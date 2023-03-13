@@ -1,0 +1,27 @@
+{
+  "type": "commonjs",
+  "name": "coded-json",
+  "version": "1.0.0",
+  "description": "Coded JSON source code",
+  "main": "out/cjson.js",
+  "types": "out/cjson.d.ts",
+  "scripts": {
+    "build": "echo Y | rmdir out /s && npx tsc",
+    "test": "npx jasmine"
+  },
+  "keywords": [
+    "coded",
+    "json",
+    "cjson"
+  ],
+  "author": "Shubhendu S Gupta",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jasmine": "^4.3.1",
+    "jasmine": "^4.5.0",
+    "typescript": "^4.9.5"
+  },
+  "dependencies": {
+    "ts-node": "^10.9.1"
+  }
+}
