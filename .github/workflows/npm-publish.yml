@@ -17,7 +17,6 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-      - run: cd npm
       - run: ls -l
       - run: npm i
       - run: npx tsc
