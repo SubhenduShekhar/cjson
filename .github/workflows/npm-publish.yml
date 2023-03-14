@@ -19,6 +19,7 @@ jobs:
           node-version: 16
       - run: ls -l
       - run: npm i
+      - run: ls -l
       - run: npx tsc
     
   test:
