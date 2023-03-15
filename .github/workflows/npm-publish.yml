@@ -17,6 +17,5 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-      - name: Changing directory to NPM
-        working-directory: ./npm
+      - working-directory: ./npm
       - run: npm i
