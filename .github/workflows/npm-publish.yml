@@ -30,6 +30,6 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-          name: org1/repo1
+          repository: SubhenduShekhar/Coded-Json-Tests
       - run: dir
       
