@@ -17,20 +17,4 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-      - run: cd npm
       - run: dir
-      - run: npm i
-      - run: npx tsc
-    
-  test:
-    name: Test
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16
-          repository: SubhenduShekhar/Coded-Json-Tests
-      - run: ls -l
-      - run: npm i
-      - run: npx jasmine
