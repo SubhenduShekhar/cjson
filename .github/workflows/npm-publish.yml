@@ -25,14 +25,11 @@ jobs:
   #    - run: npx tsc
   test:
     runs-on: windows-latest
-    defaults:
-      run:
-        working-directory: ./npm
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-          repository: SubhenduShekhar/Coded-Json-Tests
+          name: org1/repo1
       - run: dir
       
