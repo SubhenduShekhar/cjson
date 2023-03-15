@@ -12,10 +12,12 @@ jobs:
   build:
     name: Build
     runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: ./npm
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-      - working-directory: ./npm
-      - run: npm i
+      - run: ls -l
