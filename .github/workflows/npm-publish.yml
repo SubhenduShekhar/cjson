@@ -21,3 +21,6 @@ jobs:
         with:
           node-version: 16
       - run: dir
+      - run: npm ci
+      - run: npx tsc
+      
