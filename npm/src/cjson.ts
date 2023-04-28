@@ -70,7 +70,6 @@ export class Cjson extends Is {
             var importFilePath: string = path.join(dirname, filePath);
             this.content = this.content.replace(Keywords.importKey + filePath + "\"", read(importFilePath))
         }
-        else throw new Error("filepath is undefined");
     }
 
     private decodeSingleLineComment(lineItem: string) {
@@ -81,7 +80,3 @@ export class Cjson extends Is {
         }
     }
 }
-
-// var a = new Cjson("C:\\Users\\10701924\\Desktop\\projects\\others\\Coded-Json-Tests\\test-files\\target.cjson");
-
-// console.log(JSON.stringify(a.deserialize()));
