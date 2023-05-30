@@ -1,3 +1,4 @@
+
 {
   "type": "commonjs",
   "name": "coded-json",
@@ -6,7 +7,7 @@
   "main": "out/cjson.js",
   "types": "out/cjson.d.ts",
   "scripts": {
-    "build": "echo Y | rmdir out /s && npx tsc",
+    "build": "npx tsc",
     "test": "npx jasmine"
   },
   "keywords": [

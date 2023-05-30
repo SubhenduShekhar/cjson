@@ -2,7 +2,7 @@ import Keywords from "./keywords";
 
 export class Is {
     protected isImport(lineItem: string) {
-        if(lineItem.includes(Keywords.importCheck))
+        if(lineItem.includes(Keywords.importKey))
             return true;
         return false;
     }
