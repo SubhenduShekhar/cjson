@@ -29,5 +29,5 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          name: Tarbal store
+          name: Tarbal_store
           path: coded-json?.tgz
