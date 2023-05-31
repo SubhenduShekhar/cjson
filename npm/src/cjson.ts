@@ -21,15 +21,21 @@ export class Cjson extends Is {
 
     private decodeKeywords() {
         for(let i = 0; i < this.commaSeparated.length; i ++) {
-            if(this.isImport(this.commaSeparated[i]))
+            if(this.isImport(this.commaSeparated[i])) {
                 this.decodeImport(this.commaSeparated[i]);
-            if(this.isSingleLineComment(this.commaSeparated[i])) 
+                this.commaSeparated = this.content.split(",");
+            }
+            if(this.isSingleLineComment(this.commaSeparated[i])) {
                 this.decodeSingleLineComment(this.commaSeparated[i]);
+                this.commaSeparated = this.content.split(",");
+            }
             if(this.isRelativeJPath(this.commaSeparated[i]).Result) {
                 let keys: string[] = this.isRelativeJPath(this.commaSeparated[i]).Keys;
                 for(let j = 0; j < keys.length; j ++)
-                    this.content = this.content.replace(keys[j], "\"" + keys + "\"")
+                    this.content = this.content.replace(keys[j], "\"" + keys + "\"");
+                this.commaSeparated = this.content.split(",");
             }
+            
         }
         this.obj = JSON.parse(this.content);
     }

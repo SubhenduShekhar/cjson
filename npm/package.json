@@ -15,6 +15,9 @@
     "json",
     "cjson"
   ],
+  "files": [
+    "./out"
+  ],
   "author": "Shubhendu S Gupta",
   "license": "MIT",
   "devDependencies": {
