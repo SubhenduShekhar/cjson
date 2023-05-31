@@ -7,8 +7,7 @@
   "main": "out/cjson.js",
   "types": "out/cjson.d.ts",
   "scripts": {
-    "build": "npx tsc",
-    "test": "npx jasmine"
+    "build": "npx tsc && npm pack"
   },
   "keywords": [
     "coded",

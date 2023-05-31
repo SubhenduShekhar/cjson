@@ -1,0 +1,8 @@
+{
+    "source": $import "./source.json",
+    "target": {
+        "fruit": "Apple",
+        "size": "Large",
+        "color": "Red"
+    }
+}
