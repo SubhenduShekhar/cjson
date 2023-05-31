@@ -26,7 +26,8 @@ jobs:
         name: Building source
       - run: npm run build
       - run: dir
+
       - uses: actions/upload-artifact@v3
         with:
           name: Tarbal store
-          path: ./coded-json?.tgz
+          path: coded-json?.tgz
