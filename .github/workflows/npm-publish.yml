@@ -30,4 +30,4 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: Tarbal_store
-          path: coded-json?.tgz
+          path: ./npm/coded-json-*.tgz
