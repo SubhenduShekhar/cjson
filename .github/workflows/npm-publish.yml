@@ -51,3 +51,7 @@ jobs:
           name: Tarbal_store
           path: ./tests/npm
       - run: dir
+      - run: npm i
+
+        name: Running tests
+      - run: npm run test
