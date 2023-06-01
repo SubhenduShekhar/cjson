@@ -49,4 +49,5 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: Tarbal_store
+          path: ./tests/npm
       - run: dir
