@@ -33,6 +33,7 @@ jobs:
           path: ./npm/coded-json-*.tgz
   
   test:
+    needs: build
     name: Test
     runs-on: windows-latest
     defaults:
