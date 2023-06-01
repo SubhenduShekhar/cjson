@@ -31,3 +31,21 @@ jobs:
         with:
           name: Tarbal_store
           path: ./npm/coded-json-*.tgz
+  
+  test:
+    name: Test
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: ./tests/npm
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      
+        name: Loading tar
+      - uses: actions/download-artifact@v3
+        with:
+          name: Tarbal_store
+      - run: dir
