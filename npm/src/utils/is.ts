@@ -1,30 +1,54 @@
 import Keywords from "./keywords";
 
+/**
+ * Detects keywords
+ */
 export class Is {
+    /**
+     * Detects `import`
+     * @param lineItem Comma separated line item in string
+     * @returns `true` if found
+     */
     protected isImport(lineItem: string) {
         if(lineItem.includes(Keywords.importKey))
             return true;
         return false;
     }
-
+    /**
+     * Checks single line comment
+     * @param lineItem Comma separated line item in string
+     * @returns `true` if found
+     */
     protected isSingleLineComment(lineItem: string) {
         if(lineItem.includes(Keywords.singleLineComment))
             return true;
         return false;
     }
-
+    /**
+     * @deprecated Out of scope in `v1.0.0`
+     * @param lineItem Comma separated line item in string
+     * @returns `true` if found
+     */
     protected isMultiLineCommentStart(lineItem: string) {
         if(lineItem.includes(Keywords.multiLineCommentStart))
             return true;
         return false;
     }
-
+    /**
+     * @deprecated Out of scope in `v1.0.0`
+     * @param lineItem Comma separated line item in string
+     * @returns `true` if found
+     */
     protected isMultiLineCommentEnd(lineItem: string) {
         if(lineItem.includes(Keywords.multiLineCommentEnd))
             return true;
         return false;
     }
-
+    /**
+     * @deprecated Out of scope in `v1.0.0`
+     * @param lineItem Comma separated line item in string
+     * @returns `true` if found
+     */
     protected isRelativeJPath(lineItem: string) {
         let splitByColon: string[] = lineItem.split(":");
         let relativeJPathKeys: string[] = [];
