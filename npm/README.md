@@ -2,6 +2,7 @@
     <h1 style="color: rebeccapurple;"> { CJSON } </h1>
     <h4> Coded Javascript Object Notation </h4>
 </center>
+
 ![NPM Package](https://github.com/SubhenduShekhar/cjson/actions/workflows/npm-publish.yml/badge.svg)
 
 Why static JSON if you can utilize CJSON
