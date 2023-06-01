@@ -18,7 +18,10 @@ export class Cjson extends Is {
         this.content = read(this.filePath);
         this.commaSeparated = this.content.split(",");
     }
-
+    /**
+     * Root function for decoding keywords
+     * Need to improve performance. `v1.0.0`
+     */
     private decodeKeywords() {
         for(let i = 0; i < this.commaSeparated.length; i ++) {
             if(this.isImport(this.commaSeparated[i])) {
@@ -39,7 +42,10 @@ export class Cjson extends Is {
         }
         this.obj = JSON.parse(this.content);
     }
-
+    /**
+     * Import functions path to relative file is deocded.
+     * Modifies `content`
+     */
     private decodeRelativePaths() {
         this.content = JSON.stringify(this.obj);
         this.commaSeparated = this.content.split(",");
@@ -57,18 +63,28 @@ export class Cjson extends Is {
         }
         this.obj = JSON.parse(this.content);
     }
-
-    public deserialize() {
+    /**
+     * Deserializes the keywords.
+     * @returns `JSON` if no errors. Else `undefined`
+     */
+    public deserialize() : JSON | undefined {
         this.decodeKeywords();
         this.json = new Json(this.obj);
         this.decodeRelativePaths();
         return this.obj;
     }
-
-    private getFilePath(lineItem: string) {
+    /**
+     * Returns file path from `import` keyword
+     * @param lineItem Comma separated line item in string
+     * @returns File path in string
+     */
+    private getFilePath(lineItem: string): string {
         return lineItem.split(Keywords.importKey)[1].split("\"")[0];
     }
-
+    /**
+     * Decodes `import` keyword
+     * @param lineItem Comma separated line item in string
+     */
     private decodeImport(lineItem: string) {
         var filePath: string = this.getFilePath(lineItem);
         if(this.filePath !== undefined) {
@@ -77,7 +93,10 @@ export class Cjson extends Is {
             this.content = this.content.replace(Keywords.importKey + filePath + "\"", read(importFilePath))
         }
     }
-
+    /**
+     * Identifies comment lines. Can identify multiple lined comments
+     * @param lineItem Comma separated line item in string
+     */
     private decodeSingleLineComment(lineItem: string) {
         let lineSplit: string[] = lineItem.split("\r\n");
         for(let i = 0; i < lineSplit.length; i ++) {
