@@ -1,5 +1,10 @@
 import * as file from './file';
 
+/**
+ * Checks for `JSON` content
+ * @param content String type content
+ * @returns `true` if content is JSON type
+ */
 export function isContentJson(content: string) {
     try {
         JSON.parse(content);
@@ -9,11 +14,17 @@ export function isContentJson(content: string) {
         return false;
     }
 }
-
+/**
+ * Split by comma
+ * @param content String type content
+ * @returns `string[]`
+ */
 export function separateByComma(content: string) {
     return content.split(",");
 }
-
+/**
+ * `JSON` specific functions
+ */
 export class Json {
     private obj: any | string;
     private jsonKeys: string[] = [];
@@ -30,20 +41,30 @@ export class Json {
             this.filePath = undefined;
         }
     }
-
+    /**
+     * Allowed data types
+     */
     private dataTypes = [
         "string",
         "number",
         "boolean"
     ]
-
+    /**
+     * Pushes valid JSON path keys
+     * @param eachKey Key to be appended
+     * @param prevKey Previous key
+     */
     private pushKey(eachKey: string, prevKey: string) {
         if(prevKey === "")
             this.jsonKeys.push(eachKey);
         else
             this.jsonKeys.push(prevKey + "." + eachKey)
     }
-
+    /**
+     * Reads keys in recursive manner
+     * @param jsonData `JSON` data
+     * @param prevKey Previous key
+     */
     private getKeys(jsonData: any, prevKey: string = "") {
         if(isContentJson(JSON.stringify(jsonData))) {
             Object.keys(jsonData).forEach(eachKey => {
@@ -80,7 +101,11 @@ export class Json {
             jsonData.forEach(eachElem => this.getKeys(eachElem))
         }
     }
-    
+    /**
+     * Parses value from JSON 
+     * @param key
+     * @returns Value fetched from key
+     */
     private getValueFromKey(key: string) {
         let value = this.obj;
         if(key.includes(".")) {
@@ -99,19 +124,29 @@ export class Json {
             value = value[key];
         return value;
     }
-
+    /**
+     * Parses value from JSON 
+     * @param key 
+     * @returns Value fetched from key
+     */
     public parse(key?: string) {
         if(key !== undefined)
             return this.getValueFromKey(key);
         else
             return this.obj;
     }
-
+    /**
+     * Reads all possible keys.
+     * @returns Keys `string[]`
+     */
     public getAllKeys() {
         this.getKeys(this.obj);
         return this.jsonKeys;
     }
-
+    /**
+     * Fetches all values with given `JSON` keys
+     * @returns Values in `string[]`
+     */
     public getAllValues() {
         if(this.jsonKeys.length === 0)
             this.getAllKeys();
@@ -123,6 +158,3 @@ export class Json {
         return this.jsonValues;
     }
 }
-
-// var t = file.read("C:\\Users\\10701924\\Desktop\\projects\\others\\Coded-Json-Tests\\test-files\\source.json");
-// var a = new Json(JSON.parse(t));
