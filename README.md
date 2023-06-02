@@ -5,7 +5,9 @@
 
 ![NPM Package](https://github.com/SubhenduShekhar/cjson/actions/workflows/npm-publish.yml/badge.svg)
 
-Why static JSON if you can utilize CJSON
+Why static JSON if you can utilize CJSON.
+
+<b> Create your files with extension `.cjson` to unlock all these features </b>
 
 <br>
 
@@ -13,6 +15,7 @@ Why static JSON if you can utilize CJSON
 
 - [Import multiple JSON files](#Import-multiple-JSON-files)
 - [Single/ Multiple line comments](#Single-Multiple-line-comments)
+
 
 ## Import multiple JSON files
 
