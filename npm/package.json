@@ -2,7 +2,7 @@
 {
   "type": "commonjs",
   "name": "coded-json",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Coded JSON source code",
   "main": "out/cjson.js",
   "types": "out/cjson.d.ts",
