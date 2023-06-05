@@ -2,14 +2,16 @@ import { read } from "./utils/file";
 import * as path from 'path';
 import { Is } from "./utils/is";
 import Keywords from "./utils/keywords";
-import { Json } from "./utils/json";
+import { Json, isContentJson } from "./utils/json";
+
 
 export class Cjson extends Is {
     private obj: JSON | undefined;
     private filePath: string;
     private content: string = "";
     private commaSeparated: string[] = [];
-    private json: Json | undefined = undefined;
+    public json: Json | undefined = undefined;
+    public isContentJson = (isFilePath: boolean): boolean => { return isContentJson(this.content, isFilePath) };
 
     constructor(filePath: string) {
         super();
