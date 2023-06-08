@@ -1,1 +1,3 @@
 __pycache__
+dist/
+cjson/src/coded_json.egg-info/

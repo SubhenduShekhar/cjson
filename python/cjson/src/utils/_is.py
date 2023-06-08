@@ -1,4 +1,4 @@
-from keywords import Keywords
+from utils.keywords import Keywords
 
 class Is:
     def _is_import(self, line_item: str):
