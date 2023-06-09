@@ -3,3 +3,4 @@ dist/
 cjson/src/coded_json.egg-info/
 build/
 cjson/src/cjson.egg*
+.pypirc

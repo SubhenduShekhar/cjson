@@ -5,7 +5,9 @@ import * as file from './file';
  * @param content String type content
  * @returns `true` if content is JSON type
  */
-export function isContentJson(content: string) {
+export function isContentJson(content: string, isFilePath?: boolean) {
+    if(isFilePath)
+        content = file.read(content);
     try {
         JSON.parse(content);
         return true;
@@ -31,8 +33,8 @@ export class Json {
     private jsonValues: string[] = [];
     private filePath: string | undefined;
 
-    constructor(obj: any | string) {
-        if(typeof obj === "string") {
+    constructor(obj: any | string, isFilePath?: boolean) {
+        if(typeof obj === "string" && isFilePath) {
             this.filePath = obj;
             this.obj = JSON.parse(file.read(this.filePath));
         }
