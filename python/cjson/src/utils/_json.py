@@ -41,7 +41,7 @@ class Json:
         return self.__json_keys
 
     def get_all_values(self):
-        if len(self.__json_keys) is 0:
+        if len(self.__json_keys) == 0:
             self.get_all_keys()
         
         for i in range(0, len(self.__json_keys)):
