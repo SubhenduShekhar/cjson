@@ -19,6 +19,10 @@ export class Cjson extends Is {
         this.filePath = filePath;
         this.content = read(this.filePath);
         this.commaSeparated = this.content.split(",");
+        
+        this.decodeKeywords();
+        this.decodeRelativePaths();
+        this.json = new Json(this.obj);
     }
     /**
      * Root function for decoding keywords
@@ -70,9 +74,6 @@ export class Cjson extends Is {
      * @returns `JSON` if no errors. Else `undefined`
      */
     public deserialize() : JSON | undefined {
-        this.decodeKeywords();
-        this.json = new Json(this.obj);
-        this.decodeRelativePaths();
         return this.obj;
     }
     /**
