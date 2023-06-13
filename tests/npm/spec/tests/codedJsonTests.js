@@ -57,13 +57,13 @@ describe("JSON Test 2", () => {
 
     it("I should be able to parse full json using `obj< Cjson >.json.parse()`", () => {
         var cjson = new Cjson(cjsonfilePath);
-        var value = cjson.json.parse();
-        assert.equal(value, cjson.deserialize());
+        var value = JSON.stringify(cjson.json.parse());
+        assert.equal(value, JSON.stringify(cjson.deserialize()));
     });
 
     it("I should be able to add relative path to variables in json files using `$.jpath.to.variable`", () => {
         var cjson = new Cjson(relativeTargetCjson);
         var deserialize = cjson.deserialize();
-        console.log(JSON.stringify(deserialize, null, 4));
+        // console.log(JSON.stringify(deserialize, null, 4));
     });
 });
