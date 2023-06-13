@@ -12,9 +12,11 @@ Why static JSON if you can utilize CJSON
 
 <br/>
 
-# NODEJS
+# Syntax
 
-## Steps
+## NodeJS
+
+### Steps
 
 - Create file with `.cjson` extension
 - Write below code to decode the json:
@@ -44,10 +46,13 @@ Why static JSON if you can utilize CJSON
 
 - [Import multiple JSON files](#Import-multiple-JSON-files)
 - [Single/ Multiple line comments](#Single-Multiple-line-comments)
+- [Calling relative keys using JPATH](#Calling-relative-keys-using-JPATH)
 
 ## Import multiple JSON files
 
-You can use `$import` keyword for importing
+You can use `$import` keyword for importing other JSON files.
+<br/>
+You can also import multiple JSON files.
 
 ```
 {
@@ -70,3 +75,9 @@ For multi line comments, use like below:
 // This is the second one
 
 ```
+
+## Calling relative keys using JPATH
+
+You can also refer to other variables using `$.` followed by jpath.
+<br/>
+<b>Please note, the current version is only decoding using top to down approach</b>
