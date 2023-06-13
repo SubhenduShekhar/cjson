@@ -37,6 +37,20 @@ describe("CJSON Test 1", () => {
 
         assert.notEqual(decodedJSON, JSON.parse("{}"))
     });
+
+    it("I should be able to deserialize relative path to local variable", () => {
+        var cjson = new Cjson(relativeTargetCjson);
+
+        var decodedJSON = cjson.deserialize();
+
+        console.log(decodedJSON);
+        
+        assert.equal(decodedJSON.target.digitCheck, cjson.json.parse("target.digitCheck"));
+        assert.equal(decodedJSON.target.digitImport, cjson.json.parse("target.digitImport"));
+        var digitArrayImport = decodedJSON.target.digitArrayImport;
+        for(let i = 0; i < digitArrayImport.length; i ++)
+            assert.equal(digitArrayImport[i], cjson.json.parse("target.digitArrayImport")[i]);
+    })
 });
 
 /**
@@ -59,11 +73,5 @@ describe("JSON Test 2", () => {
         var cjson = new Cjson(cjsonfilePath);
         var value = JSON.stringify(cjson.json.parse());
         assert.equal(value, JSON.stringify(cjson.deserialize()));
-    });
-
-    it("I should be able to add relative path to variables in json files using `$.jpath.to.variable`", () => {
-        var cjson = new Cjson(relativeTargetCjson);
-        var deserialize = cjson.deserialize();
-        // console.log(JSON.stringify(deserialize, null, 4));
     });
 });

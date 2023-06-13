@@ -4,5 +4,5 @@ export default class Keywords {
     public static multiLineCommentStart: string = "/*";
     public static multiLineCommentEnd: string = "*/";
     public static relativeJPath: string = "$.";
-    public static relativeJPathRegex: RegExp = new RegExp("[$.][.A-Za-z0-9]*", "g");
+    public static relativeJPathRegex: RegExp = new RegExp("[$][.][.A-Za-z0-9]*", "g");
 }

@@ -78,7 +78,6 @@ export class Cjson extends Is {
             } else
                 content = content.replace(keyRegex, this.json?.parse(eachKey.split(Keywords.relativeJPath)[1]).toString())
         })
-
         this.refineObj(content);
     }
 
