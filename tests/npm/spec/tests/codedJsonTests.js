@@ -47,6 +47,7 @@ describe("CJSON Test 1", () => {
         
         assert.equal(decodedJSON.target.digitCheck, cjson.json.parse("target.digitCheck"));
         assert.equal(decodedJSON.target.digitImport, cjson.json.parse("target.digitImport"));
+        assert.equal(decodedJSON.relativeCalls.quiz.sport.q1.question, decodedJSON.relativeCalls.quiz.sport.q2.question)
         var digitArrayImport = decodedJSON.target.digitArrayImport;
         for(let i = 0; i < digitArrayImport.length; i ++)
             assert.equal(digitArrayImport[i], cjson.json.parse("target.digitArrayImport")[i]);
