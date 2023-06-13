@@ -38,6 +38,10 @@ export class Json {
             this.filePath = obj;
             this.obj = JSON.parse(file.read(this.filePath));
         }
+        else if(typeof obj === "string" && !isFilePath) {
+            this.obj = JSON.parse(obj)
+            this.filePath = undefined;
+        }
         else if(obj !== undefined) {
             this.obj = obj;
             this.filePath = undefined;

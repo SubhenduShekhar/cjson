@@ -45,7 +45,7 @@ export class Is {
         return false;
     }
     /**
-     * @deprecated Out of scope in `v1.0.0`
+     * Checks whether load contains relative JPaths
      * @param lineItem Comma separated line item in string
      * @returns `true` if found
      */

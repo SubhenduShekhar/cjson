@@ -1,0 +1,11 @@
+{
+    "source": $import "./source.json",
+    "relativeCalls": $import "./relativeCalls.json",
+    "target": {
+        "fruit": "Apple",
+        "size": "Large",
+        "color": "Red",
+        "secColor": $.target.color,
+        "colorList": [ $.target.color, $.target.secColor ]
+    }
+}

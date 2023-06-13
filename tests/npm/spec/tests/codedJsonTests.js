@@ -9,6 +9,8 @@ const cjsonfilePath = path.join(__dirname, "..", "..", "..", "\\test-files\\targ
 const jsonfilePath = path.join(__dirname, "..", "..", "..", "\\test-files\\source.json");
 /** Path to pure.json */
 const pureJsonfilePath = path.join(__dirname, "..", "..", "..", "\\test-files\\pure.json");
+/** Path to relativeTargetCjson.json */
+const relativeTargetCjson = path.join(__dirname, "..", "..", "..", "\\test-files\\targetRelativeCalls.cjson");
 
 /**
  * Tests related to CJSON files 
@@ -57,5 +59,11 @@ describe("JSON Test 2", () => {
         var cjson = new Cjson(cjsonfilePath);
         var value = cjson.json.parse();
         assert.equal(value, cjson.deserialize());
+    });
+
+    it("I should be able to add relative path to variables in json files using `$.jpath.to.variable`", () => {
+        var cjson = new Cjson(relativeTargetCjson);
+        var deserialize = cjson.deserialize();
+        console.log(JSON.stringify(deserialize, null, 4));
     });
 });
