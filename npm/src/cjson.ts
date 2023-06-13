@@ -21,54 +21,67 @@ export class Cjson extends Is {
         this.commaSeparated = this.content.split(",");
         
         this.decodeKeywords();
-        this.decodeRelativePaths();
-        this.json = new Json(this.obj);
+        this.decodeRelativePaths(this.content);
     }
     /**
      * Root function for decoding keywords
      * Need to improve performance. `v1.0.0`
      */
     private decodeKeywords() {
-        for(let i = 0; i < this.commaSeparated.length; i ++) {
-            if(this.isImport(this.commaSeparated[i])) {
-                this.decodeImport(this.commaSeparated[i]);
-                this.commaSeparated = this.content.split(",");
+        var isChanged: boolean = false;
+        while(true) {
+            isChanged = false;
+
+            if(this.isImport(this.content)) {
+                this.decodeImport(this.content);
+                isChanged = true
             }
-            if(this.isSingleLineComment(this.commaSeparated[i])) {
-                this.decodeSingleLineComment(this.commaSeparated[i]);
-                this.commaSeparated = this.content.split(",");
+            if(this.isSingleLineComment(this.content)) {
+                this.decodeSingleLineComment(this.content);
+                isChanged = true
             }
-            if(this.isRelativeJPath(this.commaSeparated[i]).Result) {
-                let keys: string[] = this.isRelativeJPath(this.commaSeparated[i]).Keys;
-                for(let j = 0; j < keys.length; j ++)
-                    this.content = this.content.replace(keys[j], "\"" + keys + "\"");
-                this.commaSeparated = this.content.split(",");
-            }
-            
+            if(!isChanged) break;
         }
+    }
+
+    private refineObj(content?: string) {
+        if(content) this.content = content;
+
+        this.json = new Json(this.content, false);
         this.obj = JSON.parse(this.content);
     }
     /**
      * Import functions path to relative file is deocded.
      * Modifies `content`
      */
-    private decodeRelativePaths() {
-        this.content = JSON.stringify(this.obj);
-        this.commaSeparated = this.content.split(",");
-        for(let i = 0; i < this.commaSeparated.length; i ++) {
-            let eachPath: string[] = this.commaSeparated[i].split(":");
-            for(let j = 0; j < eachPath.length; j ++) {
-                if(eachPath[j].trim().startsWith("\"" + Keywords.relativeJPath)) {
-                    let exactKey: string = eachPath[j].trim().split("\"" + Keywords.relativeJPath)[1].split("\"")[0];
-                    let value = this.json?.parse(exactKey);
-                    if(typeof value === "string") 
-                        value = "\"" + value + "\"";
-                    this.content = this.content.replace("\"" + Keywords.relativeJPath + exactKey + "\"", value);
-                }
+    private decodeRelativePaths(content: string) {
+        var uniqueKeys = content.match(Keywords.relativeJPathRegex)?.filter((value, index, array) => { return array.indexOf(value) === index } )
+
+        uniqueKeys?.map(eachKey => {
+            let keyRegex = new RegExp(eachKey.replace("$", "\\$"), 'g');
+            content = content.replace(keyRegex, "\"<" + eachKey + ">\"");
+        });
+
+        this.refineObj(content);
+
+        uniqueKeys?.map(eachKey => {
+            let keyRegex = new RegExp("\\<" + eachKey.replace("$", "\\$") + "\\>", 'g');
+            
+            while(this.json?.parse(eachKey.split(Keywords.relativeJPath)[1]).toString().startsWith("<$.")) {
+                this.refineObj(content);
             }
-        }
-        this.obj = JSON.parse(this.content);
+
+            if(typeof this.json?.parse(eachKey.split(Keywords.relativeJPath)[1]) !== "string") {
+                keyRegex = new RegExp("\"\\<" + eachKey.replace("$", "\\$") + "\\>\"", "g");
+
+                content = content.replace(new RegExp(keyRegex), this.json?.parse(eachKey.split(Keywords.relativeJPath)[1]))
+            } else
+                content = content.replace(keyRegex, this.json?.parse(eachKey.split(Keywords.relativeJPath)[1]).toString())
+        })
+
+        this.refineObj(content);
     }
+
     /**
      * Deserializes the keywords.
      * @returns `JSON` if no errors. Else `undefined`

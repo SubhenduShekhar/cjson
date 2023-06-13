@@ -30,7 +30,6 @@ class Cjson(Is):
             
             if self.is_single_line_comments(self.__comma_separated[i]):
                 self.__decode_single_line_comment(self.__comma_separated[i])
-                # print(self.__content)
                 self.__comma_separated = self.__content.split(",")
             
             if self.is_relative_jpath(self.__comma_separated[i])["Result"]:
