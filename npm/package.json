@@ -2,8 +2,10 @@
 {
   "type": "commonjs",
   "name": "coded-json",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Coded JSON source code",
+  "repository": "https://github.com/SubhenduShekhar/cjson",
+  "homepage": "https://github.com/SubhenduShekhar/cjson#readme",
   "main": "out/cjson.js",
   "types": "out/cjson.d.ts",
   "scripts": {
