@@ -1,32 +1,36 @@
 from utils.file import read
 from utils._is import Is
 from utils.keywords import Keywords
-from utils._json import Json, is_content_json as content_json_check, separate_by_comma
+from utils._json import Json, is_content_json as content_json_check
 from os import path
 import json, re
+
+def is_content_json(content: str, is_file_path: bool = False):
+        ''' Checks if the parsed content is JSON
+        '''
+        return content_json_check(content, is_file_path=is_file_path)
 
 class Cjson(Is):
     __obj:any
     __file_path: str
     __content: str = ""
-    __comma_separated: list[str] = []
-    __json: Json | None = None
-    
-    
-    
-
-    def is_content_json(self, is_file_path: bool):
-        return content_json_check(self.__content, is_file_path=is_file_path)
+    json: Json | None = None
 
     def __init__(self, file_path: str):
+        ''' Initializes and decodes `CJSON` files.
+
+            This can also be used for parsing JSON files in `CJSON` way.
+            Parsing in CJSON way unlocks many functions. For more details, see function documentation.
+        '''
         super().__init__()
         self.__obj = None
         self.__file_path = file_path
         self.__content = read(self.__file_path)
-        self.__comma_separated = self.__content.split(",")
         self.__decode_keywords()
-        self.__json = Json(self.__obj)
-        self.__decode_relative_paths()
+        '''Call this object to unlock native JSON functions
+        '''
+        self.json = Json(self.__obj)
+        self.__decode_relative_paths(self.__content)
     
     def __decode_keywords(self):
         is_changed: bool = False
@@ -45,40 +49,43 @@ class Cjson(Is):
                 break
     
     def __refine_obj(self, content: str = None):
-        if self.__content != None:
+        if content != None:
             self.__content = content
         
-        self.__json = Json(self.__content, False)
+        self.json = Json(self.__content, False)
         self.__obj = json.loads(self.__content)
 
     def __decode_relative_paths(self, content: str):
-        unique_keys: list[str] = re.search(Keywords.relative_jpath_regex, content)
+        path_keys: list[str] = re.findall(Keywords.relative_jpath_regex, content)
+        unique_keys: list[str] = []
+
+        for each_key in path_keys:
+            if each_key not in unique_keys:
+                unique_keys.append(each_key)
 
         for each_key in unique_keys:
-            key_regex: str = each_key.replace("$", "\\$")
-            content = content.replace(key_regex, "\"<" + each_key + ">\"")
+            content = content.replace(each_key, "\"<" + each_key + ">\"")
 
         self.__refine_obj(content=content)
-
+    
         for each_key in unique_keys:
-            key_regex: str = "\\<" + each_key.replace("$", "\\$") + "\\>"
+            key_regex: str = "<" + each_key + ">"
+            
+            parsed_val: str = self.json.parse(each_key.split(Keywords.relative_jpath)[1])
 
-            while(self.__json.parse(each_key.split(Keywords.relative_jpath)[1]))
+            while(str(parsed_val).startswith("<" + Keywords.relative_jpath)):
+                self.__refine_obj(content=content)
+                parsed_val: str = self.json.parse(each_key.split(Keywords.relative_jpath)[1])
+            
+            if type(parsed_val) != str:
+                content = content.replace("\"" + key_regex + "\"", str(parsed_val))
+            else:
+                content = content.replace(key_regex, parsed_val)
 
-        # self.__content = str(self.__obj)
-        # self.__comma_separated = self.__content.split(",")
-
-        # for i in range(0, len(self.__comma_separated)):
-        #     each_path: list[str] = self.__comma_separated[i].split(":")
-        #     for j in range(0, len(each_path)):
-        #         if each_path[j].strip().startswith("\"" + Keywords.relative_jpath):
-        #             exact_key: str = each_path[j].strip().split("\"" + Keywords.relative_jpath)[1].split("\"")[0]
-        #             value: str = self.__json.parse(exact_key)
-        #             if type(value) == str:
-        #                 value = "\"" + value + "\""
-        #                 self.__content = self.__content.replace("\"" + Keywords.relative_jpath + exact_key + "\"", value)
-
+        self.__refine_obj(content=content)
+    
     def deserialize(self):
+        ''' Returns the JSON compiled object for the given `CJSON` file. '''
         return self.__obj
     
     def __get_file_path(self, line_item: str):
@@ -95,6 +102,3 @@ class Cjson(Is):
         for i in range(0, len(line_split)):
             if line_split[i].strip() != "" and line_split[i].strip().startswith(Keywords.single_line_comment):
                 self.__content = self.__content.replace(line_split[i], "")
-
-a = Cjson(r"C:\Users\632400\Desktop\projects\cjson\tests\test-files\targetRelativeCalls.cjson")
-print(a.deserialize())

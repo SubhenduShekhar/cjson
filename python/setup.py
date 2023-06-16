@@ -4,10 +4,11 @@ __readme_file = open("README.md")
 __description = __readme_file.read()
 
 setuptools.setup(
-    name="cjson",
-    version="1.0.0",
+    name="codedjson",
+    version="1.1.0",
     description="Coded JSON files. Save your files with .cjson extension to unlock these features",
     long_description=__description,
+    long_description_content_type="text/markdown",
     author="Shubhendu Shekhar Gupta",
     author_email="subhendushekhargupta@gmail.com",
     packages= [".", "utils/"],
