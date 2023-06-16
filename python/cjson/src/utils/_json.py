@@ -14,9 +14,6 @@ def is_content_json(content: str, is_file_path: bool = False):
     except:
         return False
 
-def separate_by_comma(content: str):
-    return content.split(",")
-
 class Json:
     __obj: Union[any , str]
     __json_keys: list[str] = []
@@ -29,18 +26,31 @@ class Json:
             self.__file_path = obj
             file = open(self.__file_path)
             self.__obj = json.load(file)
+        elif type(obj) == str and not is_file_path:
+            self.__obj = json.loads(obj)
+        else:
+            self.__obj = obj
+            self.__file_path = None
     
     def parse(self, key: Union[ str, None ] = None ):
+        ''' Run any `JPath` query in parsed `CJSON`/ `JSON`.
+
+            Returns full `JSON` if `key` is not provided
+        '''
         if key is None:
             return self.__obj
         else:
             return self.__get_value_from_key(key)
 
     def get_all_keys(self):
+        ''' Returns all possible `JSON` keys in parsed `JSON`
+        '''
         self.__get_keys(json_data=self.__obj)
         return self.__json_keys
 
     def get_all_values(self):
+        ''' Returns all possible `JSON` values in parsed `JSON`
+        '''
         if len(self.__json_keys) == 0:
             self.get_all_keys()
         
@@ -94,6 +104,8 @@ class Json:
                 self.__get_keys(each_in_elif)
     
     def __get_value_from_key(self, key: str):
+        ''' Returns all possible json keys in `CJSON` object
+        '''
         value = self.__obj
         if "." in key:
             key_list: list[str] = key.split(".")
