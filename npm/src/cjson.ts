@@ -9,16 +9,18 @@ export class Cjson extends Is {
     private obj: JSON | undefined;
     private filePath: string;
     private content: string = "";
-    private commaSeparated: string[] = [];
     public json: Json | undefined = undefined;
     public isContentJson = (isFilePath: boolean): boolean => { return isContentJson(this.content, isFilePath) };
 
+    /**
+     * Call this contructor to parse a CJSON file.
+     * @param filePath CJSON file absolute path
+     */
     constructor(filePath: string) {
         super();
         this.obj = undefined;
         this.filePath = filePath;
         this.content = read(this.filePath);
-        this.commaSeparated = this.content.split(",");
         
         this.decodeKeywords();
         this.decodeRelativePaths(this.content);
@@ -31,9 +33,8 @@ export class Cjson extends Is {
         var isChanged: boolean = false;
         while(true) {
             isChanged = false;
-
             if(this.isImport(this.content)) {
-                this.decodeImport(this.content);
+                this.content = this.decodeImport(this.content);
                 isChanged = true
             }
             if(this.isSingleLineComment(this.content)) {
@@ -100,12 +101,18 @@ export class Cjson extends Is {
      * Decodes `import` keyword
      * @param lineItem Comma separated line item in string
      */
-    private decodeImport(lineItem: string) {
-        var filePath: string = this.getFilePath(lineItem);
-        if(this.filePath !== undefined) {
-            var dirname: string = path.dirname(this.filePath);
-            var importFilePath: string = path.join(dirname, filePath);
-            this.content = this.content.replace(Keywords.importKey + filePath + "\"", read(importFilePath))
+    private decodeImport(content: string): string {
+        var filePath: string = this.getFilePath(content);
+
+        var dirname: string = path.dirname(this.filePath);
+        var importFilePath: string = path.join(dirname, filePath);
+        content = content.replace(Keywords.importKey + filePath + "\"", read(importFilePath))
+
+        if(this.isImport(content)) {
+            this.decodeImport(content);
+            return content;
+        } else {
+            return content;
         }
     }
     /**
