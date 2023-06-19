@@ -5,7 +5,7 @@ __description = __readme_file.read()
 
 setuptools.setup(
     name="codedjson",
-    version="1.1.0",
+    version="1.1.1",
     description="Coded JSON files. Save your files with .cjson extension to unlock these features",
     long_description=__description,
     long_description_content_type="text/markdown",
