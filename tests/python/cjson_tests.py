@@ -16,7 +16,6 @@ class Result(Enum):
     Pass = "Pass"
     Fail = "Fail"
     
-
 def add_resut(result: Result, message: str):
     print(result, ":", message)
 
