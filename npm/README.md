@@ -7,7 +7,7 @@
     <h4> Why static JSON if you can utilize CJSON </h4>
     <br/>
     <br/>
-    <img src="https://github.com/SubhenduShekhar/cjson/actions/workflows/npm-publish.yml/badge.svg"/>
+    <img src="https://github.com/SubhenduShekhar/cjson/actions/workflows/tests.yml/badge.svg"/>
 </center>
 
 <br/>
