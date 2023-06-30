@@ -1,35 +1,95 @@
 package com.codedjson.utils;
 
+import com.codedjson.exceptions.IllegalJsonType;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class Base {
     protected String filePath;
     protected String content;
-    protected String[] commaSeparated;
-    protected String importFilePath;
-    protected String importFileFullPath;
+    protected JsonParser jsonParser = new JsonParser();
     protected File baseFileObj;
-
+    protected Gson gson = new Gson();
+    public Base(String filePath, boolean isFilePath) throws FileNotFoundException {
+        this.filePath = filePath;
+        this.content = read(this.filePath);
+    }
+    public Base(String content) {
+        this.filePath = null;
+        this.content = content;
+    }
+    public String getFullPath() {
+        return Paths.get(this.filePath).getParent().toString();
+    }
+    public String appendPath(String parent, String... paths) {
+        return Paths.get(parent, paths).toString();
+    }
     private String fileReader(String filePath) throws FileNotFoundException {
         File file = new File(filePath);
         String data = "";
         Scanner scanner = new Scanner(file);
         while(scanner.hasNextLine()) {
             String lineData = scanner.nextLine();
-            data += lineData;
+            data += lineData + "\n";
         }
         scanner.close();
         return data;
     }
-
     public void read() throws FileNotFoundException {
-        this.content = fileReader(this.filePath);
-        this.commaSeparated = this.content.split(",");
+        content = fileReader(filePath);
     }
-
     public String read(String filePath) throws FileNotFoundException {
         return fileReader(filePath);
+    }
+
+    protected Object parseJson(String jsonString) throws Exception {
+        try {
+            JsonObject jsonObject = (JsonObject) jsonParser.parse(jsonString);
+            return jsonObject;
+        }
+        catch (Exception e) {
+            try {
+                JsonArray jsonArray = (JsonArray) jsonParser.parse(jsonString);
+                return jsonArray;
+            }
+            catch (Exception er) {
+                throw new IllegalJsonType();
+            }
+        }
+    }
+
+    protected String getType(Object var) {
+        try {
+            int obj = (int) var;
+            return "int";
+        }
+        catch (Exception intEx) {
+            try {
+                Double obj = (Double) var;
+                return "double";
+            }
+            catch (Exception doubleEx) {
+                try {
+                    String obj = (String) var;
+                    return "string";
+                }
+                catch (Exception strEx) {
+                    try {
+                        boolean obj = (boolean) var;
+                        return "boolean";
+                    }
+                    catch (Exception boolEx) {
+                        return "";
+                    }
+                }
+            }
+        }
     }
 }
