@@ -1,0 +1,3 @@
+{
+    "source": $import "./pure.json"
+}

@@ -1,18 +1,23 @@
+
 {
   "type": "commonjs",
   "name": "coded-json",
-  "version": "1.0.0",
+  "version": "1.1.3",
   "description": "Coded JSON source code",
+  "repository": "https://github.com/SubhenduShekhar/cjson",
+  "homepage": "https://github.com/SubhenduShekhar/cjson#readme",
   "main": "out/cjson.js",
   "types": "out/cjson.d.ts",
   "scripts": {
-    "build": "echo Y | rmdir out /s && npx tsc",
-    "test": "npx jasmine"
+    "build": "npx tsc && npm pack"
   },
   "keywords": [
     "coded",
     "json",
     "cjson"
+  ],
+  "files": [
+    "./out"
   ],
   "author": "Shubhendu S Gupta",
   "license": "MIT",

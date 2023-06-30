@@ -2,69 +2,128 @@ import { read } from "./utils/file";
 import * as path from 'path';
 import { Is } from "./utils/is";
 import Keywords from "./utils/keywords";
+import { Json, isContentJson } from "./utils/json";
 
-export class Cjson<T> extends Is {
-    private obj: T | undefined;
+
+export class Cjson extends Is {
+    private obj: JSON | undefined;
     private filePath: string;
     private content: string = "";
-    private commaSeparated: string[] = [];
+    public json: Json | undefined = undefined;
+    public isContentJson = (isFilePath: boolean): boolean => { return isContentJson(this.content, isFilePath) };
 
+    /**
+     * Call this contructor to parse a CJSON file.
+     * @param filePath CJSON file absolute path
+     */
     constructor(filePath: string) {
         super();
         this.obj = undefined;
         this.filePath = filePath;
+        this.content = read(this.filePath);
+        
+        this.decodeKeywords();
+        this.decodeRelativePaths(this.content);
+    }
+    /**
+     * Root function for decoding keywords
+     * Need to improve performance. `v1.0.0`
+     */
+    private decodeKeywords() {
+        var isChanged: boolean = false;
+        while(true) {
+            isChanged = false;
+            if(this.isImport(this.content)) {
+                this.content = this.decodeImport(this.content);
+                isChanged = true
+            }
+            if(this.isSingleLineComment(this.content)) {
+                this.decodeSingleLineComment(this.content);
+                isChanged = true
+            }
+            if(!isChanged) break;
+        }
     }
 
-    public deserialize() {
-        this.content = read(this.filePath);
-        this.commaSeparated = this.content.split(",");
+    private refineObj(content?: string) {
+        if(content) this.content = content;
 
-        for(let i = 0; i < this.commaSeparated.length; i ++) {
-            this.decodeImport(this.commaSeparated[i]);
-            this.decodeSingleLineComment(this.commaSeparated[i]);
-            this.decodeMultiLineComment(this.commaSeparated[i], i);
-        }
+        this.json = new Json(this.content, false);
         this.obj = JSON.parse(this.content);
+    }
+    /**
+     * Import functions path to relative file is deocded.
+     * Modifies `content`
+     */
+    private decodeRelativePaths(content: string) {
+        var uniqueKeys = content.match(Keywords.relativeJPathRegex)?.filter((value, index, array) => { return array.indexOf(value) === index } )
+
+        uniqueKeys?.map(eachKey => {
+            let keyRegex = new RegExp(eachKey.replace("$", "\\$"), 'g');
+            content = content.replace(keyRegex, "\"<" + eachKey + ">\"");
+        });
+
+        this.refineObj(content);
+
+        uniqueKeys?.map(eachKey => {
+            let keyRegex = new RegExp("\\<" + eachKey.replace("$", "\\$") + "\\>", 'g');
+            
+            while(this.json?.parse(eachKey.split(Keywords.relativeJPath)[1]).toString().startsWith("<$.")) {
+                this.refineObj(content);
+            }
+
+            if(typeof this.json?.parse(eachKey.split(Keywords.relativeJPath)[1]) !== "string") {
+                keyRegex = new RegExp("\"\\<" + eachKey.replace("$", "\\$") + "\\>\"", "g");
+
+                content = content.replace(new RegExp(keyRegex), this.json?.parse(eachKey.split(Keywords.relativeJPath)[1]))
+            } else
+                content = content.replace(keyRegex, this.json?.parse(eachKey.split(Keywords.relativeJPath)[1]).toString())
+        })
+        this.refineObj(content);
+    }
+
+    /**
+     * Deserializes the keywords.
+     * @returns `JSON` if no errors. Else `undefined`
+     */
+    public deserialize() : JSON | undefined {
         return this.obj;
     }
-
-    private getFilePath(lineItem: string) {
-        return lineItem.split(Keywords.importCheck)[1].split("\"")[0];
+    /**
+     * Returns file path from `import` keyword
+     * @param lineItem Comma separated line item in string
+     * @returns File path in string
+     */
+    private getFilePath(lineItem: string): string {
+        return lineItem.split(Keywords.importKey)[1].split("\"")[0];
     }
+    /**
+     * Decodes `import` keyword
+     * @param lineItem Comma separated line item in string
+     */
+    private decodeImport(content: string): string {
+        var filePath: string = this.getFilePath(content);
 
-    private decodeImport(lineItem: string) {
-        if(this.isImport(lineItem)) {
-            var filePath: string = this.getFilePath(lineItem);
-            if(this.filePath !== undefined) {
-                var dirname: string = path.dirname(this.filePath);
-                var importFilePath: string = path.join(dirname, filePath);
-                this.content = this.content.replace(Keywords.importCheck + filePath + "\"", read(importFilePath))
-                this.commaSeparated = this.content.split(",");
-            }
-            else throw new Error("filepath is undefined");
+        var dirname: string = path.dirname(this.filePath);
+        var importFilePath: string = path.join(dirname, filePath);
+        content = content.replace(Keywords.importKey + filePath + "\"", read(importFilePath))
+
+        if(this.isImport(content)) {
+            this.decodeImport(content);
+            return content;
+        } else {
+            return content;
         }
     }
-
+    /**
+     * Identifies comment lines. Can identify multiple lined comments
+     * @param lineItem Comma separated line item in string
+     */
     private decodeSingleLineComment(lineItem: string) {
-        if(this.isSingleLineComment(lineItem)) {
-            var commentedLine: string = Keywords.singleLineComment + lineItem.split(Keywords.singleLineComment)[1];
-            this.content = this.content.replace(commentedLine, "");
-        }
-    }
-
-    private decodeMultiLineComment(lineItem: string, index: number) {
-        if(this.isMultiLineCommentStart(lineItem)) {
-            var commentedLine: string = lineItem.split(Keywords.multiLineCommentStart)[1];
-            for(let i = index; i < this.commaSeparated.length; i ++) {
-                if(this.isMultiLineCommentEnd(this.commaSeparated[i]))
-                    break;
-                else commentedLine += this.commaSeparated[i];
-            }
-            this.content = this.content.replace(commentedLine, "");
+        let lineSplit: string[] = lineItem.split("\r\n");
+        for(let i = 0; i < lineSplit.length; i ++) {
+            if(lineSplit[i].trim() !== "" && lineSplit[i].trim().startsWith(Keywords.singleLineComment))
+                this.content = this.content.replace(lineSplit[i], "");
         }
     }
 }
-
-var a = new Cjson<string>("C:\\Users\\Home\\OneDrive\\Desktop\\projects\\Coded-Json-Tests\\test-files\\target.cjson");
-
-a.deserialize();

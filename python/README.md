@@ -12,16 +12,14 @@
 
 <br/>
 
-## NodeJS
-
 ### Your first CJSON code
 
 - Create file with `.cjson` extension
 - Write below code to decode the json:
 
 ```
-    import { Cjson } from 'coded-json'; 
-    var cjson = new Cjson(file/path/to/file.cjson);
+    from cjson import Cjson
+    cjson = Cjson(file/path/to/file.cjson);
     var b = cjson.deserialize();
 ```
 
