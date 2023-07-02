@@ -1,40 +1,37 @@
 package com.codedjson;
 
 import com.codedjson.utils.Decode;
-import com.codedjson.utils.Is;
-import com.codedjson.utils.Keywords;
-
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Scanner;
 
-public class CJson<T> extends Is {
+public class CJson<T> extends Decode {
     private T t;
 
-    public CJson(String filePath) {
+    /**
+     * @param filePath
+     * @throws Exception
+     */
+    public CJson(String filePath) throws Exception {
+        super(filePath, true);
         this.t = null;
         this.filePath = filePath;
         this.baseFileObj = new File(filePath);
     }
-
     private void decode() throws FileNotFoundException {
         read();
-        for (String eachLine : commaSeparated) {
-            if(isImport(eachLine)) {
-                String decodedString = decodeImport(eachLine);
-                this.content = this.content.replace(Keywords.importCheck + this.importFilePath + "\"", decodedString);
-            }
-        }
     }
 
-    public T deserialize() {
-        try {
-            this.decode();
-            return (T)this.content;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            System.exit(1);
-            return null;
-        }
+    /**
+     * Call this method to deserialize <code>cjson</code> files.
+     * @param classType
+     * @return
+     * @throws Exception
+     */
+    public T deserialize(Class<T> classType) throws Exception {
+        this.decodeKeywords();
+        json = parseJson(content);
+        if(classType.equals(String.class)) return (T) content;
+
+        return gson.fromJson(content, classType);
     }
 }
