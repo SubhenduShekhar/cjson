@@ -12,7 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@types/jasmine": "^4.3.1",
-    "coded-json": "file:coded-json-1.1.1.tgz",
+    "coded-json": "file:coded-json-1.1.3.tgz",
     "jasmine": "^4.5.0",
     "jasmine-spec-reporter": "^7.0.0",
     "ts-node": "^10.9.1",
