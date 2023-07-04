@@ -13,7 +13,12 @@ public class Is extends Base {
         return content.contains(Keywords.importKey);
     }
     protected boolean isSingleLineComent(String content) {
-        return content.contains(Keywords.singleLineComment);
+        commentedLines = new ArrayList<>();
+        for (String eachLines : commaSeparatedLines = content.split("\n")) {
+            if(eachLines.trim().startsWith(Keywords.singleLineComment))
+                commentedLines.add(eachLines.trim());
+        }
+        return (commentedLines.size() != 0) ? true : false;
     }
 
     protected RelativeJPath isRelativeJPath(String content) {

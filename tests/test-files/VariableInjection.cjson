@@ -1,0 +1,14 @@
+{
+    "target": {
+        "types": "asd",
+        "fruit": <fruit>,
+        "size": "Large",
+        "fruitType": $.target.fruit,
+        "color": "Red",
+        "secColor": $.target.color,
+        "colorList": [ $.target.color, $.target.secColor ],
+        "digitCheck": 1.5,
+        "digitImport": $.target.digitCheck,
+        "digitArrayImport": [ $.target.digitCheck, $.target.digitImport ]
+    }
+}

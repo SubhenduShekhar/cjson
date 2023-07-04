@@ -9,6 +9,7 @@ import com.google.gson.JsonParser;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Scanner;
 
 public class Base {
@@ -17,6 +18,9 @@ public class Base {
     protected JsonParser jsonParser = new JsonParser();
     protected File baseFileObj;
     protected Gson gson = new Gson();
+    protected String[] commaSeparatedLines;
+
+    protected List<String> commentedLines;
     public Base(String filePath, boolean isFilePath) throws FileNotFoundException {
         this.filePath = filePath;
         this.content = read(this.filePath);
