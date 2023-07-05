@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.lang.reflect.Field;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -122,6 +123,17 @@ public class Decode extends Json {
                     content = content.replaceAll(Pattern.quote("\"<-" + runtimeVals.get(runtimeVals.indexOf(fieldName)) + "->\""), value.toString());
                 else
                     content = content.replaceAll(Pattern.quote("<-" + runtimeVals.get(runtimeVals.indexOf(fieldName)) + "->"), value.toString());
+            }
+        }
+        return content;
+    }
+    protected String replaceContent(String content, HashMap<String, Object> injectingObj, boolean mapDirect) {
+        for (String key : injectingObj.keySet()) {
+            if(content.contains("\"<-" + key + "->\"")) {
+                if(getType(injectingObj.get(key)).equals("string"))
+                    content = content.replaceAll("<-" + key + "->", Matcher.quoteReplacement((String) injectingObj.get(key)));
+                else
+                    content = content.replaceAll("\"<-" + key + "->\"", Matcher.quoteReplacement((String) injectingObj.get(key)));
             }
         }
         return content;

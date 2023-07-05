@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.lang.reflect.Field;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -42,15 +43,19 @@ public class CJson<T> extends Decode {
         return gson.fromJson(content, classType);
     }
 
-    /*public static void main(String[] args) throws Exception {
-        Sample sample = new Sample();
-        sample.fruit = "Apple";
-        sample.types = new ArrayList<>();
-        sample.types.add("fruits");
-        sample.types.add("vegetables");
+    public T inject(Class<T> classType, HashMap<String, ?> injectingObj, Boolean mapDirect) throws Exception {
+        decodeKeywords();
+        content = replaceContent(content, (HashMap<String, Object>) injectingObj, mapDirect);
 
-        CJson<String> cJson = new CJson<>("C:\\Users\\Home\\OneDrive\\Desktop\\projects\\cjson\\tests\\test-files\\VariableInjection.cjson");
-        String t = cJson.inject(String.class, sample);
+        return gson.fromJson(content, classType);
+    }
+
+    /*public static void main(String[] args) throws Exception {
+        HashMap<String, String> h = new HashMap<>();
+        h.put("fruit", "apple");
+
+        CJson<String> cJson = new CJson<>("C:\\Users\\632400\\Desktop\\projects\\cjson\\tests\\test-files\\VariableInjection.cjson");
+        String t = cJson.inject(String.class, h, true);
         //String target = cJson.deserialize(String.class);
     }*/
 }
