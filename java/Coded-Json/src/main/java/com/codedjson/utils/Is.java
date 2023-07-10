@@ -8,6 +8,9 @@ public class Is extends Base {
     public Is(String filePath, boolean isFilePath) throws FileNotFoundException {
         super(filePath, isFilePath);
     }
+    public Is(String content) {
+        super(content);
+    }
 
     protected boolean isImport(String content) {
         return content.contains(Keywords.importKey);

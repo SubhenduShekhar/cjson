@@ -46,9 +46,6 @@ public class Base {
         scanner.close();
         return data;
     }
-    public void read() throws FileNotFoundException {
-        content = fileReader(filePath);
-    }
     public String read(String filePath) throws FileNotFoundException {
         return fileReader(filePath);
     }

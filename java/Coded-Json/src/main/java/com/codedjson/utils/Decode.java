@@ -102,38 +102,13 @@ public class Decode extends Json {
 
         content = decodeRelativePaths(content);
     }
-    protected <InjectingClass>String replaceContent(String content, InjectingClass injectingObj) throws NoSuchFieldException, IllegalAccessException {
-        Field[] fields = injectingObj.getClass().getFields();
-
-        for(Field eachField : fields) {
-            String fieldName = eachField.getName();
-            if(content.contains("\"<-" + fieldName + "->\"")) {
-                Object value = injectingObj.getClass().getField(fieldName).get(injectingObj);
-                if (value.getClass().getName().contains("ArrayList")) {
-                    String listVal = "[";
-                    for (Object eachVal : (List<Object>) value) {
-                        if (getType(eachVal).equals("string"))
-                            listVal += "\"" + eachVal + "\",";
-                        else
-                            listVal += eachVal + ",";
-                    }
-                    listVal = listVal.substring(0, listVal.length() - 1) + "]";
-                    content = content.replaceAll(Pattern.quote("\"<-" + runtimeVals.get(runtimeVals.indexOf(fieldName)) + "->\""), listVal.toString());
-                } else if (!getType(value).equals("string"))
-                    content = content.replaceAll(Pattern.quote("\"<-" + runtimeVals.get(runtimeVals.indexOf(fieldName)) + "->\""), value.toString());
-                else
-                    content = content.replaceAll(Pattern.quote("<-" + runtimeVals.get(runtimeVals.indexOf(fieldName)) + "->"), value.toString());
-            }
-        }
-        return content;
-    }
-    protected String replaceContent(String content, HashMap<String, Object> injectingObj, boolean mapDirect) {
+    protected String replaceContent(String content, HashMap<String, Object> injectingObj) {
         for (String key : injectingObj.keySet()) {
             if(content.contains("\"<-" + key + "->\"")) {
                 if(getType(injectingObj.get(key)).equals("string"))
                     content = content.replaceAll("<-" + key + "->", Matcher.quoteReplacement((String) injectingObj.get(key)));
                 else
-                    content = content.replaceAll("\"<-" + key + "->\"", Matcher.quoteReplacement((String) injectingObj.get(key)));
+                    content = content.replaceAll("\"<-" + key + "->\"", Matcher.quoteReplacement(injectingObj.get(key).toString()));
             }
         }
         return content;

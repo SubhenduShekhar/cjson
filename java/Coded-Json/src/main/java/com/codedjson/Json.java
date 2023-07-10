@@ -22,7 +22,7 @@ public class Json extends Is {
         this.filePath = filePath;
     }
     public Json(String content) throws Exception {
-        super(content, false);
+        super(content);
     }
     public boolean isContentJson(String content) throws Exception {
         try {

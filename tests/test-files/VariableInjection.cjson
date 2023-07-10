@@ -10,5 +10,6 @@
         "digitCheck": 1.5,
         "digitImport": $.target.digitCheck,
         "digitArrayImport": [ $.target.digitCheck, $.target.digitImport ]
-    }
+    },
+    "jsonInjection": <jsonTypeData>
 }
