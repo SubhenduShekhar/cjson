@@ -4,13 +4,16 @@ import com.codedjson.Json;
 import com.codedjson.types.ParsedValue;
 
 import java.io.FileNotFoundException;
+import java.lang.reflect.Field;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Decode extends Json {
+    protected List<String> runtimeVals = new ArrayList<>();
     public Decode(String filePath, boolean isFilePath) throws Exception {
         super(filePath, isFilePath);
     }
@@ -29,13 +32,10 @@ public class Decode extends Json {
         return content;
     }
     private void decodeSingleLineComment() {
-        String[] lineSplit = content.split("\n");
-        for(String eachLineSplit : lineSplit) {
-            if(!eachLineSplit.trim().equals("") && eachLineSplit.trim().startsWith(Keywords.singleLineComment))
-                content = content.replaceAll(eachLineSplit, "");
-        }
+        for(String eachLine : commentedLines)
+            content = content.replace(eachLine, "");
     }
-    private void decodeRelativePaths(String content) throws Exception {
+    private String decodeRelativePaths(String content) {
         List<String> jpaths = new ArrayList<>();
 
         Matcher matcher = Keywords.relativeJPathRegex.matcher(content);
@@ -52,11 +52,35 @@ public class Decode extends Json {
         for(String eachJPath : jpaths) {
             ParsedValue value = parse(eachJPath);
 
+            while (value.value.toString().contains("$."))
+                value = parse(value.value.toString());
+
             if(value.type.equals("String"))
                 content = content.replaceAll("\"<" + eachJPath.replace("$", "\\$") + ">\"", Matcher.quoteReplacement("\"" + value.value + "\""));
             else
                 content = content.replaceAll("\"<" + eachJPath.replace("$", "\\$") + ">\"", Matcher.quoteReplacement(value.value.toString()));
         }
+
+        return content;
+    }
+    private String decodeRuntimeKeys(String content) {
+
+        Matcher matcher = Keywords.runtimeVals.matcher(content);
+
+        while(matcher.find()) {
+            String group = matcher.group();
+
+            if(!runtimeVals.contains(group)) {
+                String variable = group.split("<")[1].split(">")[0];
+                runtimeVals.add(variable);
+
+                if(!content.contains("\"<" + Matcher.quoteReplacement(group) + ">\"")) {
+                    variable = "\"<-" + variable + "->\"";
+                    content = content.replaceAll(Pattern.quote(group), Matcher.quoteReplacement(variable));
+                }
+            }
+        }
+        return content;
     }
     protected void decodeKeywords() throws Exception {
         boolean isChanged;
@@ -71,10 +95,22 @@ public class Decode extends Json {
                 decodeSingleLineComment();
                 isChanged = true;
             }
+            content = decodeRuntimeKeys(content);
             if(! isChanged) break;
         }
         json = parseJson(content);
 
-        decodeRelativePaths(content);
+        content = decodeRelativePaths(content);
+    }
+    protected String replaceContent(String content, HashMap<String, Object> injectingObj) {
+        for (String key : injectingObj.keySet()) {
+            if(content.contains("\"<-" + key + "->\"")) {
+                if(getType(injectingObj.get(key)).equals("string"))
+                    content = content.replaceAll("<-" + key + "->", Matcher.quoteReplacement((String) injectingObj.get(key)));
+                else
+                    content = content.replaceAll("\"<-" + key + "->\"", Matcher.quoteReplacement(injectingObj.get(key).toString()));
+            }
+        }
+        return content;
     }
 }

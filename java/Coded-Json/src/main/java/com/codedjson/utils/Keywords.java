@@ -7,4 +7,5 @@ public class Keywords {
     public static String singleLineComment = "//";
     public static String relativeJPath = "$.";
     public static Pattern relativeJPathRegex = Pattern.compile("[$][.][.A-Za-z0-9]*");
+    public static Pattern runtimeVals = Pattern.compile("[<][A-Za-z0-9]*[>]");
 }
