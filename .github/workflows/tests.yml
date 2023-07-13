@@ -3,9 +3,12 @@
 name: Tests
 
 on:
-  push:
-    branches:
-      - main
+  release:
+    types: [published] 
+    
+  # push:
+  #   branches:
+  #     - main
 
 jobs:
   npm-build:
