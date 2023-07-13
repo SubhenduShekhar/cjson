@@ -3,17 +3,16 @@
 name: Tests
 
 on:
-  release:
-    types: [published] 
-    
-  # push:
-  #   branches:
-  #     - main
+  push:
+    branches:
+      - main
 
 jobs:
+  
   npm-build:
     name: NPM Build
     runs-on: windows-latest
+
     defaults:
       run:
         working-directory: ./npm
@@ -58,6 +57,30 @@ jobs:
         name: Tarbal_store_python
         path: ./python/dist/codedjson-*.tar.gz
   
+  java-build:
+    name: Java build
+    runs-on: windows-latest
+
+    defaults:
+      run:
+        working-directory: ./java/Coded-Json
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK 11
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+        cache: maven
+    - name: Build with Maven
+      run: mvn -B package --file pom.xml
+
+    - name: Check
+      run: |
+        cd ./target
+        dir
+
   npm-test:
     needs: npm-build
     name: Test
