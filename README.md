@@ -1,7 +1,10 @@
-<img src="https://github.com/SubhenduShekhar/cjson/blob/main/docs/logo.png?raw=true" />
-<br/>
-<br/>
-<h3> Coded Javascript Object Notation </h3>
+<!-- <img src="https://github.com/SubhenduShekhar/cjson/blob/main/docs/logo.png?raw=true" /> -->
+
+![img](https://github.com/SubhenduShekhar/cjson/blob/main/docs/logo.png?raw=true)
+
+<!-- <br/>
+<br/> -->
+# Coded Javascript Object Notation
 <br/>
 <h4> CJSON is a data file format(inspired from JSON), but supports logical expressions too.
 Having extended language support to NodeJS, Python and Java, users has experienced data reusability.
@@ -20,18 +23,31 @@ One of the strong feature which we have introduced is importing CJson/Json files
 It works in the similar way, how we import libraries in programming languages. All you need to import it using 
 `$import "path/to/target/file"` and `deserialize` the file.
 
-# Calling relative keys using JPATH
+### Calling relative keys using JPATH
 
 Unlike XPATH for XML files, we have JPATH for JSON files. But as the drawback of plain data files, we cannot refer any variable inside a json object to another variable. This feature is useful when you have to duplicate the json key, but the value will be pulled from another variable which is already present in the json file.
 
 You can also refer to a variable which will be loaded after importing the file.  
 
-# Dynamic variable injection <b> (JAVA Only) </b>
+### Dynamic variable injection <b> (JAVA Only) </b>
 
-You can inject a variable dynamically also. Instead
+***This feature is only available in JAVA and for pure values***
+
+You can inject a variable dynamically also. Instead of replacing a variable value by parsing as `gson` object, put a key in format `<keyToBeReplaced>` like below:
+
+```
+{
+    "idValue": <id>
+}
+```
+Now create a `HashMap` with key as `<id>` and store relevant value in it.
+While invoking `inject` function, pass the HashMap as the second parameter. 
 
 # Single/ Multiple line comments
 
+CJSON also supports **commented lines** by adding `//` at the start of the line.
+
+***Please ***
 
 ## NodeJS
 
@@ -97,7 +113,8 @@ For multi line comments, use like below:
 
 You can also refer to other variables using `$.` followed by jpath.
 <br/>
-<b>Please note, the current version is only decoding using top to down approach</b>
+
+**Please note, the current version is only decoding using top to down approach**
 
 <br>
 
@@ -169,29 +186,13 @@ For multi line comments, use like below:
 
 You can also refer to other variables using `$.` followed by jpath.
 <br/>
-<b>Please note, the current version is only decoding using top to down approach</b>
+
+**Please note, the current version is only decoding using top to down approach**
 
 ## Keywords
 
-<table>
-    <thead>
-        <tr>
-            <td width=5%>Keyword</td>
-            <td width=35%>Description</td>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td width=40%> $import </td>
-            <td width=60%> To import other json file </td>
-        </tr>
-        <tr>
-            <td width=40%> Comments(Single/ Multi-line) </td>
-            <td width=60%> // </td>
-        </tr>
-        <tr>
-            <td width=40%> $.jpath </td>
-            <td width=60%> Refer to a local variable inside JSON </td>
-        </tr>
-    </tbody>
-</table>
+| Keywords      | Description   |
+| ------------- | ------------- |
+| `$import`     | To import other json file  |
+| `Comments(Single/ Multi-line)`  | `//`  |
+|   `$.jpath`   |   Refer to a local variable inside JSON   |
