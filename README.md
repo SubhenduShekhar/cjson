@@ -1,21 +1,25 @@
-<!-- <img src="https://github.com/SubhenduShekhar/cjson/blob/main/docs/logo.png?raw=true" /> -->
+<div align="center">
+    <img src="https://github.com/SubhenduShekhar/cjson/blob/main/docs/logo.png?raw=true" width="400" alt="CJSON Logo"/>
+    <h2>Coded Javascript Object Notation</h2><br/>
+    <h3>
+        CJSON is a data file format(inspired from JSON), but supports logical expressions too. Having extended language support to NodeJS, Python and Java, users has experienced data reusability. For features and examples, please refer to this documentation as base document.
+    </h3>
+    <br/>
+    <div>
+        <img src="https://img.shields.io/badge/java-mvn-blue" alt="Java Tag">&emsp;
+        <img src="https://img.shields.io/badge/NODEJS-npmjs-orange" alt="NPM Tag">&emsp;
+        <img src="https://img.shields.io/badge/Python-pypi-purple" alt="Python Tag">
+    </div>
+    <div>
+        <img src="https://github.com/SubhenduShekhar/cjson/actions/workflows/tests.yml/badge.svg" alt="Test Status"/>
+    </div>
+</div>
 
-![img](https://github.com/SubhenduShekhar/cjson/blob/main/docs/logo.png?raw=true)
-
-<!-- <br/>
-<br/> -->
-# Coded Javascript Object Notation
-<br/>
-<h4> CJSON is a data file format(inspired from JSON), but supports logical expressions too.
-Having extended language support to NodeJS, Python and Java, users has experienced data reusability.
-For features and examples, please refer to this documentation as base document. </h4>
-<br/>
-<br/>
-<img src="https://github.com/SubhenduShekhar/cjson/actions/workflows/tests.yml/badge.svg"/>
-
-<br/>
+<br/><br/><br/>
 
 ## Features
+
+<br/>
 
 ### Import multiple JSON files
 
@@ -43,156 +47,22 @@ You can inject a variable dynamically also. Instead of replacing a variable valu
 Now create a `HashMap` with key as `<id>` and store relevant value in it.
 While invoking `inject` function, pass the HashMap as the second parameter. 
 
-# Single/ Multiple line comments
+### Single/ Multiple line comments
 
 CJSON also supports **commented lines** by adding `//` at the start of the line.
 
-***Please ***
+**Please note, inline comments are not supported. Contributers create an issue [here](https://github.com/users/SubhenduShekhar/projects/7)**
 
-## NodeJS
+### Examples
 
-### Your first CJSON code
-
-- Create file with `.cjson` extension
-- Write below code to decode the json:
-
-```
-    import { Cjson } from 'coded-json'; 
-    var cjson = new Cjson(file/path/to/file.cjson);
-    var b = cjson.deserialize();
-```
-
-#### Output: 
-
-```
-{
-    "source": {
-        // Source JSON content
-    },
-    "target": {
-        "fruit": "Apple",
-        "size": "Large",
-        "color": "Red"
-    }
-}
-```
-
-### Features
-
-
-
-#### Import multiple JSON files
-
-You can use `$import` keyword for importing other JSON files.
-<br/>
-You can also import multiple JSON files.
-
-```
-{
-    "source": $import "./source.json",
-    "target": {
-        "fruit": "Apple",
-        "size": "Large",
-        "color": "Red"
-    }
-}
-```
-
-#### Single/ Multiple line comments
-
-For single line comments, use `//`
-
-For multi line comments, use like below:
-```
-// This is first line comment
-// This is the second one
-
-```
-
-#### Calling relative keys using JPATH
-
-You can also refer to other variables using `$.` followed by jpath.
-<br/>
-
-**Please note, the current version is only decoding using top to down approach**
-
-<br>
-
-## Python
-
-<br>
-
-### Your first CJSON code
-
-- Create file with `.cjson` extension
-- Write below code to decode the json:
-
-```
-    from cjson import Cjson
-    cjson = Cjson(file/path/to/file.cjson);
-    var b = cjson.deserialize();
-```
-
-#### Output: 
-
-```
-{
-    "source": {
-        // Source JSON content
-    },
-    "target": {
-        "fruit": "Apple",
-        "size": "Large",
-        "color": "Red"
-    }
-}
-```
-
-### Features
-
-- [Import multiple JSON files](#Import-multiple-JSON-files)
-- [Single/ Multiple line comments](#Single-Multiple-line-comments)
-- [Calling relative keys using JPATH](#Calling-relative-keys-using-JPATH)
-
-#### Import multiple JSON files
-
-You can use `$import` keyword for importing other JSON files.
-<br/>
-You can also import multiple JSON files.
-
-```
-{
-    "source": $import "./source.json",
-    "target": {
-        "fruit": "Apple",
-        "size": "Large",
-        "color": "Red"
-    }
-}
-```
-
-#### Single/ Multiple line comments
-
-For single line comments, use `//`
-
-For multi line comments, use like below:
-```
-// This is first line comment
-// This is the second one
-
-```
-
-#### Calling relative keys using JPATH
-
-You can also refer to other variables using `$.` followed by jpath.
-<br/>
-
-**Please note, the current version is only decoding using top to down approach**
+- [NPM](https://github.com/SubhenduShekhar/cjson/blob/main/npm/README.md)
+- [Python](https://github.com/SubhenduShekhar/cjson/blob/main/python/README.md)
+- [Java](https://github.com/SubhenduShekhar/cjson/blob/main/java/Coded-Json/README.md)
 
 ## Keywords
 
 | Keywords      | Description   |
 | ------------- | ------------- |
 | `$import`     | To import other json file  |
-| `Comments(Single/ Multi-line)`  | `//`  |
 |   `$.jpath`   |   Refer to a local variable inside JSON   |
+| `Comments(Single/ Multi-line)`  | `//`  |
