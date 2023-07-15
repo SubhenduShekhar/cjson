@@ -1,36 +1,58 @@
-<center>
-    <img src="https://github.com/SubhenduShekhar/cjson/blob/main/docs/logo.png?raw=true" />
+<div align="center">
+    <img src="https://github.com/SubhenduShekhar/cjson/blob/main/docs/logo.png?raw=true" width="200" alt="CJSON Logo"/>
+    <h2>Coded Javascript Object Notation</h2><br/>
+    <h2>For NodeJS</h2><br/>
+    <h3>
+        CJSON is a data file format(inspired from JSON), but supports logical expressions too. Having extended language support to NodeJS, Python and Java, users has experienced data reusability. For features and examples, please refer to this documentation as base document.
+    </h3>
     <br/>
-    <br/>
-    <h3> Coded Javascript Object Notation </h3>
-    <br/>
-    <h4> Why static JSON if you can utilize CJSON </h4>
-    <br/>
-    <br/>
-    <img src="https://github.com/SubhenduShekhar/cjson/actions/workflows/tests.yml/badge.svg"/>
-</center>
+    <div>
+        <img src="https://img.shields.io/badge/Python-pypi-purple" alt="Python Tag">
+    </div>
+    <div>
+        <img src="https://github.com/SubhenduShekhar/cjson/actions/workflows/tests.yml/badge.svg" alt="Test Status"/>
+    </div>
+</div>
+
+<br/><br/>
 
 <br/>
 
-## NodeJS
+## Installation
 
-### Your first CJSON code
+`npm i coded-json`
 
-- Create file with `.cjson` extension
-- Write below code to decode the json:
+## Examples
+
+### Importing a JSON file in CJSON file
+
+#### file.cjson
 
 ```
-    import { Cjson } from 'coded-json'; 
-    var cjson = new Cjson(file/path/to/file.cjson);
+{
+    "source": $import "path/to/source.json",
+    "target": {
+        "fruit": "Apple",
+        "size": "Large",
+        "color": "Red"
+    }
+}
+```
+
+#### Code
+
+```
+    import Cjson from "coded-json";
+    var cjson: Cjson = new Cjson("path/to/file.cjson");
     var b = cjson.deserialize();
 ```
 
-#### Output: 
+#### Output
 
 ```
 {
     "source": {
-        // Source JSON content
+        // source.json content
     },
     "target": {
         "fruit": "Apple",
@@ -40,30 +62,43 @@
 }
 ```
 
-### Features
+### Calling relative keys using JPATH
 
-- [Import multiple JSON files](#Import-multiple-JSON-files)
-- [Single/ Multiple line comments](#Single-Multiple-line-comments)
-- [Calling relative keys using JPATH](#Calling-relative-keys-using-JPATH)
+Below example shows `color` variable is calling data from `fruit` variable
 
-#### Import multiple JSON files
-
-You can use `$import` keyword for importing other JSON files.
-<br/>
-You can also import multiple JSON files.
-
+#### file.cjson
 ```
 {
-    "source": $import "./source.json",
     "target": {
-        "fruit": "Apple",
-        "size": "Large",
-        "color": "Red"
+        "fruit": "Orange",
+        "size": "Medium",
+        "color": $.target.fruit
     }
 }
 ```
 
-#### Single/ Multiple line comments
+#### Code
+
+```
+    import Cjson from "coded-json";
+    var cjson: Cjson = new Cjson("path/to/file.cjson");
+    var b = cjson.deserialize();
+```
+
+#### Output
+
+```
+{
+    "target": {
+        "fruit": "Orange",
+        "size": "Medium",
+        "color": "Orange"
+    }
+}
+```
+
+### Single/ Multiple line comments
+
 
 For single line comments, use `//`
 
@@ -72,36 +107,7 @@ For multi line comments, use like below:
 // This is first line comment
 // This is the second one
 
+{
+    "name": "Amrut" // This is not allowed
+}
 ```
-
-#### Calling relative keys using JPATH
-
-You can also refer to other variables using `$.` followed by jpath.
-<br/>
-<b>Please note, the current version is only decoding using top to down approach</b>
-
-
-## Keywords
-
-<table>
-    <thead>
-        <tr>
-            <td width=5%>Keyword</td>
-            <td width=35%>Description</td>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td width=40%> $import </td>
-            <td width=60%> To import other json file </td>
-        </tr>
-        <tr>
-            <td width=40%> Comments(Single/ Multi-line) </td>
-            <td width=60%> // </td>
-        </tr>
-        <tr>
-            <td width=40%> $.jpath </td>
-            <td width=60%> Refer to a local variable inside JSON </td>
-        </tr>
-    </tbody>
-</table>
