@@ -7,7 +7,7 @@
     </h3>
     <br/>
     <div>
-        <img src="https://img.shields.io/badge/Python-pypi-purple" alt="Python Tag">
+        <img src="https://img.shields.io/badge/NODEJS-orange" alt="NPM Tag">&emsp;
     </div>
     <div>
         <img src="https://github.com/SubhenduShekhar/cjson/actions/workflows/tests.yml/badge.svg" alt="Test Status"/>
@@ -80,8 +80,13 @@ Below example shows `color` variable is calling data from `fruit` variable
 #### Code
 
 ```
+<<<<<<< HEAD
     import Cjson from "coded-json";
     var cjson: Cjson = new Cjson("path/to/file.cjson");
+=======
+    import { Cjson } from 'coded-json'; 
+    var cjson = new Cjson(file/path/to/file.cjson);
+>>>>>>> 6a7c309a47cd4870f80797b696a59e2f93314b87
     var b = cjson.deserialize();
 ```
 
@@ -98,7 +103,10 @@ Below example shows `color` variable is calling data from `fruit` variable
 ```
 
 ### Single/ Multiple line comments
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6a7c309a47cd4870f80797b696a59e2f93314b87
 
 For single line comments, use `//`
 

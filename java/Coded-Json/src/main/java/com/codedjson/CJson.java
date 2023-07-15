@@ -2,15 +2,8 @@ package com.codedjson;
 
 import com.codedjson.utils.Decode;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.lang.reflect.Field;
-import java.net.URI;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.regex.Pattern;
 
 public class CJson<T> extends Decode {
     private T t;
