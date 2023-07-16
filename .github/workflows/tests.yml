@@ -141,7 +141,7 @@ jobs:
   java-test:
     needs: java-build
 
-    name: Java test
+    name: Test
     runs-on: windows-latest
 
     defaults:
@@ -156,5 +156,6 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
           cache: maven
-      - name: Build with Maven
+          
+      - name: Test
         run: mvn test
