@@ -15,7 +15,6 @@ import java.util.Scanner;
 public class Base {
     protected String filePath;
     protected String content;
-    protected JsonParser jsonParser = new JsonParser();
     protected File baseFileObj;
     protected Gson gson = new Gson();
     protected String[] commaSeparatedLines;
@@ -32,10 +31,10 @@ public class Base {
     public String getFullPath() {
         return Paths.get(this.filePath).getParent().toString();
     }
-    public String appendPath(String parent, String... paths) {
+    protected String appendPath(String parent, String... paths) {
         return Paths.get(parent, paths).toString();
     }
-    private String fileReader(String filePath) throws FileNotFoundException {
+    private static String fileReader(String filePath) throws FileNotFoundException {
         File file = new File(filePath);
         String data = "";
         Scanner scanner = new Scanner(file);
@@ -46,11 +45,12 @@ public class Base {
         scanner.close();
         return data;
     }
-    public String read(String filePath) throws FileNotFoundException {
+    public static String read(String filePath) throws FileNotFoundException {
         return fileReader(filePath);
     }
 
-    protected Object parseJson(String jsonString) throws Exception {
+    protected static Object parseJson(String jsonString) throws Exception {
+        JsonParser jsonParser = new JsonParser();
         try {
             JsonObject jsonObject = (JsonObject) jsonParser.parse(jsonString);
             return jsonObject;

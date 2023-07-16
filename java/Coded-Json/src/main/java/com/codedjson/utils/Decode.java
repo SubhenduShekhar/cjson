@@ -50,10 +50,10 @@ public class Decode extends Json {
         }
 
         for(String eachJPath : jpaths) {
-            ParsedValue value = parse(eachJPath);
+            ParsedValue value = parseValue(eachJPath);
 
             while (value.value.toString().contains("$."))
-                value = parse(value.value.toString());
+                value = parseValue(value.value.toString());
 
             if(value.type.equals("String"))
                 content = content.replaceAll("\"<" + eachJPath.replace("$", "\\$") + ">\"", Matcher.quoteReplacement("\"" + value.value + "\""));
