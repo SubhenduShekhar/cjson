@@ -4,7 +4,6 @@
         // And this should also be ignored
         "sport": {
             // This is single line comment
-            "nullType": null,
             "q1": {
                 "question": "Which one is correct team name in NBA?",
                 "options": [
@@ -14,7 +13,8 @@
                     "Huston Rocket"
                 ],
                 "answer": "Huston Rocket"
-            }
+            },
+            "q2": null
         },
         "maths": {
             "q1": {

@@ -1,5 +1,6 @@
 package com.codedjson;
 
+import com.codedjson.exceptions.IllegalValueType;
 import com.codedjson.exceptions.NullJsonKeys;
 import com.codedjson.types.ParsedValue;
 import com.codedjson.utils.Is;
@@ -8,6 +9,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,7 +26,11 @@ public class Json extends Is {
     public Json(String content) throws Exception {
         super(content);
     }
-    public boolean isContentJson(String content) throws Exception {
+    /**
+     * Checks if the deserialized object is of json type
+     * @return boolean
+     */
+    public boolean isContentJson() {
         try {
             parseJson(content);
             return true;
@@ -33,9 +39,28 @@ public class Json extends Is {
             return false;
         }
     }
-    public boolean isContentJson(String content, boolean isFilePath) {
+    /**
+     * Checks if the passed content is of json type
+     * @param content Test content in string
+     * @return boolean
+     */
+    public static boolean isContentJson(String content) {
         try {
-            parseJson(read(content));
+            parseJson(content);
+            return true;
+        }
+        catch (Exception e) {
+            return false;
+        }
+    }
+    /**
+     * Checks if the file content is of json type
+     * @param path File path
+     * @return boolean
+     */
+    public static boolean isContentJson(Path path) {
+        try {
+            parseJson(read(path.toString()));
             return true;
         }
         catch (Exception e) {
@@ -128,16 +153,19 @@ public class Json extends Is {
         }
         return jsonValues;
     }
-    public ParsedValue parse(String key) {
+    protected ParsedValue parseValue(String key) {
         Object value = getValueFromKey(key);
 
         if(value.getClass().getName().contains("JsonPrimitive")) {
             JsonPrimitive jsonPrimitive = (JsonPrimitive) value;
             if(jsonPrimitive.isBoolean())
                 return new ParsedValue(jsonPrimitive.getAsBoolean(), "boolean");
-            else if(jsonPrimitive.isNumber())
-                return new ParsedValue(jsonPrimitive.getAsNumber(), "number");
-            else if(jsonPrimitive.isString())
+            else if(jsonPrimitive.isNumber()) {
+                if(jsonPrimitive.getAsDouble() == jsonPrimitive.getAsInt())
+                    return new ParsedValue(jsonPrimitive.getAsInt(), "number");
+                else
+                    return new ParsedValue(jsonPrimitive.getAsDouble(), "double");
+            } else if(jsonPrimitive.isString())
                 return new ParsedValue(jsonPrimitive.getAsString(), "String");
             else if(jsonPrimitive.isJsonNull())
                 return new ParsedValue(jsonPrimitive.getAsJsonNull(), "null");
@@ -147,5 +175,17 @@ public class Json extends Is {
     }
     public Object parse() {
         return json;
+    }
+    public Object parse(String key) throws IllegalValueType {
+        ParsedValue value = parseValue(key);
+
+        switch (value.type) {
+            case "boolean": return Boolean.parseBoolean(value.value.toString());
+            case "number": return Integer.parseInt(value.value.toString());
+            case "double": return Double.parseDouble(value.value.toString());
+            case "String": return value.value.toString();
+            case "null": return null;
+            default: throw new IllegalValueType("Undefined value type : " + value.value.getClass().getTypeName());
+        }
     }
 }
