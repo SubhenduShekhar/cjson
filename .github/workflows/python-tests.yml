@@ -1,0 +1,61 @@
+# Python test CI pipeline
+
+name: Python Tests
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  
+  python-build:
+    name: Python build
+    runs-on: windows-latest
+
+    defaults:
+      run:
+        working-directory: ./python
+      
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.x'
+
+    - name: Build package
+      run: python setup.py sdist
+    
+    - name: Artifact store
+      uses: actions/upload-artifact@v3
+      with:
+        name: Tarbal_store_python
+        path: ./python/dist/codedjson-*.tar.gz
+    
+  python-test:
+    needs: python-build
+    name: Test
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: ./tests/python
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.x'
+      
+      - name: Loading tar
+        uses: actions/download-artifact@v3
+        with:
+          name: Tarbal_store_python
+          path: ./tests/python
+        
+      - run: |
+          dir
+          pip install -r requirements.txt
+        
+      - name: Running Tests
+        run: python cjson_tests.py
