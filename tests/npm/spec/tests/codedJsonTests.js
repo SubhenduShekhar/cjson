@@ -11,6 +11,8 @@ const jsonfilePath = path.join(__dirname, "..", "..", "..", "\\test-files\\sourc
 const pureJsonfilePath = path.join(__dirname, "..", "..", "..", "\\test-files\\pure.json");
 /** Path to relativeTargetCjson.json */
 const relativeTargetCjson = path.join(__dirname, "..", "..", "..", "\\test-files\\targetRelativeCalls.cjson");
+/** Path to relativeTargetCjson.json */
+const VariableInjection = path.join(__dirname, "..", "..", "..", "\\test-files\\VariableInjection.cjson");
 
 /**
  * Tests related to CJSON files 
@@ -51,7 +53,21 @@ describe("CJSON Test 1", () => {
         var digitArrayImport = decodedJSON.target.digitArrayImport;
         for(let i = 0; i < digitArrayImport.length; i ++)
             assert.equal(digitArrayImport[i], cjson.json.parse("target.digitArrayImport")[i]);
-    })
+    });
+
+    it("I should be able to inject values", () => {
+        var cjson = new Cjson(VariableInjection);
+        var injectObj = {
+            fruit: "apple",
+            jsonTypeData: {
+                injectedData: "jsonInjectionValue"
+            }
+        };
+        var deserializedVal = cjson.inject(injectObj);
+        console.log(deserializedVal);
+        assert.equal(deserializedVal.target.fruit, injectObj.fruit);
+        assert.equal(JSON.stringify(deserializedVal.jsonInjection), JSON.stringify(injectObj.jsonTypeData))
+    });
 });
 
 /**
@@ -66,12 +82,16 @@ describe("JSON Test 2", () => {
 
     it("I should be able to parse jpath using `obj< Cjson >.json.parse(\"Valid.JPATH\")`", () => {
         var cjson = new Cjson(cjsonfilePath);
+        cjson.deserialize();
+        
         var value = cjson.json.parse("source.quiz.sport.q1.question");
         assert.equal(value, "Which one is correct team name in NBA?");
     });
 
     it("I should be able to parse full json using `obj< Cjson >.json.parse()`", () => {
         var cjson = new Cjson(cjsonfilePath);
+        cjson.deserialize();
+
         var value = JSON.stringify(cjson.json.parse());
         assert.equal(value, JSON.stringify(cjson.deserialize()));
     });

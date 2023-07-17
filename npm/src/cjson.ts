@@ -3,6 +3,8 @@ import * as path from 'path';
 import { Is } from "./utils/is";
 import Keywords from "./utils/keywords";
 import { Json, isContentJson } from "./utils/json";
+import { UndefinedObjectError } from "./utils/errors";
+import { refineRelativePaths, refineRuntimeVals } from "./utils/refinery";
 
 
 export class Cjson extends Is {
@@ -21,9 +23,6 @@ export class Cjson extends Is {
         this.obj = undefined;
         this.filePath = filePath;
         this.content = read(this.filePath);
-        
-        this.decodeKeywords();
-        this.decodeRelativePaths(this.content);
     }
     /**
      * Root function for decoding keywords
@@ -44,7 +43,6 @@ export class Cjson extends Is {
             if(!isChanged) break;
         }
     }
-
     private refineObj(content?: string) {
         if(content) this.content = content;
 
@@ -58,35 +56,37 @@ export class Cjson extends Is {
     private decodeRelativePaths(content: string) {
         var uniqueKeys = content.match(Keywords.relativeJPathRegex)?.filter((value, index, array) => { return array.indexOf(value) === index } )
 
-        uniqueKeys?.map(eachKey => {
-            let keyRegex = new RegExp(eachKey.replace("$", "\\$"), 'g');
-            content = content.replace(keyRegex, "\"<" + eachKey + ">\"");
-        });
+        if(uniqueKeys) {
+            content = refineRelativePaths(content, uniqueKeys);
 
+            this.refineObj(content);
+
+            uniqueKeys?.map(eachKey => {
+                let keyRegex = new RegExp("\\<" + eachKey.replace("$", "\\$") + "\\>", 'g');
+                
+                while(this.json?.parse(eachKey.split(Keywords.relativeJPath)[1]).toString().startsWith("<$.")) {
+                    this.refineObj(content);
+                }
+
+                if(typeof this.json?.parse(eachKey.split(Keywords.relativeJPath)[1]) !== "string") {
+                    keyRegex = new RegExp("\"\\<" + eachKey.replace("$", "\\$") + "\\>\"", "g");
+
+                    content = content.replace(new RegExp(keyRegex), this.json?.parse(eachKey.split(Keywords.relativeJPath)[1]))
+                } else
+                    content = content.replace(keyRegex, this.json?.parse(eachKey.split(Keywords.relativeJPath)[1]).toString())
+            });
+        }
         this.refineObj(content);
-
-        uniqueKeys?.map(eachKey => {
-            let keyRegex = new RegExp("\\<" + eachKey.replace("$", "\\$") + "\\>", 'g');
-            
-            while(this.json?.parse(eachKey.split(Keywords.relativeJPath)[1]).toString().startsWith("<$.")) {
-                this.refineObj(content);
-            }
-
-            if(typeof this.json?.parse(eachKey.split(Keywords.relativeJPath)[1]) !== "string") {
-                keyRegex = new RegExp("\"\\<" + eachKey.replace("$", "\\$") + "\\>\"", "g");
-
-                content = content.replace(new RegExp(keyRegex), this.json?.parse(eachKey.split(Keywords.relativeJPath)[1]))
-            } else
-                content = content.replace(keyRegex, this.json?.parse(eachKey.split(Keywords.relativeJPath)[1]).toString())
-        })
-        this.refineObj(content);
+        return content;
     }
-
     /**
      * Deserializes the keywords.
      * @returns `JSON` if no errors. Else `undefined`
      */
     public deserialize() : JSON | undefined {
+        this.decodeKeywords();
+        this.decodeRelativePaths(this.content);
+        
         return this.obj;
     }
     /**
@@ -125,5 +125,51 @@ export class Cjson extends Is {
             if(lineSplit[i].trim() !== "" && lineSplit[i].trim().startsWith(Keywords.singleLineComment))
                 this.content = this.content.replace(lineSplit[i], "");
         }
+    }
+    private decodeRuntimeVals(content: string, uniqueKeys: string[], injectingObj: any) {
+        if(uniqueKeys !== undefined) {
+            content = refineRuntimeVals(content, uniqueKeys);
+            
+            uniqueKeys?.map(eachKey => {
+                eachKey = eachKey.split("<")[1].split(">")[0];
+
+                let keyRegex = new RegExp("<-" + eachKey + "->", 'g');
+                
+                if(typeof injectingObj[eachKey] === "string")
+                    content = content.replace(keyRegex, injectingObj[eachKey]);
+                else {
+                    keyRegex = new RegExp("\"<-" + eachKey + "->\"", 'g');
+                    content = content.replace(keyRegex, JSON.stringify(injectingObj[eachKey]));
+                }
+            });
+        }
+        return content;
+    }
+    /**
+     * Use this for injecting variable at runtime.
+     * 
+     * Value need to be replaced can be stored with a key like `<key>`.
+     * 
+     * Pass the value as json object in `injectingObj`
+     * @param injectingObj Runtime values to be injected in json format
+     * @returns 
+     */
+    public inject(injectingObj: any) {
+        let content = this.content;
+
+        this.decodeKeywords();
+
+        var uniqueKeys = this.content.match(Keywords.runTimeValsRegex)?.filter((value, index, array) => { return array.indexOf(value) === index });
+        if(uniqueKeys) {
+            content = refineRuntimeVals(content, uniqueKeys);
+
+            content = this.decodeRuntimeVals(content, uniqueKeys, injectingObj);
+        }
+        uniqueKeys = this.content.match(Keywords.relativeJPathRegex)?.filter((value, index, array) => { return array.indexOf(value) === index });
+        if(uniqueKeys)
+            content = this.decodeRelativePaths(content);
+        
+        this.refineObj(content);
+        return this.obj;
     }
 }
