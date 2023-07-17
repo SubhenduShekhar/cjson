@@ -1,0 +1,63 @@
+# This workflow will run tests using node and then publish a package to GitHub Packages when a release is created
+
+name: Tests
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  
+  npm-build:
+    name: NPM Build
+    runs-on: windows-latest
+
+    defaults:
+      run:
+        working-directory: ./npm
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      
+      - run: npm i
+        name: Building source
+
+      - run: npm run build
+      
+      - run: dir
+          
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Tarbal_store_npm
+          path: ./npm/coded-json-*.tgz
+
+  npm-test:
+    needs: npm-build
+    name: Test
+    runs-on: windows-latest
+
+    defaults:
+      run:
+        working-directory: ./tests/npm
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      
+        name: Loading tar
+      - uses: actions/download-artifact@v3
+        with:
+          name: Tarbal_store_npm
+          path: ./tests/npm
+      
+      - run: dir
+      
+      - run: npm i
+        name: Running tests
+      
+      - run: npm run test
