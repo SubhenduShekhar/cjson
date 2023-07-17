@@ -10,7 +10,7 @@
         <img src="https://img.shields.io/badge/java-blue" alt="Java Tag">
     </div>
     <div>
-        <img src="https://github.com/SubhenduShekhar/cjson/actions/workflows/tests.yml/badge.svg" alt="Test Status"/>
+        <img src="https://github.com/SubhenduShekhar/cjson/actions/workflows/java-tests.yml/badge.svg" alt="Test Status"/>
     </div>
 </div>
 
