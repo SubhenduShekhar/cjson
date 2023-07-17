@@ -10,7 +10,7 @@
         <img src="https://img.shields.io/badge/NODEJS-orange" alt="NPM Tag">&emsp;
     </div>
     <div>
-        <img src="https://github.com/SubhenduShekhar/cjson/actions/workflows/tests.yml/badge.svg" alt="Test Status"/>
+        <img src="https://github.com/SubhenduShekhar/cjson/actions/workflows/npm-tests.yml/badge.svg" alt="Test Status"/>
     </div>
 </div>
 

@@ -11,7 +11,9 @@
         <img src="https://img.shields.io/badge/Python-pypi-purple" alt="Python Tag">
     </div>
     <div>
-        <img src="https://github.com/SubhenduShekhar/cjson/actions/workflows/tests.yml/badge.svg" alt="Test Status"/>
+        <img src="https://github.com/SubhenduShekhar/cjson/actions/workflows/python-tests.yml/badge.svg" alt="Test Status"/>
+        <img src="https://github.com/SubhenduShekhar/cjson/actions/workflows/java-tests.yml/badge.svg" alt="Test Status"/>
+        <img src="https://github.com/SubhenduShekhar/cjson/actions/workflows/npm-tests.yml/badge.svg" alt="Test Status"/>
     </div>
 </div>
 
