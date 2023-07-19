@@ -90,8 +90,11 @@ class Cjson(Is):
         self.__decode_keywords()
         '''Call this object to unlock native JSON functions
         '''
+        self.__content = self.__refine_runtime_vals(self.__content)
         self.json = Json(self.__obj)
+        
         print(self.__content)
+        
         self.__decode_relative_paths(self.__content)
 
         ''' Returns the JSON compiled object for the given `CJSON` file. '''
@@ -111,6 +114,19 @@ class Cjson(Is):
         for i in range(0, len(line_split)):
             if line_split[i].strip() != "" and line_split[i].strip().startswith(Keywords.single_line_comment):
                 self.__content = self.__content.replace(line_split[i], "")
+    
+    def __refine_runtime_vals(self, content: str):
+        runtime_keys: list[str] = re.findall(Keywords.runtime_vals_regex, content)
+        unique_keys: list[str] = []
+
+        for each_runtime_keys in runtime_keys:
+            if(each_runtime_keys not in unique_keys):
+                unique_keys.append(each_runtime_keys)
+        
+        for each_runtime_keys in unique_keys:
+            content = content.replace(each_runtime_keys, "\"<-" + each_runtime_keys.split("<")[1].split(">")[0] + "->\"")
+        
+        return content
 
     def inject(self, injecting_obj: any):
         self.__decode_keywords()
@@ -119,8 +135,8 @@ class Cjson(Is):
         self.json = Json(self.__obj)
         self.__decode_relative_paths(self.__content)
 
-a = Cjson(r"C:\Users\632400\Desktop\projects\cjson\tests\test-files\VariableInjection.cjson")
+a = Cjson(r"C:\Users\Home\OneDrive\Desktop\projects\cjson\tests\test-files\VariableInjection.cjson")
 
 b = a.deserialize()
 
-print(b)
+# print(b)
