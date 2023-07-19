@@ -26,11 +26,6 @@ class Cjson(Is):
         self.__obj = None
         self.__file_path = file_path
         self.__content = read(self.__file_path)
-        self.__decode_keywords()
-        '''Call this object to unlock native JSON functions
-        '''
-        self.json = Json(self.__obj)
-        self.__decode_relative_paths(self.__content)
     
     def __decode_keywords(self):
         is_changed: bool = False
@@ -85,6 +80,20 @@ class Cjson(Is):
         self.__refine_obj(content=content)
     
     def deserialize(self):
+        ''' Deserializes CJSON context and returns dictionary object in JSON context.
+
+            Please Note, if any key is detected for runtime variable injections is
+            replaced with `<-tag->`. No error/warning is thrown.
+
+            To inject runtime variables, use `inject` function
+        '''
+        self.__decode_keywords()
+        '''Call this object to unlock native JSON functions
+        '''
+        self.json = Json(self.__obj)
+        print(self.__content)
+        self.__decode_relative_paths(self.__content)
+
         ''' Returns the JSON compiled object for the given `CJSON` file. '''
         return self.__obj
     
@@ -102,3 +111,16 @@ class Cjson(Is):
         for i in range(0, len(line_split)):
             if line_split[i].strip() != "" and line_split[i].strip().startswith(Keywords.single_line_comment):
                 self.__content = self.__content.replace(line_split[i], "")
+
+    def inject(self, injecting_obj: any):
+        self.__decode_keywords()
+        '''Call this object to unlock native JSON functions
+        '''
+        self.json = Json(self.__obj)
+        self.__decode_relative_paths(self.__content)
+
+a = Cjson(r"C:\Users\632400\Desktop\projects\cjson\tests\test-files\VariableInjection.cjson")
+
+b = a.deserialize()
+
+print(b)
