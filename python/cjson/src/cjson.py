@@ -88,12 +88,12 @@ class Cjson(Is):
             To inject runtime variables, use `inject` function
         '''
         self.__decode_keywords()
+
+        runtime_keys: list[str] = re.findall(Keywords.runtime_vals_regex, self.__content)
         '''Call this object to unlock native JSON functions
         '''
-        self.__content = self.__refine_runtime_vals(self.__content)
+        self.__content = self.__refine_runtime_vals(self.__content, runtime_keys=runtime_keys)
         self.json = Json(self.__obj)
-        
-        print(self.__content)
         
         self.__decode_relative_paths(self.__content)
 
@@ -115,8 +115,7 @@ class Cjson(Is):
             if line_split[i].strip() != "" and line_split[i].strip().startswith(Keywords.single_line_comment):
                 self.__content = self.__content.replace(line_split[i], "")
     
-    def __refine_runtime_vals(self, content: str):
-        runtime_keys: list[str] = re.findall(Keywords.runtime_vals_regex, content)
+    def __refine_runtime_vals(self, content: str, runtime_keys: list[str]):
         unique_keys: list[str] = []
 
         for each_runtime_keys in runtime_keys:
@@ -128,15 +127,40 @@ class Cjson(Is):
         
         return content
 
-    def inject(self, injecting_obj: any):
+    def inject(self, injecting_obj: dict):
         self.__decode_keywords()
+
+        runtime_keys: list[str] = re.findall(Keywords.runtime_vals_regex, self.__content)
+        
+        self.__content = self.__refine_runtime_vals(content=self.__content, runtime_keys=runtime_keys)
         '''Call this object to unlock native JSON functions
         '''
         self.json = Json(self.__obj)
         self.__decode_relative_paths(self.__content)
+        
+        for each_key in injecting_obj.keys():
+            if type(injecting_obj[each_key]) != str:
+                self.__content = self.__content.replace("\"<-" + each_key + "->\"", json.dumps(injecting_obj[each_key]))
+            else:
+                self.__content = self.__content.replace("<-" + each_key + "->", str(injecting_obj[each_key]))
+        
+        self.__refine_obj(self.__content)
 
-a = Cjson(r"C:\Users\Home\OneDrive\Desktop\projects\cjson\tests\test-files\VariableInjection.cjson")
+        return self.__obj
+    
 
-b = a.deserialize()
+# cjson = Cjson(r"C:\Users\632400\Desktop\projects\cjson\tests\test-files\VariableInjection.cjson")
+# injec_data = {
+#             "fruit": "apple",
+#             "quantity": 1,
+#             "jsonTypeData": {
+#                 "secondaryData": {
+#                     "type": "fruit",
+#                     "seeds": "yes"
+#                 }
+#             }
+#         }
 
-# print(b)
+# data = cjson.inject(injecting_obj=injec_data)
+
+# print(data)

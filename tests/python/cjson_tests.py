@@ -11,6 +11,7 @@ cjson_file_path = get_file_path("target.cjson")
 json_file_path = get_file_path("source.json")
 pure_json_file_path = get_file_path("pure.json")
 relative_target_cjson = get_file_path("targetRelativeCalls.cjson")
+variable_injection = get_file_path("VariableInjection.cjson")
 
 class Result(Enum):
     Pass = "Pass"
@@ -61,6 +62,27 @@ class CjsonTests(unittest.TestCase):
             self.assertEqual(digit_array_import[i], cjson.json.parse("target.digitArrayImport")[i])
         
         add_resut(Result.Pass, "I should be able to deserialize relative path to local variable")
+    
+    def test5(self):
+        cjson = Cjson(variable_injection)
+
+        injec_data = {
+            "fruit": "apple",
+            "quantity": 1,
+            "jsonTypeData": {
+                "secondaryData": {
+                    "type": "fruit",
+                    "seeds": "yes"
+                }
+            }
+        }
+
+        data = cjson.inject(injecting_obj=injec_data)
+        
+        self.assertEqual(cjson.json.parse("target.fruit"), injec_data["fruit"])
+        self.assertEqual(cjson.json.parse("target.quantity"), injec_data["quantity"])
+        self.assertEqual(cjson.json.parse("jsonInjection.secondaryData.type"), injec_data["jsonTypeData"]["secondaryData"]["type"])
+
 
 class JSONTests(unittest.TestCase):
     def test1(self):
@@ -70,12 +92,14 @@ class JSONTests(unittest.TestCase):
     
     def test2(self):
         cjson = Cjson(cjson_file_path)
+        cjson.deserialize()
         value = cjson.json.parse("source.quiz.sport.q1.question")
         self.assertEqual(value, "Which one is correct team name in NBA?")
         add_resut(Result.Pass, "I should be able to parse jpath using `obj< Cjson >.json.parse(\"Valid.JPATH\")`")
     
     def test3(self):
         cjson = Cjson(cjson_file_path)
+        cjson.deserialize()
         value = cjson.json.parse()
         self.assertEqual(value, cjson.deserialize())
 
