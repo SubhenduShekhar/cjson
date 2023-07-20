@@ -2,6 +2,7 @@
     "target": {
         "types": "asd",
         "fruit": <fruit>,
+        "quantity": <quantity>,
         "size": "Large",
         "fruitType": $.target.fruit,
         "color": "Red",
