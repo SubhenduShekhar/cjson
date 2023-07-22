@@ -59,11 +59,13 @@ describe("CJSON Test 1", () => {
         var cjson = new Cjson(VariableInjection);
         var injectObj = {
             fruit: "apple",
+            quantity: 1,
             jsonTypeData: {
                 injectedData: "jsonInjectionValue"
             }
         };
         var deserializedVal = cjson.inject(injectObj);
+        
         console.log(deserializedVal);
         assert.equal(deserializedVal.target.fruit, injectObj.fruit);
         assert.equal(JSON.stringify(deserializedVal.jsonInjection), JSON.stringify(injectObj.jsonTypeData))
