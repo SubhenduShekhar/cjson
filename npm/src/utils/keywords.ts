@@ -9,4 +9,6 @@ export default class Keywords {
     
     public static runTimeValsRegex: RegExp = new RegExp("[<][A-Za-z0-9]*[>]", "g");
 
+    public static pathRegex: RegExp = new RegExp("[A-Za-z0-9:\\.]+", "g");
+
 }
