@@ -6,3 +6,9 @@ def read(filePath: str):
         return f.read()
     else:
         raise FileNotFoundError("Please specify absolute path")
+
+def is_path_absolute(file_path: str):
+    if file_path.startswith("\\"):
+        file_path = file_path[1:]
+    
+    return os.path.isabs(file_path)

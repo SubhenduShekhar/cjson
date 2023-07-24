@@ -19,7 +19,8 @@ export var read = (filePath: string) => {
  * @returns 
  */
 export var isAbsolutePath = (filePath: string) => {
-    // var uniqueKeys = filePath.match(Keywords.runTimeValsRegex)?.filter((value, index, array) => { return array.indexOf(value) === index });
-    // console.log(uniqueKeys);
-    return (path.isAbsolute(filePath) ? true : false);
+    if(filePath.startsWith("\\"))
+        filePath = filePath.substring(1)
+    
+    return path.isAbsolute(filePath);
 }

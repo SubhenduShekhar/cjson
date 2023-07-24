@@ -2,7 +2,7 @@
 {
   "type": "commonjs",
   "name": "coded-json",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "CJSON is a data file format(inspired from JSON), but supports logical expressions too. Having extended language support to NodeJS, Python and Java, users has experienced data reusability. For features and examples, please refer to this documentation as base document.",
   "repository": "https://github.com/SubhenduShekhar/cjson",
   "homepage": "https://github.com/SubhenduShekhar/cjson#readme",

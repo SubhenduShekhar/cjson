@@ -3,7 +3,7 @@ import * as path from 'path';
 import { Is } from "./utils/is";
 import Keywords from "./utils/keywords";
 import { Json, isContentJson } from "./utils/json";
-import { CJSONContentInsteadOfFilePath, UndefinedObjectError } from "./utils/errors";
+import { AbsolutePathConstraintError, CJSONContentInsteadOfFilePath } from "./utils/errors";
 import { refineRelativePaths, refineRuntimeVals } from "./utils/refinery";
 
 
@@ -12,6 +12,7 @@ export class Cjson extends Is {
     private filePath: string ;
     private content: string = "";
     public json: Json | undefined = undefined;
+    public isContentCJson: boolean | undefined;
     public isContentJson = (isFilePath: boolean): boolean => { return isContentJson(this.content, isFilePath) };
 
     /**
@@ -22,11 +23,12 @@ export class Cjson extends Is {
         super();
         this.obj = undefined;
         
-        if(content.trim().startsWith("{") && !isContentCJson) throw CJSONContentInsteadOfFilePath("Expected CJSON content instead of file path. Give second parameter as true.");
+        if(isAbsolutePath(content) && isContentCJson) throw CJSONContentInsteadOfFilePath("CJSON flag is true, but got file path");
 
         if(isContentCJson) {
             this.filePath = __dirname;
             this.content = content;
+            this.isContentCJson = isContentCJson;
         } else {
             this.filePath = content;
             this.content = read(this.filePath);
@@ -111,10 +113,18 @@ export class Cjson extends Is {
      */
     private decodeImport(content: string): string {
         var filePath: string = this.getFilePath(content);
-        // if(this.filePath === undefined) throw UndefinedObjectError("Given CJSON is not from file");
+        var importFilePath: string;
+
+        if(isAbsolutePath(filePath))
+            importFilePath = filePath;
+
+        else if(!isAbsolutePath(filePath) && this.isContentCJson) throw AbsolutePathConstraintError("Only absolute path is supported in import statements");
         
-        var dirname: string = path.dirname(this.filePath);
-        var importFilePath: string = path.join(dirname, filePath);
+        else {
+            var dirname: string = path.dirname(this.filePath);
+            importFilePath = path.join(dirname, filePath);
+        }
+        
         content = content.replace(Keywords.importKey + filePath + "\"", read(importFilePath))
 
         if(this.isImport(content)) {
@@ -183,18 +193,19 @@ export class Cjson extends Is {
     }
 }
 
-var a = `
-{
-    "source": $import "C:\\Users\\Home\\OneDrive\\Desktop\\projects\\cjson\\tests\\test-files\\source.json",
-    "target": {
-        "fruit": "Apple",
-        "size": "Large",
-        "color": "Red"
-    }
-}
-`
-isAbsolutePath("C:\\Users\\Home\\OneDrive\\Desktop\\projects\\cjson\\tests\\test-files\\source.json");
-// var cjson = new Cjson(a, true);
+// var a = `
+// {
+//     "source": $import "C:\\Users\\Home\\OneDrive\\Desktop\\projects\\cjson\\tests\\test-files\\source.json",
+//     "target": {
+//         "fruit": "Apple",
+//         "size": "Large",
+//         "color": "Red"
+//     }
+// }
+// `
+// var a = "C:\\Users\\Home\\OneDrive\\Desktop\\projects\\cjson\\tests\\test-files\\targetRelativeCalls.cjson"
+
+// var cjson = new Cjson(a);
 
 // var b =  cjson.deserialize();
 // console.log(b);
