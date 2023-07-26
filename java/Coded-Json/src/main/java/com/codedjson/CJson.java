@@ -11,20 +11,6 @@ public class CJson<T> extends Decode {
     /**
      * Parser for <code>CJSON</code> files.<br/>
      * Inspired from JSON capabilities with extended features.
-     * @deprecated will be deprecated from later versions. Use <code>CJson(Path filePath)</code> instead
-     * @param filePath
-     * @throws Exception
-     */
-    public CJson(String filePath) throws Exception {
-        super(filePath, true);
-        this.t = null;
-        this.filePath = filePath;
-        this.baseFileObj = new File(filePath);
-    }
-
-    /**
-     * Parser for <code>CJSON</code> files.<br/>
-     * Inspired from JSON capabilities with extended features.
      * @param filePath
      * @throws Exception
      */
@@ -33,6 +19,19 @@ public class CJson<T> extends Decode {
         this.t = null;
         this.filePath = filePath.toString();
         this.baseFileObj = new File(this.filePath);
+    }
+    /**
+     * Parser for <code>CJSON</code> files.<br/>
+     * Inspired from JSON capabilities with extended features.
+     * @deprecated will be deprecated from later versions. Use <code>CJson(Path filePath)</code> instead
+     * @param content CJSON/JSON content in string
+     * @throws Exception
+     */
+    public CJson(String content) {
+        super(content);
+        this.t = null;
+        this.filePath = null;
+        this.baseFileObj = null;
     }
     /**
      * Call this method to deserialize <code>cjson</code> files.

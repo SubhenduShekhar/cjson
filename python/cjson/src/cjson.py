@@ -1,9 +1,10 @@
-from utils.file import read
+from utils.file import read, is_path_absolute
 from utils._is import Is
 from utils.keywords import Keywords
 from utils._json import Json, is_content_json as content_json_check
 from os import path
 import json, re
+from utils._exceptions import AbsolutePathConstraintError, FilePathAndCJSONCotentConflict
 
 def is_content_json(content: str, is_file_path: bool = False):
         ''' Checks if the parsed content is JSON
@@ -14,18 +15,31 @@ class Cjson(Is):
     __obj:any
     __file_path: str
     __content: str = ""
+    __is_content_cjson: bool = False
     json: Json | None = None
 
-    def __init__(self, file_path: str):
+    def __init__(self, content: str, is_content_cjson: bool = False):
         ''' Initializes and decodes `CJSON` files.
 
             This can also be used for parsing JSON files in `CJSON` way.
+
+            `content` can be file path and cjson/json type string.
+
             Parsing in CJSON way unlocks many functions. For more details, see function documentation.
+
         '''
         super().__init__()
         self.__obj = None
-        self.__file_path = file_path
-        self.__content = read(self.__file_path)
+
+        if(is_path_absolute(content) and is_content_cjson):
+            raise FilePathAndCJSONCotentConflict()
+        elif is_content_cjson == True:
+            self.__is_content_cjson = is_content_cjson
+            self.__content = content
+            self.__file_path = None
+        else:
+            self.__file_path = content
+            self.__content = read(self.__file_path)
     
     def __decode_keywords(self):
         is_changed: bool = False
@@ -104,9 +118,18 @@ class Cjson(Is):
         return line_item.split(Keywords.import_key)[1].split("\"")[0]
 
     def __decode_import(self, line_item: str):
+        global import_file_path
+        
         file_path: str = self.__get_file_path(line_item=line_item)
-        dir_name: str = path.dirname(path.abspath(self.__file_path))
-        import_file_path: str = path.join(dir_name, file_path)
+
+        if(is_path_absolute(file_path=file_path)):
+            import_file_path = file_path
+        elif(not is_path_absolute(file_path=file_path) and self.__is_content_cjson):
+            raise AbsolutePathConstraintError("Only absolute path is supported in import statements")
+        else:
+            dir_name: str = path.dirname(path.abspath(self.__file_path))
+            import_file_path = path.join(dir_name, file_path)
+        
         self.__content = self.__content.replace(Keywords.import_key + file_path + "\"", read(import_file_path))
 
     def __decode_single_line_comment(self, line_item: str):
@@ -147,20 +170,20 @@ class Cjson(Is):
         self.__refine_obj(self.__content)
 
         return self.__obj
-    
 
-# cjson = Cjson(r"C:\Users\632400\Desktop\projects\cjson\tests\test-files\VariableInjection.cjson")
-# injec_data = {
-#             "fruit": "apple",
-#             "quantity": 1,
-#             "jsonTypeData": {
-#                 "secondaryData": {
-#                     "type": "fruit",
-#                     "seeds": "yes"
-#                 }
-#             }
-#         }
+# a = '''
+# {
+#     "source": $import "C:\\Users\\Home\\OneDrive\\Desktop\\projects\\cjson\\tests\\test-files\\source.json",
+#     "target": {
+#         "fruit": "Apple",
+#         "size": "Large",
+#         "color": "Red"
+#     }
+# }
+# '''
+# c = "C:\\Users\\Home\\OneDrive\\Desktop\\projects\\cjson\\tests\\test-files\\targetRelativeCalls.cjson"
 
-# data = cjson.inject(injecting_obj=injec_data)
+# b = Cjson(c, True)
 
-# print(data)
+# k = b.deserialize()
+# print(k)

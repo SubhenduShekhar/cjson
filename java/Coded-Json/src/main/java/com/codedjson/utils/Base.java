@@ -18,15 +18,18 @@ public class Base {
     protected File baseFileObj;
     protected Gson gson = new Gson();
     protected String[] commaSeparatedLines;
+    protected boolean isFilePath;
 
     protected List<String> commentedLines;
     public Base(String filePath, boolean isFilePath) throws FileNotFoundException {
         this.filePath = filePath;
         this.content = read(this.filePath);
+        this.isFilePath = isFilePath;
     }
     public Base(String content) {
         this.filePath = null;
         this.content = content;
+        this.isFilePath = false;
     }
     public String getFullPath() {
         return Paths.get(this.filePath).getParent().toString();
@@ -92,5 +95,11 @@ public class Base {
                 }
             }
         }
+    }
+    protected boolean isAbsolutePath(String filePath) {
+        if(filePath.startsWith("\\"))
+            filePath = filePath.substring(2);
+
+        return new File(filePath).isAbsolute();
     }
 }

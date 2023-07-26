@@ -23,7 +23,7 @@ public class Json extends Is {
         super(filePath, isFilePath);
         this.filePath = filePath;
     }
-    public Json(String content) throws Exception {
+    public Json(String content) {
         super(content);
     }
     /**

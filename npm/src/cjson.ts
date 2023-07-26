@@ -1,28 +1,38 @@
-import { read } from "./utils/file";
+import { isAbsolutePath, read } from "./utils/file";
 import * as path from 'path';
 import { Is } from "./utils/is";
 import Keywords from "./utils/keywords";
 import { Json, isContentJson } from "./utils/json";
-import { UndefinedObjectError } from "./utils/errors";
+import { AbsolutePathConstraintError, CJSONContentInsteadOfFilePath } from "./utils/errors";
 import { refineRelativePaths, refineRuntimeVals } from "./utils/refinery";
 
 
 export class Cjson extends Is {
     private obj: JSON | undefined;
-    private filePath: string;
+    private filePath: string ;
     private content: string = "";
     public json: Json | undefined = undefined;
+    public isContentCJson: boolean | undefined;
     public isContentJson = (isFilePath: boolean): boolean => { return isContentJson(this.content, isFilePath) };
 
     /**
      * Call this contructor to parse a CJSON file.
      * @param filePath CJSON file absolute path
      */
-    constructor(filePath: string) {
+    constructor(content: string, isContentCJson?: boolean) {
         super();
         this.obj = undefined;
-        this.filePath = filePath;
-        this.content = read(this.filePath);
+        
+        if(isAbsolutePath(content) && isContentCJson) throw CJSONContentInsteadOfFilePath("CJSON flag is true, but got file path");
+
+        if(isContentCJson) {
+            this.filePath = __dirname;
+            this.content = content;
+            this.isContentCJson = isContentCJson;
+        } else {
+            this.filePath = content;
+            this.content = read(this.filePath);
+        }
     }
     /**
      * Root function for decoding keywords
@@ -103,9 +113,18 @@ export class Cjson extends Is {
      */
     private decodeImport(content: string): string {
         var filePath: string = this.getFilePath(content);
+        var importFilePath: string;
 
-        var dirname: string = path.dirname(this.filePath);
-        var importFilePath: string = path.join(dirname, filePath);
+        if(isAbsolutePath(filePath))
+            importFilePath = filePath;
+
+        else if(!isAbsolutePath(filePath) && this.isContentCJson) throw AbsolutePathConstraintError("Only absolute path is supported in import statements");
+        
+        else {
+            var dirname: string = path.dirname(this.filePath);
+            importFilePath = path.join(dirname, filePath);
+        }
+        
         content = content.replace(Keywords.importKey + filePath + "\"", read(importFilePath))
 
         if(this.isImport(content)) {
@@ -173,3 +192,20 @@ export class Cjson extends Is {
         return this.obj;
     }
 }
+
+// var a = `
+// {
+//     "source": $import "C:\\Users\\Home\\OneDrive\\Desktop\\projects\\cjson\\tests\\test-files\\source.json",
+//     "target": {
+//         "fruit": "Apple",
+//         "size": "Large",
+//         "color": "Red"
+//     }
+// }
+// `
+// var a = "C:\\Users\\Home\\OneDrive\\Desktop\\projects\\cjson\\tests\\test-files\\targetRelativeCalls.cjson"
+
+// var cjson = new Cjson(a);
+
+// var b =  cjson.deserialize();
+// console.log(b);
