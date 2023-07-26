@@ -40,7 +40,7 @@ public class CjsonTests extends Base {
     @Test
     public void iShouldBeAbleToDeserializeCJSONString() throws Exception {
         String cjsonCotent = "{\n" +
-                "    \"source\": $import \"C:\\Users\\Home\\OneDrive\\Desktop\\projects\\cjson\\tests\\test-files\\source.json\",\n" +
+                "    \"source\": $import \"" + cjsonfilePath.toString() + "\",\n" +
                 "    \"target\": {\n" +
                 "        \"fruit\": \"Apple\",\n" +
                 "        \"size\": \"Large\",\n" +
