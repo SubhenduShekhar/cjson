@@ -1,11 +1,10 @@
 package com.codedjson.utils;
 
 import com.codedjson.Json;
+import com.codedjson.exceptions.AbsolutePathConstraintError;
 import com.codedjson.types.ParsedValue;
 
 import java.io.FileNotFoundException;
-import java.lang.reflect.Field;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,13 +16,22 @@ public class Decode extends Json {
     public Decode(String filePath, boolean isFilePath) throws Exception {
         super(filePath, isFilePath);
     }
+    public Decode(String filePath) {
+        super(filePath);
+    }
     private String getFilePath(String content) {
         return content.split(Pattern.quote(Keywords.importKey))[1].split("\"")[0];
     }
-    private String decodeImport(String content) throws FileNotFoundException {
+    private String decodeImport(String content) throws AbsolutePathConstraintError, FileNotFoundException {
         String filePath = this.getFilePath(content);
+        String dirName;
+        if(isAbsolutePath(filePath))
+            dirName = filePath;
+        else if(!isFilePath)
+            throw new AbsolutePathConstraintError();
+        else
+            dirName = appendPath(getFullPath(), filePath);
 
-        String dirName = appendPath(getFullPath(), filePath);
         content = content.replaceAll(Pattern.quote(Keywords.importKey + filePath + "\""), Matcher.quoteReplacement(read(dirName)));
 
         if(isImport(content)) {

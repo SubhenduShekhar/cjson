@@ -1,5 +1,6 @@
 package com.codedjson;
 
+import com.codedjson.exceptions.AbsolutePathConstraintError;
 import com.codedjson.templates.Pure;
 import com.codedjson.templates.Target;
 import com.codedjson.templates.TargetRelativeCalls;
@@ -35,5 +36,37 @@ public class CjsonTests extends Base {
 
         TargetRelativeCalls targetRelativeCalls = cJson.deserialize(TargetRelativeCalls.class);
         Assertions.assertEquals(targetRelativeCalls.target.digitCheck, cJson.parse("$.target.digitCheck"));
+    }
+    @Test
+    public void iShouldBeAbleToDeserializeCJSONString() throws Exception {
+        String cjsonCotent = "{\n" +
+                "    \"source\": $import \"C:\\Users\\Home\\OneDrive\\Desktop\\projects\\cjson\\tests\\test-files\\source.json\",\n" +
+                "    \"target\": {\n" +
+                "        \"fruit\": \"Apple\",\n" +
+                "        \"size\": \"Large\",\n" +
+                "        \"color\": \"Red\"\n" +
+                "    }\n" +
+                "}";
+        CJson<Target> cJson = new CJson<>(cjsonCotent);
+        Target target = cJson.deserialize(Target.class);
+        Assertions.assertNotNull(target.source.quiz.get("sport").get("q1").question);
+    }
+    @Test
+    public void iShouldNotBeAbleToDeserializeIfImportStatementIsRelativePath() throws Exception {
+        String cjsonCotent = "{\n" +
+                "    \"source\": $import \"\\test-files\\source.json\",\n" +
+                "    \"target\": {\n" +
+                "        \"fruit\": \"Apple\",\n" +
+                "        \"size\": \"Large\",\n" +
+                "        \"color\": \"Red\"\n" +
+                "    }\n" +
+                "}";
+        CJson<Target> cJson = new CJson<>(cjsonCotent);
+        try {
+            cJson.deserialize(Target.class);
+        }
+        catch (AbsolutePathConstraintError e) {
+            Assertions.assertEquals(e.getMessage(), "Expected absolute path in import statement but got relative");
+        }
     }
 }

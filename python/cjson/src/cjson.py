@@ -22,7 +22,8 @@ class Cjson(Is):
         ''' Initializes and decodes `CJSON` files.
 
             This can also be used for parsing JSON files in `CJSON` way.
-            You can also deserialize CJSON/JSON type content as content parameter.
+
+            `content` can be file path and cjson/json type string.
 
             Parsing in CJSON way unlocks many functions. For more details, see function documentation.
 
