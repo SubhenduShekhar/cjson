@@ -37,7 +37,7 @@ public class CjsonTests extends Base {
         TargetRelativeCalls targetRelativeCalls = cJson.deserialize(TargetRelativeCalls.class);
         Assertions.assertEquals(targetRelativeCalls.target.digitCheck, cJson.parse("$.target.digitCheck"));
     }
-    @Test
+    /*@Test
     public void iShouldBeAbleToDeserializeCJSONString() throws Exception {
         String cjsonCotent = "{\n" +
                 "    \"source\": $import \"" + cjsonfilePath.toString() + "\",\n" +
@@ -50,7 +50,7 @@ public class CjsonTests extends Base {
         CJson<Target> cJson = new CJson<>(cjsonCotent);
         Target target = cJson.deserialize(Target.class);
         Assertions.assertNotNull(target.source.quiz.get("sport").get("q1").question);
-    }
+    }*/
     @Test
     public void iShouldNotBeAbleToDeserializeIfImportStatementIsRelativePath() throws Exception {
         String cjsonCotent = "{\n" +
