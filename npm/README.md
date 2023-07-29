@@ -80,13 +80,8 @@ Below example shows `color` variable is calling data from `fruit` variable
 #### Code
 
 ```
-<<<<<<< HEAD
-    import Cjson from "coded-json";
-    var cjson: Cjson = new Cjson("path/to/file.cjson");
-=======
     import { Cjson } from 'coded-json'; 
     var cjson = new Cjson(file/path/to/file.cjson);
->>>>>>> 6a7c309a47cd4870f80797b696a59e2f93314b87
     var b = cjson.deserialize();
 ```
 
@@ -102,11 +97,51 @@ Below example shows `color` variable is calling data from `fruit` variable
 }
 ```
 
-### Single/ Multiple line comments
-<<<<<<< HEAD
+### Dynamic variable injection
 
-=======
->>>>>>> 6a7c309a47cd4870f80797b696a59e2f93314b87
+#### file.cjson
+
+```
+{
+    "target": {
+        "types": "asd",
+        "fruit": <fruit>,
+        "quantity": <quantity>,
+    },
+    "jsonInjection": <jsonTypeData>
+}
+```
+
+#### Code
+
+```
+    var cjson = new Cjson(file/path/to/file.cjson);
+    var injectObj = {
+        fruit: "apple",
+        quantity: 1,
+        jsonTypeData: {
+            injectedData: "jsonInjectionValue"
+        }
+    };
+    var deserializedVal = cjson.inject(injectObj);
+```
+
+#### Output
+
+```
+{
+    "target": {
+        "types": "asd",
+        "fruit": "apple,
+        "quantity": 1,
+    },
+    "jsonInjection": {
+        injectedData: "jsonInjectionValue"
+    }
+}
+```
+
+### Single/ Multiple line comments
 
 For single line comments, use `//`
 
