@@ -29,15 +29,17 @@ One of the strong feature which we have introduced is importing CJson/Json files
 It works in the similar way, how we import libraries in programming languages. All you need to import it using 
 `$import "path/to/target/file"` and `deserialize` the file.
 
+### Deserializing CJSON/JSON string content
+
+Parsing of CJSON string content is also possible now. You can create CJSON object with a second parameter(specific to language). For language specific details, refer below.
+
 ### Calling relative keys using JPATH
 
 Unlike XPATH for XML files, we have JPATH for JSON files. But as the drawback of plain data files, we cannot refer any variable inside a json object to another variable. This feature is useful when you have to duplicate the json key, but the value will be pulled from another variable which is already present in the json file.
 
 You can also refer to a variable which will be loaded after importing the file.  
 
-### Dynamic variable injection <b> (JAVA Only) </b>
-
-***This feature is only available in JAVA and for pure values***
+### Dynamic variable injection
 
 You can inject a variable dynamically also. Instead of replacing a variable value by parsing as `gson` object, put a key in format `<keyToBeReplaced>` like below:
 

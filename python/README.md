@@ -97,6 +97,58 @@ Below example shows `color` variable is calling data from `fruit` variable
 }
 ```
 
+### Dynamic variable injection
+
+#### file.cjson
+
+```
+{
+    "target": {
+        "types": "asd",
+        "fruit": <fruit>,
+        "quantity": <quantity>,
+    },
+    "jsonInjection": <jsonTypeData>
+}
+```
+
+#### Code
+
+```
+    cjson = Cjson(variable_injection)
+
+        injec_data = {
+            "fruit": "apple",
+            "quantity": 1,
+            "jsonTypeData": {
+                "secondaryData": {
+                    "type": "fruit",
+                    "seeds": "yes"
+                }
+            }
+        }
+
+    data = cjson.inject(injecting_obj=injec_data)
+```
+
+#### Output
+
+```
+{
+    "target": {
+        "types": "asd",
+        "fruit": "apple,
+        "quantity": 1,
+    },
+    "jsonInjection": {
+        "secondaryData": {
+            "type": "fruit",
+            "seeds": "yes"
+        }
+    }
+}
+```
+
 ### Single/ Multiple line comments
 
 

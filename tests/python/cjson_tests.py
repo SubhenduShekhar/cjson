@@ -83,6 +83,7 @@ class CjsonTests(unittest.TestCase):
         self.assertEqual(cjson.json.parse("target.quantity"), injec_data["quantity"])
         self.assertEqual(cjson.json.parse("jsonInjection.secondaryData.type"), injec_data["jsonTypeData"]["secondaryData"]["type"])
 
+        add_resut(Result.Pass, "I should be able to inject data using inject()")
 
 class JSONTests(unittest.TestCase):
     def test1(self):
