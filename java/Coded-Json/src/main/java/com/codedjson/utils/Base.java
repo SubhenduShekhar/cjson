@@ -52,7 +52,7 @@ public class Base {
         return fileReader(filePath);
     }
 
-    protected static Object parseJson(String jsonString) throws Exception {
+    protected static Object parseJson(String jsonString) throws IllegalJsonType {
         JsonParser jsonParser = new JsonParser();
         try {
             JsonObject jsonObject = (JsonObject) jsonParser.parse(jsonString);

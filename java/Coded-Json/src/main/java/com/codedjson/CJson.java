@@ -1,9 +1,16 @@
 package com.codedjson;
 
+import com.codedjson.exceptions.IllegalJsonType;
+import com.codedjson.exceptions.IllegalValueType;
+import com.codedjson.types.ParsedValue;
 import com.codedjson.utils.Decode;
+import com.codedjson.utils.Keywords;
+
 import java.io.File;
 import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.List;
+import java.util.regex.Matcher;
 
 public class CJson<T> extends Decode {
     private T t;
@@ -46,7 +53,6 @@ public class CJson<T> extends Decode {
 
         return gson.fromJson(content, classType);
     }
-
     /**
      * Inject a hashmap to a json object. Uses tag <code>&lt;variable&gt;</code><br/>
      * JSONArrays and JSONObjects cannot be injected<br/>
@@ -64,7 +70,6 @@ public class CJson<T> extends Decode {
 
         return gson.fromJson(content, classType);
     }
-
     /**
      * Deserializes <code>CJSON</code> content and returns as string.
      * @return String value of parsed <code>cjson</code>
@@ -74,5 +79,25 @@ public class CJson<T> extends Decode {
         decodeKeywords();
         json = parseJson(content);
         return content;
+    }
+    public CJson remove(String key) throws IllegalJsonType {
+        if(key.startsWith(Keywords.relativeJPath))
+            key = key.split(Matcher.quoteReplacement(Keywords.relativeJPath))[1];
+        ParsedValue parseValue =  parseValue(key);
+        String value = parseValue.value.toString();
+
+        if(parseValue.type.equals("String"))
+            value = "\"" + parseValue.value + "\"";
+        Matcher matcher = Keywords.keyValueSet(key, value).matcher(content);
+
+        while(matcher.find()) {
+            String group = matcher.group();
+            content = content.replace(group, "");
+        }
+        json = parseJson(content);
+        return this;
+    }
+    public void remove(List<String> keyList) {
+        throw new UnsupportedOperationException();
     }
 }
