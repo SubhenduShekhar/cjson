@@ -55,8 +55,9 @@ public class CJson<T> extends Decode {
 
         decodeKeywords();
 
-        content = parse().toString();
         json = parseJson(content);
+
+        content = parse().toString();
         if(classType.equals(String.class))
             t = (T) content;
         else
