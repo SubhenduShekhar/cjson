@@ -97,14 +97,25 @@ public class CJson<T> extends Decode {
         json = parseJson(content);
         return content;
     }
-    public void remove(String key) {
-        if(key.startsWith(Keywords.relativeJPath))
-            key = key.replace(Keywords.relativeJPath, "");
-        String value = parseValue(key).value.toString();
-        String s = content.replace(value, "null");
+    public T remove(String key) throws IllegalJsonType {
+        removeWithKey(key);
 
+        json = parseJson(content);
+        if(classType.equals(String.class))
+            t = (T) content;
+        else
+            t = gson.fromJson(content, classType);
+        return t;
     }
-    public void remove(List<String> keyList) {
-        throw new UnsupportedOperationException();
+    public T remove(List<String> keyList) throws IllegalJsonType {
+        for(String key: keyList)
+            removeWithKey(key);
+
+        json = parseJson(content);
+        if(classType.equals(String.class))
+            t = (T) content;
+        else
+            t = gson.fromJson(content, classType);
+        return t;
     }
 }

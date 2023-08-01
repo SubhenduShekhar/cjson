@@ -11,7 +11,5 @@ public class Main {
         cJson.remove("$.quiz.sport.q1");
         System.out.println(cJson);
         String s1 = s.trim().replaceAll(" +", " ");
-        /*String s = "{\"asdas\"}";
-        System.out.println(s.replace("{\"a", ""));*/
     }
 }

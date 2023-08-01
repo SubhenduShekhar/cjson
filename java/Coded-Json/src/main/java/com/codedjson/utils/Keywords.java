@@ -9,6 +9,6 @@ public class Keywords {
     public static Pattern relativeJPathRegex = Pattern.compile("[$][.][.A-Za-z0-9]*");
     public static Pattern runtimeVals = Pattern.compile("[<][A-Za-z0-9]*[>]");
     public static Pattern keyValueSet(String key, String value) {
-        return Pattern.compile("\"" + key + "\":\\s.*,");
+        return Pattern.compile("\"" + key + "\":\\s.*" + value + ",");
     }
 }

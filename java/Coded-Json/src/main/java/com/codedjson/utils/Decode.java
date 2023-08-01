@@ -121,4 +121,12 @@ public class Decode extends Json {
         }
         return content;
     }
+    protected void removeWithKey(String key) {
+        if(key.startsWith(Keywords.relativeJPath))
+            key = key.replace(Keywords.relativeJPath, "");
+
+        String value = parseValue(key).value.toString();
+        String toBeReplaced = "\"" + key.split("\\.")[key.split("\\.").length - 1] + "\":" + value + ",";
+        content = content.replace(toBeReplaced, "");
+    }
 }
