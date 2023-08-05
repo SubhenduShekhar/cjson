@@ -57,6 +57,15 @@ CJSON also supports **commented lines** by adding `//` at the start of the line.
 
 **Please note, inline comments are not supported. Contributers create an issue [here](https://github.com/users/SubhenduShekhar/projects/7)**
 
+### Removing key (JAVA only) ![Beta](https://img.shields.io/badge/Status-Beta-yellow)
+
+Any JSON key value pair can be removed by providing its JPath.
+Please Note, if you use `remove` before `deserialize` you will receive `UndeserializedCJSON` exception.
+
+This is because, unless the content is deserialized, CJSON engine has not processed the CJSON content.
+
+[Here](https://github.com/SubhenduShekhar/cjson/blob/main/java/Coded-Json/README.md#removing-key) are the examples
+
 ### Examples
 
 - [NPM](https://github.com/SubhenduShekhar/cjson/blob/main/npm/README.md)
@@ -70,3 +79,4 @@ CJSON also supports **commented lines** by adding `//` at the start of the line.
 | `$import`     | To import other json file  |
 |   `$.jpath`   |   Refer to a local variable inside JSON   |
 | `Comments(Single/ Multi-line)`  | `//`  |
+| `<key>`       |  Expects a dynamic variable   |

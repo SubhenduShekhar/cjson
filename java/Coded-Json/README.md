@@ -1,7 +1,7 @@
 <div align="center">
     <img src="https://github.com/SubhenduShekhar/cjson/blob/main/docs/logo.png?raw=true" width="200" alt="CJSON Logo"/>
     <h2>Coded Javascript Object Notation</h2><br/>
-    <h2>For NodeJS</h2><br/>
+    <h2>For JAVA</h2><br/>
     <h3>
         CJSON is a data file format(inspired from JSON), but supports logical expressions too. Having extended language support to NodeJS, Python and Java, users has experienced data reusability. For features and examples, please refer to this documentation as base document.
     </h3>
@@ -18,7 +18,7 @@
 
 ## Dependency
 
-```
+```xml
 <!-- https://mvnrepository.com/artifact/io.github.subhendushekhar.cjson/cjson -->
 <dependency>
     <groupId>io.github.subhendushekhar.cjson</groupId>
@@ -35,7 +35,7 @@
 
 #### file.cjson
 
-```
+```json
 {
     "source": $import "path/to/source.json",
     "target": {
@@ -48,13 +48,14 @@
 
 #### Code
 
-```
+```java
     import com.codedjson.CJson;
+    import java.nio.file.Paths;
 
     public class Main {
         public static void main(String[] args) throws Exception {
             
-            CJson<SerializableClass> cJson = new CJson<>("file/path/to/file.cjson");
+            CJson<SerializableClass> cJson = new CJson<>(new Paths("file/path/to/file.cjson"));
             SerializableClass target = cJson.deserialize(SerializableClass.class);
         }
     }
@@ -62,7 +63,7 @@
 
 #### Output: 
 
-```
+```json
 {
     "source": {
         // source.json content
@@ -80,7 +81,7 @@
 Below example shows `color` variable is calling data from `fruit` variable
 
 #### file.cjson
-```
+```json
 {
     "target": {
         "fruit": "Orange",
@@ -92,13 +93,14 @@ Below example shows `color` variable is calling data from `fruit` variable
 
 #### Code
 
-```
+```java
     import com.codedjson.CJson;
+    import java.nio.file.Paths;
 
     public class Main {
         public static void main(String[] args) throws Exception {
             
-            CJson<SerializableClass> cJson = new CJson<>("file/path/to/file.cjson");
+            CJson<SerializableClass> cJson = new CJson<>(new Paths("file/path/to/file.cjson"));
             SerializableClass target = cJson.deserialize(SerializableClass.class);
         }
     }
@@ -106,7 +108,7 @@ Below example shows `color` variable is calling data from `fruit` variable
 
 #### Output
 
-```
+```json
 {
     "target": {
         "fruit": "Orange",
@@ -120,7 +122,7 @@ Below example shows `color` variable is calling data from `fruit` variable
 
 #### file.cjson
 
-```
+```json
 {
     "target": {
         "fruit": "Orange",
@@ -133,9 +135,10 @@ Below example shows `color` variable is calling data from `fruit` variable
 
 #### Code
 
-```
+```java
     import com.codedjson.CJson;
     import java.util.HashMap;
+    import java.nio.file.Paths;
 
     public class Main {
         public static void main(String[] args) throws Exception {
@@ -143,7 +146,7 @@ Below example shows `color` variable is calling data from `fruit` variable
             HashMap<String, String> data = new HashMap<String, String>();
             data.put("id", "ID01");
 
-            CJson<SerializableClass> cJson = new CJson<>("file/path/to/file.cjson");
+            CJson<SerializableClass> cJson = new CJson<>(new Paths("file/path/to/file.cjson"));
             SerializableClass target = cJson.inject(SerializableClass.class, data);
 
         }
@@ -152,7 +155,7 @@ Below example shows `color` variable is calling data from `fruit` variable
 
 #### `target` value
 
-```
+```json
 {
     "target": {
         "fruit": "Orange",
@@ -168,11 +171,126 @@ Below example shows `color` variable is calling data from `fruit` variable
 For single line comments, use `//`
 
 For multi line comments, use like below:
-```
+```json
 // This is first line comment
 // This is the second one
 
 {
     "name": "Amrut" // This is not allowed
 }
+```
+
+### Removing key
+
+#### Removing using jpath key pair
+
+##### file.cjson
+
+```json
+{
+    "target": {
+        "fruit": "Orange",
+        "size": "Medium",
+        "color": "Orangle"
+    }
+}
+```
+
+##### Code
+
+```java
+    import com.codedjson.CJson;
+    import java.util.HashMap;
+    import java.nio.file.Paths;
+
+    public class Main {
+        public static void main(String[] args) throws Exception {
+            CJson<SerializableClass> cJson = new CJson<>(new Paths("file/path/to/file.cjson"));
+            cJson.deserialize(SerializableClass.class);
+            SerializableClass value = cJson.remove("$.target.fruit");
+        }
+    }
+```
+
+##### Output 
+```json
+{
+    "target": {
+        "size": "Medium",
+        "color": "Orangle"
+    }
+}
+```
+
+#### Removing using list of jpath keys pair
+
+##### file.cjson
+
+```json
+{
+    "target": {
+        "fruit": "Orange",
+        "size": "Medium",
+        "color": "Orangle"
+    }
+}
+```
+
+##### Code
+
+```java
+    import com.codedjson.CJson;
+
+    import java.util.Arrays;
+    import java.util.HashMap;
+    import java.nio.file.Paths;
+    import java.util.List;
+    
+    public class Main {
+        public static void main(String[] args) throws Exception {
+            CJson<SerializableClass> cJson = new CJson<>(new Paths("file/path/to/file.cjson"));
+            cJson.deserialize(SerializableClass.class);
+            List<String> li = Arrays.asList("$.target.fruit", "$.target.size");
+            SerializableClass value = cJson.remove(li);
+        }
+    }
+```
+
+##### Output
+```json
+{
+    "target": {
+        "color": "Orangle"
+    }
+}
+```
+
+### Deserializing CJSON string content
+
+**Any import path used must be absolute. Otherwise, you will receive `AbsolutePathConstraintError` exception**
+
+#### Code
+
+```java
+    import com.codedjson.CJson;
+
+    import java.util.Arrays;
+    import java.util.HashMap;
+    import java.nio.file.Paths;
+    import java.util.List;
+    
+    public class Main {
+        public static void main(String[] args) throws Exception {
+            String cjsonCotent = "{\n" +
+                    "    \"source\": $import \"" + pureJsonfilePath.toString() + "\",\n" +
+                    "    \"target\": {\n" +
+                    "        \"fruit\": \"Apple\",\n" +
+                    "        \"size\": \"Large\",\n" +
+                    "        \"color\": \"Red\"\n" +
+                    "    }\n" +
+                    "}";
+            CJson<SerializableClass> cJson = new CJson<>(cjsonCotent);
+            SerializableClass target = cJson.deserialize(SerializableClass.class);
+        }
+    }
 ```
