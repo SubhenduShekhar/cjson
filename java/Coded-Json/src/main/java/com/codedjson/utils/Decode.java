@@ -2,6 +2,7 @@ package com.codedjson.utils;
 
 import com.codedjson.Json;
 import com.codedjson.exceptions.AbsolutePathConstraintError;
+import com.codedjson.exceptions.IllegalJsonType;
 import com.codedjson.exceptions.UndeserializedCJSON;
 import com.codedjson.types.ParsedValue;
 import com.google.gson.JsonObject;
@@ -15,7 +16,7 @@ import java.util.regex.Pattern;
 
 public class Decode extends Json {
     protected List<String> runtimeVals = new ArrayList<>();
-    public Decode(String filePath, boolean isFilePath) throws Exception {
+    public Decode(String filePath, boolean isFilePath) throws FileNotFoundException {
         super(filePath, isFilePath);
     }
     public Decode(String filePath) {
@@ -92,7 +93,7 @@ public class Decode extends Json {
         }
         return content;
     }
-    protected void decodeKeywords() throws Exception {
+    protected void decodeKeywords() throws AbsolutePathConstraintError, FileNotFoundException, IllegalJsonType {
         boolean isChanged;
         while(true) {
             isChanged = false;
@@ -132,7 +133,7 @@ public class Decode extends Json {
 
         String value = parseValue(key).value.toString();
 
-        Matcher matcher = Keywords.keyValueSet(key, value).matcher(content);
+        Matcher matcher = Keywords.keyValueSet(key, value, content).matcher(content);
         while (matcher.find()) {
             String group = matcher.group();
             content = content.replace(group, "");

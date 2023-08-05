@@ -9,6 +9,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
+import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,7 +20,7 @@ public class Json extends Is {
     public List<String> jsonKeys;
     public List<Object> jsonValues;
     private String[] dataTypes = new String[] { "string", "int", "boolean", "double" };
-    public Json(String filePath, boolean isFilePath) throws Exception {
+    public Json(String filePath, boolean isFilePath) throws FileNotFoundException {
         super(filePath, isFilePath);
         this.filePath = filePath;
     }
