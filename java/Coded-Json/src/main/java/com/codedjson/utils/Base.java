@@ -8,6 +8,7 @@ import com.google.gson.JsonParser;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.lang.reflect.Field;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Scanner;
@@ -52,7 +53,7 @@ public class Base {
         return fileReader(filePath);
     }
 
-    protected static Object parseJson(String jsonString) throws Exception {
+    protected static Object parseJson(String jsonString) throws IllegalJsonType {
         JsonParser jsonParser = new JsonParser();
         try {
             JsonObject jsonObject = (JsonObject) jsonParser.parse(jsonString);
