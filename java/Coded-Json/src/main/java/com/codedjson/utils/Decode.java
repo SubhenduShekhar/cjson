@@ -2,7 +2,9 @@ package com.codedjson.utils;
 
 import com.codedjson.Json;
 import com.codedjson.exceptions.AbsolutePathConstraintError;
+import com.codedjson.exceptions.UndeserializedCJSON;
 import com.codedjson.types.ParsedValue;
+import com.google.gson.JsonObject;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -111,13 +113,16 @@ public class Decode extends Json {
         content = decodeRelativePaths(content);
     }
     protected String replaceContent(String content, HashMap<String, Object> injectingObj) {
-        for (String key : injectingObj.keySet()) {
-            if(content.contains("\"<-" + key + "->\"")) {
-                if(getType(injectingObj.get(key)).equals("string"))
-                    content = content.replaceAll("<-" + key + "->", Matcher.quoteReplacement((String) injectingObj.get(key)));
-                else
-                    content = content.replaceAll("\"<-" + key + "->\"", Matcher.quoteReplacement(injectingObj.get(key).toString()));
-            }
+        for (String key : injectingObj.keySet())
+            content = replaceContent(content, key, injectingObj.get(key));
+        return content;
+    }
+    protected String replaceContent(String content, String key, Object value) {
+        if (content.contains("\"<-" + key + "->\"")) {
+            if (getType(value).equals("string"))
+                content = content.replaceAll("<-" + key + "->", Matcher.quoteReplacement((String) value));
+            else
+                content = content.replaceAll("\"<-" + key + "->\"", Matcher.quoteReplacement(value.toString()));
         }
         return content;
     }
@@ -126,7 +131,56 @@ public class Decode extends Json {
             key = key.replace(Keywords.relativeJPath, "");
 
         String value = parseValue(key).value.toString();
-        String toBeReplaced = "\"" + key.split("\\.")[key.split("\\.").length - 1] + "\":" + value + ",";
-        content = content.replace(toBeReplaced, "");
+
+        Matcher matcher = Keywords.keyValueSet(key, value).matcher(content);
+        while (matcher.find()) {
+            String group = matcher.group();
+            content = content.replace(group, "");
+        }
     }
+    /*protected void findPathToConstruct(String key, Object value) {
+        String[] keySets = key.split(Matcher.quoteReplacement(Keywords.relativeJPath))[1].split("\\.");
+        String pathConstruct = "";
+        Object valObject = null;
+
+        for(String eachKey : keySets) {
+            if(pathConstruct.equals(""))
+                pathConstruct += eachKey;
+            else
+                pathConstruct += "." + eachKey;
+            try {
+                Object tempVal = getValueFromKey(pathConstruct);
+                if(tempVal == null) throw new Exception();
+                else valObject = tempVal;
+            }
+            catch (Exception e) {
+                String updatedValue;// = valObject.toString() + ",";
+
+                if(valObject.toString().endsWith("}")) {
+                    updatedValue = valObject.toString().split("}")[0] + ",";
+                    if(value.getClass().getName().toLowerCase().contains("string"))
+                        updatedValue += eachKey + ":\"" + value + "\"";
+                    else
+                        updatedValue += eachKey + ":" + value;
+                    updatedValue += "}";
+                }
+                else if(valObject.toString().endsWith("]")) {
+                    updatedValue = valObject.toString().split("]")[0] + ",";
+                    if(value.getClass().getName().toLowerCase().contains("string"))
+                        updatedValue += eachKey + ":\"" + value + "\"";
+                    else
+                        updatedValue += eachKey + ":" + value;
+                    updatedValue += "]";
+                }
+                else {
+
+                }
+                *//*if(value.getClass().getName().toLowerCase().contains("string"))
+                    updatedValue += eachKey + ":\"" + value + "\"";
+                else
+                    updatedValue += eachKey + ":" + value;*//*
+                content = content.replace(valObject.toString(), updatedValue);
+            }
+        }
+    }*/
 }

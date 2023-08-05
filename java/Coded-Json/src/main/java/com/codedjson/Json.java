@@ -126,7 +126,9 @@ public class Json extends Is {
         getKeys(json, "");
         return jsonKeys;
     }
-    private Object getValueFromKey(String key) {
+    protected Object getValueFromKey(String key) {
+        if(json == null) throw new NullPointerException("json object is null");
+
         Object value = json;
         if(key.contains(".")) {
             String[] keyList = key.split("\\.");

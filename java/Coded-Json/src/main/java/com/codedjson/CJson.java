@@ -1,23 +1,19 @@
 package com.codedjson;
 
 import com.codedjson.exceptions.IllegalJsonType;
-import com.codedjson.types.ParsedValue;
+import com.codedjson.exceptions.UndeserializedCJSON;
+import com.codedjson.utils.Checks;
 import com.codedjson.utils.Decode;
-import com.codedjson.utils.Keywords;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class CJson<T> extends Decode {
     private T t;
     private Class<T> classType;
+    private Checks checks = new Checks();
 
     /**
      * Parser for <code>CJSON</code> files.<br/>
@@ -53,6 +49,9 @@ public class CJson<T> extends Decode {
     public T deserialize(Class<T> classType) throws Exception {
         this.classType = classType;
 
+        if(checks.runtimeKeys(content))
+            System.out.println("Warning: Runtime variables detected. To inject data, use inject() instead");
+
         decodeKeywords();
 
         json = parseJson(content);
@@ -78,7 +77,31 @@ public class CJson<T> extends Decode {
         this.classType = classType;
 
         decodeKeywords();
-        content = replaceContent(content, injectingObj);//.replace("\n", "").replace("\r", "");
+        content = replaceContent(content, injectingObj);
+        content = parse().toString();
+
+        if(classType.equals(String.class))
+            t = (T) content;
+        else
+            t = gson.fromJson(content, classType);
+        return t;
+    }
+    /**
+     * Injects single key and value. Uses tag <code>&lt;variable&gt;</code><br/>
+     * JSONArrays and JSONObjects cannot be injected<br/>
+     *
+     * For more details on usage, click <a href="#">here</a>
+     * @param classType generic class type
+     * @param key
+     * @param value
+     * @return
+     * @throws Exception
+     */
+    public T inject(Class<T> classType, String key, Object value) throws Exception {
+        this.classType = classType;
+
+        decodeKeywords();
+        content = replaceContent(content, key, value);
         content = parse().toString();
 
         if(classType.equals(String.class))
@@ -107,7 +130,8 @@ public class CJson<T> extends Decode {
             t = gson.fromJson(content, classType);
         return t;
     }
-    public T remove(List<String> keyList) throws IllegalJsonType {
+    public T remove(List<String> keyList) throws IllegalJsonType, UndeserializedCJSON {
+        if(json == null) throw new UndeserializedCJSON("Undeserialized CJSON content detected. Use deseralize() before remove()");
         for(String key: keyList)
             removeWithKey(key);
 
@@ -118,4 +142,8 @@ public class CJson<T> extends Decode {
             t = gson.fromJson(content, classType);
         return t;
     }
+    /*public void insert(String jsonPath, Object value) {
+        //String pathToConstruct =
+                findPathToConstruct(jsonPath, value);
+    }*/
 }
