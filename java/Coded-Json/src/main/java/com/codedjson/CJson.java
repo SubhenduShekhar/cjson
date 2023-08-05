@@ -1,11 +1,13 @@
 package com.codedjson;
 
+import com.codedjson.exceptions.AbsolutePathConstraintError;
 import com.codedjson.exceptions.IllegalJsonType;
 import com.codedjson.exceptions.UndeserializedCJSON;
 import com.codedjson.utils.Checks;
 import com.codedjson.utils.Decode;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +23,7 @@ public class CJson<T> extends Decode {
      * @param filePath
      * @throws Exception
      */
-    public CJson(Path filePath) throws Exception {
+    public CJson(Path filePath) throws FileNotFoundException {
         super(filePath.toString(), true);
         this.t = null;
         this.filePath = filePath.toString();
@@ -30,7 +32,6 @@ public class CJson<T> extends Decode {
     /**
      * Parser for <code>CJSON</code> files.<br/>
      * Inspired from JSON capabilities with extended features.
-     * @deprecated will be deprecated from later versions. Use <code>CJson(Path filePath)</code> instead
      * @param content CJSON/JSON content in string
      * @throws Exception
      */
@@ -46,7 +47,7 @@ public class CJson<T> extends Decode {
      * @return
      * @throws Exception
      */
-    public T deserialize(Class<T> classType) throws Exception {
+    public T deserialize(Class<T> classType) throws IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException {
         this.classType = classType;
 
         if(checks.runtimeKeys(content))
@@ -73,11 +74,13 @@ public class CJson<T> extends Decode {
      * @return
      * @throws Exception
      */
-    public T inject(Class<T> classType, HashMap<String, Object> injectingObj) throws Exception {
+    public T inject(Class<T> classType, HashMap<String, Object> injectingObj) throws IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException {
         this.classType = classType;
 
         decodeKeywords();
         content = replaceContent(content, injectingObj);
+
+        json = parseJson(content);
         content = parse().toString();
 
         if(classType.equals(String.class))
@@ -97,11 +100,12 @@ public class CJson<T> extends Decode {
      * @return
      * @throws Exception
      */
-    public T inject(Class<T> classType, String key, Object value) throws Exception {
+    public T inject(Class<T> classType, String key, Object value) throws IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException {
         this.classType = classType;
 
         decodeKeywords();
         content = replaceContent(content, key, value);
+        json = parseJson(content);
         content = parse().toString();
 
         if(classType.equals(String.class))
@@ -115,12 +119,14 @@ public class CJson<T> extends Decode {
      * @return String value of parsed <code>cjson</code>
      * @throws Exception
      */
-    public String deserializeAsString() throws Exception {
+    public String deserializeAsString() throws IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException {
         decodeKeywords();
         json = parseJson(content);
         return content;
     }
-    public T remove(String key) throws IllegalJsonType {
+    public T remove(String key) throws IllegalJsonType, UndeserializedCJSON {
+        if(json == null) throw new UndeserializedCJSON("Undeserialized CJSON content detected. Use deseralize() before remove()");
+
         removeWithKey(key);
 
         json = parseJson(content);

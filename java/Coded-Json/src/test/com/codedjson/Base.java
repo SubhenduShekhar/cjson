@@ -9,4 +9,5 @@ public class Base {
     protected Path jsonfilePath = Paths.get(testDataDir, "source.json");
     protected Path pureJsonfilePath = Paths.get(testDataDir, "pure.json");
     protected Path relativeTargetCjson = Paths.get(testDataDir, "targetRelativeCalls.cjson");
+    protected Path variableInjectionCjson = Paths.get(testDataDir, "VariableInjection.cjson");
 }

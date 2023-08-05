@@ -11,4 +11,7 @@ public class TargetObj {
     public double digitCheck;
     public double digitImport;
     public List<Double> digitArrayImport;
+    public String types;
+    public String quantity;
+    public String fruitType;
 }
