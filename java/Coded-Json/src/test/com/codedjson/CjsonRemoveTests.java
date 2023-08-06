@@ -11,7 +11,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CjsonRemove extends Base {
+public class CjsonRemoveTests extends Base {
     @Test
     public void iShouldBeAbleToRemoveAStringKeyValue() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError, UndeserializedCJSON {
         CJson<Target> cJson = new CJson<>(cjsonfilePath);
