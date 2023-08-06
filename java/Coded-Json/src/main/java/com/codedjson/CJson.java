@@ -124,6 +124,14 @@ public class CJson<T> extends Decode {
         json = parseJson(content);
         return content;
     }
+    /**
+     * Removes a key value set from deserialized JSON.<br/>
+     * Takes json path as input and returns updated Serialized class.
+     * @param key JPath starting with "$."
+     * @return Updated Class&lt;T&gt;
+     * @throws IllegalJsonType Throws if any of the path is incorrect
+     * @throws UndeserializedCJSON Throws if the CJSON/JSON is not deserialized. Call deserialize before remove
+     */
     public T remove(String key) throws IllegalJsonType, UndeserializedCJSON {
         if(json == null) throw new UndeserializedCJSON("Undeserialized CJSON content detected. Use deseralize() before remove()");
 
@@ -136,6 +144,14 @@ public class CJson<T> extends Decode {
             t = gson.fromJson(content, classType);
         return t;
     }
+    /**
+     * Removes a key value set from deserialized JSON.<br/>
+     * Takes list of json paths as input and returns updated Serialized class.
+     * @param keyList JPath list starting with "$."
+     * @return Updated Class&lt;T&gt;
+     * @throws IllegalJsonType Throws if any of the path is incorrect
+     * @throws UndeserializedCJSON Throws if the CJSON/JSON is not deserialized. Call deserialize before remove
+     */
     public T remove(List<String> keyList) throws IllegalJsonType, UndeserializedCJSON {
         if(json == null) throw new UndeserializedCJSON("Undeserialized CJSON content detected. Use deseralize() before remove()");
         for(String key: keyList)
@@ -148,8 +164,16 @@ public class CJson<T> extends Decode {
             t = gson.fromJson(content, classType);
         return t;
     }
-    /*public void insert(String jsonPath, Object value) {
-        //String pathToConstruct =
-                findPathToConstruct(jsonPath, value);
-    }*/
+    /**
+     * Converts JAVA object to JSON string. <br/>
+     * If null value is passed, it returns empty JSON - {}
+     * @param object Any JAVA object
+     * @return
+     * @throws IllegalAccessException
+     */
+    public static String deserializeAsString(Object object) throws IllegalAccessException {
+        if(object == null)
+            return "{}";
+        return getAsString(object);
+    }
 }

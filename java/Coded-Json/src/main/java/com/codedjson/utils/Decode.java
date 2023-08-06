@@ -8,13 +8,17 @@ import com.codedjson.types.ParsedValue;
 import com.google.gson.JsonObject;
 
 import java.io.FileNotFoundException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Decode extends Json {
+    private static List<String> stringToIgnore = Arrays.asList( "hash", "serialVersionUID", "serialPersistentFields", "CASE_INSENSITIVE_ORDER", "MIN_VALUE", "MAX_VALUE", "TYPE", "digits", "DigitTens", "DigitOnes", "sizeTable", "SIZE", "BYTES", "serialVersionUID",
+            "POSITIVE_INFINITY", "NEGATIVE_INFINITY", "NaN", "MIN_NORMAL", "MAX_EXPONENT", "MIN_EXPONENT");
     protected List<String> runtimeVals = new ArrayList<>();
     public Decode(String filePath, boolean isFilePath) throws FileNotFoundException {
         super(filePath, isFilePath);
@@ -137,6 +141,66 @@ public class Decode extends Json {
         while (matcher.find()) {
             String group = matcher.group();
             content = content.replace(group, "");
+        }
+    }
+    /**
+     * Master function to convert JAVA object to JSON string
+     * @param object
+     * @return
+     * @throws IllegalAccessException
+     */
+    protected static String getAsString(Object object) throws IllegalAccessException {
+        if(object == null) return "null";
+        else if(object.getClass().getName().toLowerCase().contains("int")
+                || object.getClass().getName().toLowerCase().contains("double")
+                || object.getClass().getName().toLowerCase().contains("boolean")) {
+            for (Field field : object.getClass().getDeclaredFields()) {
+                if(! stringToIgnore.contains(field.getName()))
+                    return object.toString();
+            }
+            return null;
+        }
+        else if(object.getClass().getName().toLowerCase().contains("string")) {
+            for (Field field : object.getClass().getDeclaredFields()) {
+                if(! stringToIgnore.contains(field.getName()))
+                    return "\"" + object + "\"";
+            }
+            return null;
+        }
+        else if(object.getClass().getName().toLowerCase().contains("arraylist")) {
+            List<Object> li = (List<Object>) object;
+            String values = "[";
+            for(Object obj : li) {
+                if(obj.getClass().getName().toLowerCase().contains("string"))
+                    values += "\"" + obj + "\",";
+                else
+                    values += obj + ",";
+            }
+            values = values.substring(0, values.length() - 1);
+            return values + "]";
+        }
+        else if(object.getClass().getName().toLowerCase().contains("hashmap")) {
+            String values = "{";
+            HashMap<String, Object> hashObj = (HashMap<String, Object>) object;
+            for (String keys : hashObj.keySet()) {
+                if(hashObj.get(keys).getClass().getName().toLowerCase().contains("string"))
+                    values += "\"" + keys + "\":\"" + hashObj.get(keys) + "\",";
+                else
+                    values += "\"" + keys + "\":" + getAsString(hashObj.get(keys)) + ",";
+            }
+            return values.substring(0, values.length() - 1) + "}";
+        }
+        else {
+            Field[] fields = object.getClass().getFields();
+            String values = "{";
+            for(Field field : fields) {
+                field.setAccessible(true);
+                Object a = getAsString(field.get(object));
+                if(! stringToIgnore.contains(field.getName()))
+                    values += "\"" + field.getName() + "\":" + a + ",";
+            }
+            values = values.substring(0, values.length() - 1);
+            return values + "}";
         }
     }
     /*protected void findPathToConstruct(String key, Object value) {
