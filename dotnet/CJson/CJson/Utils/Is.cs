@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Coded_Json.Support
+namespace CJson.Utils
 {
-    public abstract class Base
+    internal class Is : Base
     {
-        protected String filePath;
-        protected String basePath;
+
     }
 }
