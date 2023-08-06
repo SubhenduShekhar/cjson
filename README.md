@@ -19,9 +19,19 @@
 
 <br/><br/><br/>
 
-## Features
+## Content
 
-<br/>
+- [Import multiple JSON files](#import-multiple-json-files)
+- [Deserializing CJSON/JSON string content](#deserializing-cjsonjson-string-content)
+- [Calling relative keys using JPATH](#calling-relative-keys-using-jpath)
+- [Dynamic variable injection](#dynamic-variable-injection)
+- [Single/ Multiple line comments](#single-multiple-line-comments)
+- [Removing key (JAVA only) ![Beta](https://img.shields.io/badge/Status-Beta-yellow)](#removing-key-java-only-beta)
+- [Converting `JAVA object` to `JSON String`]()
+- [Reference Examples](#examples)
+
+## Features (v2.0.0 or higher)
+
 
 ### Import multiple JSON files
 
@@ -63,6 +73,14 @@ Any JSON key value pair can be removed by providing its JPath.
 Please Note, if you use `remove` before `deserialize` you will receive `UndeserializedCJSON` exception.
 
 This is because, unless the content is deserialized, CJSON engine has not processed the CJSON content.
+
+[Here](https://github.com/SubhenduShekhar/cjson/blob/main/java/Coded-Json/README.md#removing-key) are the examples
+
+### Convert `JAVA Object` to `JSON String` (JAVA only) ![Beta](https://img.shields.io/badge/Status-Beta-yellow)
+
+Any Java object can be converted to json string by using `toString()` function.
+
+It accepts pure java object and returns JSON in string.
 
 [Here](https://github.com/SubhenduShekhar/cjson/blob/main/java/Coded-Json/README.md#removing-key) are the examples
 

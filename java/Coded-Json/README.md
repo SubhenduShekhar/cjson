@@ -294,3 +294,62 @@ For multi line comments, use like below:
         }
     }
 ```
+
+### Convert `JAVA Object` to `JSON String`
+
+#### Code
+
+```java
+    import com.codedjson.CJson;
+
+    import java.util.Arrays;
+    import java.util.HashMap;
+    import java.nio.file.Paths;
+    import java.util.List;
+    
+    public class Main {
+        public static void main(String[] args) throws Exception {
+            Target target = new Target();
+            target.source = new Pure();
+            target.source.quiz = new HashMap<>();
+
+            HashMap<String, Questions> questionsHashMap = new HashMap<>();
+            Questions questions = new Questions();
+            questions.question = "Which one is correct team name in NBA?";
+            questions.options = Arrays.asList("New York Bulls",
+                    "Los Angeles Kings",
+                    "Golden State Warriros",
+                    "Huston Rocket");
+            questions.answer = "Huston Rocket";
+
+            questionsHashMap.put("q1", questions);
+            target.source.quiz.put("sport", questionsHashMap);
+
+            String targetString = CJson.toString(target);
+        }
+    }
+```
+
+#### Output
+
+```json
+{
+  "source":{
+    "quiz":{
+      "sport":{
+        "q1":{
+          "question":"Which one is correct team name in NBA?",
+          "options":[
+            "New York Bulls",
+            "Los Angeles Kings",
+            "Golden State Warriros",
+            "Huston Rocket"
+          ],
+          "answer":"Huston Rocket"
+        },
+        "q2":null
+      }
+    }
+  }
+}
+```

@@ -124,7 +124,7 @@ public class CjsonTests extends Base {
         questionsHashMap.put("q1", questions);
         target.source.quiz.put("sport", questionsHashMap);
 
-        String targetString = CJson.deserializeAsString(target);
+        String targetString = CJson.toString(target);
         Assertions.assertNotNull(targetString);
 
         CJson<Target> cJson = new CJson<>(targetString);

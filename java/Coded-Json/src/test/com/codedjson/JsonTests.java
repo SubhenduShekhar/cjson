@@ -3,7 +3,6 @@ package com.codedjson;
 import com.codedjson.exceptions.AbsolutePathConstraintError;
 import com.codedjson.exceptions.IllegalJsonType;
 import com.codedjson.exceptions.IllegalValueType;
-import com.codedjson.exceptions.UndeserializedCJSON;
 import com.codedjson.templates.Pure;
 import com.codedjson.templates.Target;
 import org.junit.jupiter.api.Assertions;

@@ -171,7 +171,7 @@ public class CJson<T> extends Decode {
      * @return
      * @throws IllegalAccessException
      */
-    public static String deserializeAsString(Object object) throws IllegalAccessException {
+    public static String toString(Object object) throws IllegalAccessException {
         if(object == null)
             return "{}";
         return getAsString(object);
