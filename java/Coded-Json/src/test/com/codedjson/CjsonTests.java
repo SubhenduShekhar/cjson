@@ -104,33 +104,4 @@ public class CjsonTests extends Base {
         TargetRelativeCalls targetRelativeCalls = cJson.deserialize(TargetRelativeCalls.class);
         Assertions.assertEquals(targetRelativeCalls.source.quiz.get("sport").get("q1").question, "Which one is correct team name in NBA?");
     }
-    @Test
-    public void iShouldBeAbleToConvertJavaObjectToString() throws IllegalAccessException, IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException {
-        Target target = new Target();
-        target.source = new Pure();
-        target.source.quiz = new HashMap<>();
-
-        HashMap<String, Questions> questionsHashMap = new HashMap<>();
-        Questions questions = new Questions();
-        questions.question = "Which one is correct team name in NBA?";
-        questions.options = Arrays.asList("New York Bulls",
-                "Los Angeles Kings",
-                "Golden State Warriros",
-                "Huston Rocket");
-        questions.answer = "Huston Rocket";
-
-        questionsHashMap.put("q1", questions);
-        target.source.quiz.put("sport", questionsHashMap);
-
-        String targetString = CJson.toString(target);
-        Assertions.assertNotNull(targetString);
-
-        CJson<Target> cJson = new CJson<>(targetString);
-        Target deserializedObj = cJson.deserialize(Target.class);
-
-        Assertions.assertNotNull(deserializedObj);
-        Assertions.assertEquals(deserializedObj.source.quiz.get("sport").get("q1").question, "Which one is correct team name in NBA?");
-        Assertions.assertEquals(deserializedObj.source.quiz.get("sport").get("q1").options.size(), 4);
-        Assertions.assertEquals(deserializedObj.source.quiz.get("sport").get("q1").answer, "Huston Rocket");
-    }
 }

@@ -183,10 +183,13 @@ public class Decode extends Json {
             String values = "{";
             HashMap<String, Object> hashObj = (HashMap<String, Object>) object;
             for (String keys : hashObj.keySet()) {
-                if(hashObj.get(keys).getClass().getName().toLowerCase().contains("string"))
-                    values += "\"" + keys + "\":\"" + hashObj.get(keys) + "\",";
-                else
-                    values += "\"" + keys + "\":" + getAsString(hashObj.get(keys)) + ",";
+                if(hashObj.get(keys) != null) {
+                    if(hashObj.get(keys).getClass().getName().toLowerCase().contains("string"))
+                        values += "\"" + keys + "\":\"" + hashObj.get(keys) + "\",";
+                    else
+                        values += "\"" + keys + "\":" + getAsString(hashObj.get(keys)) + ",";
+                }
+                else return "null";
             }
             return values.substring(0, values.length() - 1) + "}";
         }
