@@ -123,19 +123,7 @@ public class Decode extends Json {
         return content;
     }
     protected String replaceContent(String content, String key, Object value) {
-        /*if(key.startsWith(Keywords.relativeJPath)) {
-            if(value.getClass().getName().contains("int")
-                || value.getClass().getName().contains("double")
-                || value.getClass().getName().contains("string")
-                || value.getClass().getName().contains("boolean")) {
-                if (getType(value).equals("string"))
-                    content = content.replaceAll("<-" + key + "->", Matcher.quoteReplacement((String) value));
-                else
-                    content = content.replaceAll("\"<-" + key + "->\"", Matcher.quoteReplacement(value.toString()));
-            }
-        }
-        else*/
-            if (content.contains("\"<-" + key + "->\"")) {
+        if (content.contains("\"<-" + key + "->\"")) {
             if (getType(value).equals("string"))
                 content = content.replaceAll("<-" + key + "->", Matcher.quoteReplacement((String) value));
             else

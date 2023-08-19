@@ -8,6 +8,8 @@ namespace CJson.Utils
 {
     internal class Is : Base
     {
-
+        public Is(string filePath, bool isFilePath) : base(filePath, isFilePath)
+        {
+        }
     }
 }
