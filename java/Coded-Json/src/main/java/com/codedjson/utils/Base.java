@@ -81,17 +81,11 @@ public class Base {
             }
             catch (Exception doubleEx) {
                 try {
-                    String obj = (String) var;
-                    return "string";
+                    boolean obj = (boolean) var;
+                    return "boolean";
                 }
-                catch (Exception strEx) {
-                    try {
-                        boolean obj = (boolean) var;
-                        return "boolean";
-                    }
-                    catch (Exception boolEx) {
-                        return "";
-                    }
+                catch (Exception boolEx) {
+                    return "string";
                 }
             }
         }

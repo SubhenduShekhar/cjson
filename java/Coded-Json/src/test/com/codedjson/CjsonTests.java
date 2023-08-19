@@ -3,13 +3,11 @@ package com.codedjson;
 import com.codedjson.exceptions.AbsolutePathConstraintError;
 import com.codedjson.exceptions.IllegalJsonType;
 import com.codedjson.exceptions.IllegalValueType;
-import com.codedjson.exceptions.UndeserializedCJSON;
 import com.codedjson.templates.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
