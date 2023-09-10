@@ -174,7 +174,7 @@ public class Decode extends Json {
                 if(obj.getClass().getName().toLowerCase().contains("string"))
                     values += "\"" + obj + "\",";
                 else
-                    values += obj + ",";
+                    values += getAsString(obj) + ",";
             }
             values = values.substring(0, values.length() - 1);
             return values + "]";

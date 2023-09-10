@@ -6,19 +6,24 @@ using System.IO;
 
 namespace CJson.Utils
 {
-    internal class Base
+    public class Base
     {
         protected string filePath;
         protected string content;
         protected string[] commaSeparatedLines;
         protected bool isFilePath;
-        protected List<string> commentedLines;
 
         public Base(string filePath, bool isFilePath)
         {
             this.filePath = filePath;
             this.content = Read(this.filePath);
             this.isFilePath = isFilePath;
+        }
+        public Base(String content)
+        {
+            this.content = content;
+            this.filePath = null;
+            this.isFilePath = false;
         }
         public static string Read(String filePath)
         {
@@ -69,10 +74,6 @@ namespace CJson.Utils
                     }
                 }
             }
-        }
-        protected static bool IsAbsolutePath(String filePath)
-        {
-            return Path.IsPathRooted(filePath);
         }
     }
 }
