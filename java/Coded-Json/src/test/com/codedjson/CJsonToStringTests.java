@@ -5,12 +5,15 @@ import com.codedjson.exceptions.IllegalJsonType;
 import com.codedjson.templates.Pure;
 import com.codedjson.templates.Questions;
 import com.codedjson.templates.Target;
+import com.codedjson.templates.TargetObj;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 public class CJsonToStringTests extends Base {
     @Test
@@ -86,5 +89,25 @@ public class CJsonToStringTests extends Base {
         Assertions.assertEquals(deserializedObj.source.quiz.get("sport").get("q1").question, "Which one is correct team name in NBA?");
         Assertions.assertNull(deserializedObj.source.quiz.get("sport").get("q1").options);
         Assertions.assertEquals(deserializedObj.source.quiz.get("sport").get("q1").answer, "Huston Rocket");
+    }
+    @Test
+    public void iShouldBeAbleToConvertJavaObjectToStringWithObjectArray() throws IllegalAccessException, IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException {
+        List<TargetObj> targetArray;
+
+        TargetObj targetObj = new TargetObj();
+        targetObj.fruit = "Apple";
+        targetObj.color = "red";
+
+        TargetObj targetObj1 = new TargetObj();
+        targetObj1.fruit = "Orange";
+        targetObj1.color = "orange";
+
+        targetArray = Arrays.asList(targetObj, targetObj1);
+
+        String targetString = CJson.toString(targetArray);
+        System.out.println(targetString);
+
+        CJson<List> cJson = new CJson<>(targetString);
+        cJson.deserialize(List.class);
     }
 }

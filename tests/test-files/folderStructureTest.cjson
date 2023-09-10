@@ -1,0 +1,9 @@
+{
+    "source": $import "./sub-dir/source.json",
+    "target": {
+        "fruit": "Apple",
+        "size": "Large",
+        "color": "Red",
+        "quantity": 1
+    }
+}
