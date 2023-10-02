@@ -5,7 +5,7 @@ VisualStudioVersion = 17.3.32825.248
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CJson", "CJson\CJson.csproj", "{058E52BA-DC3C-4196-97A8-AB75CBB57804}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CJsonDebug", "CJsonDebug\CJsonDebug.csproj", "{0FD0B577-2048-4873-97B1-F74BE3972679}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CJsonDebug", "CJsonDebug\CJsonDebug.csproj", "{0FD0B577-2048-4873-97B1-F74BE3972679}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

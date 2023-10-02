@@ -1,0 +1,15 @@
+C:\Users\Home\OneDrive\Desktop\projects\cjson\dotnet\CJson\CJSONTest\bin\Debug\net6.0\CJSONTest.exe
+C:\Users\Home\OneDrive\Desktop\projects\cjson\dotnet\CJson\CJSONTest\bin\Debug\net6.0\CJSONTest.deps.json
+C:\Users\Home\OneDrive\Desktop\projects\cjson\dotnet\CJson\CJSONTest\bin\Debug\net6.0\CJSONTest.runtimeconfig.json
+C:\Users\Home\OneDrive\Desktop\projects\cjson\dotnet\CJson\CJSONTest\bin\Debug\net6.0\CJSONTest.dll
+C:\Users\Home\OneDrive\Desktop\projects\cjson\dotnet\CJson\CJSONTest\bin\Debug\net6.0\CJSONTest.pdb
+C:\Users\Home\OneDrive\Desktop\projects\cjson\dotnet\CJson\CJSONTest\obj\Debug\net6.0\CJSONTest.csproj.AssemblyReference.cache
+C:\Users\Home\OneDrive\Desktop\projects\cjson\dotnet\CJson\CJSONTest\obj\Debug\net6.0\CJSONTest.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Home\OneDrive\Desktop\projects\cjson\dotnet\CJson\CJSONTest\obj\Debug\net6.0\CJSONTest.AssemblyInfoInputs.cache
+C:\Users\Home\OneDrive\Desktop\projects\cjson\dotnet\CJson\CJSONTest\obj\Debug\net6.0\CJSONTest.AssemblyInfo.cs
+C:\Users\Home\OneDrive\Desktop\projects\cjson\dotnet\CJson\CJSONTest\obj\Debug\net6.0\CJSONTest.csproj.CoreCompileInputs.cache
+C:\Users\Home\OneDrive\Desktop\projects\cjson\dotnet\CJson\CJSONTest\obj\Debug\net6.0\CJSONTest.dll
+C:\Users\Home\OneDrive\Desktop\projects\cjson\dotnet\CJson\CJSONTest\obj\Debug\net6.0\refint\CJSONTest.dll
+C:\Users\Home\OneDrive\Desktop\projects\cjson\dotnet\CJson\CJSONTest\obj\Debug\net6.0\CJSONTest.pdb
+C:\Users\Home\OneDrive\Desktop\projects\cjson\dotnet\CJson\CJSONTest\obj\Debug\net6.0\CJSONTest.genruntimeconfig.cache
+C:\Users\Home\OneDrive\Desktop\projects\cjson\dotnet\CJson\CJSONTest\obj\Debug\net6.0\ref\CJSONTest.dll

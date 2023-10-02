@@ -10,7 +10,7 @@ namespace CJsonDebug
     {
         public static void Main(String[] args)
         {
-            CJson<Target> cJson = new CJson<Target>(new CJson.Path(@"C:\Users\Home\OneDrive\Desktop\projects\cjson\tests\test-files\source.json"));
+            CJson<Target> cJson = new CJson<Target>(new CJson.Path(@"C:\Users\Home\OneDrive\Desktop\projects\cjson\tests\test-files\target.cjson"));
             Target t = cJson.deserialize();
         }
     }
