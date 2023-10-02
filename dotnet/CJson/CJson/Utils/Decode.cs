@@ -35,11 +35,11 @@ namespace CJson.Utils
         /// <param name="content"></param>
         /// <param name="curFile"></param>
         /// <returns></returns>
-        private String DecodeImport(String content, String curFile)
+        private Decode DecodeImport(String content, String curFile)
         {
             List<String> importVals = MatchAndConfirm(content, Keywords.importKeyRegex);
 
-            if (importVals.Count == 0) return content;
+            if (importVals.Count == 0) return this;
 
             else
             {
@@ -50,7 +50,7 @@ namespace CJson.Utils
 
                     content = content.Replace(eachImportVals, DecodeByDepth(File.ReadAllText(curFile), curFile));
                 }
-                return content;
+                return this;
             }
         }
         /// <summary>
@@ -58,17 +58,17 @@ namespace CJson.Utils
         /// </summary>
         /// <param name="content"></param>
         /// <returns></returns>
-        private String DecodeSingleStatement(String content)
+        private Decode DecodeSingleStatement(String content)
         {
             List<String> commentedLines = MatchAndConfirm(content, Keywords.singleLineComment);
 
-            if (commentedLines.Count == 0) return content;
+            if (commentedLines.Count == 0) return this;
 
             else
                 foreach(String eachCommentedLine in commentedLines)
                     content = content.Replace(eachCommentedLine, "");
 
-            return content;
+            return this;
         }
         /// <summary>
         /// Master function for recursive calls
@@ -81,12 +81,16 @@ namespace CJson.Utils
         {
             if (isFilePath)
             {
-                content = DecodeImport(content, curFile);
-                content = DecodeSingleStatement(content);
-                return content;
+                return this.DecodeImport(content, curFile)
+                    .DecodeSingleStatement(content)
+                    .get();
             }
             else
                 throw new NotImplementedException("String parser is not implemented yet");
+        }
+        private String get()
+        {
+            return this.content;
         }
         /// <summary>
         /// Decode root for all keywords
