@@ -14,7 +14,7 @@ namespace CJson
             this.FilePath = System.IO.Path.Combine(filePath);
         }
         public String ToString() { return FilePath; }
-        protected static bool IsAbsolutePath(String filePath)
+        public static bool IsAbsolutePath(String filePath)
         {
             return System.IO.Path.IsPathRooted(filePath);
         }

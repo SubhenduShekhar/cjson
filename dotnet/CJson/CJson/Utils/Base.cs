@@ -29,13 +29,13 @@ namespace CJson.Utils
         {
             return File.ReadAllText(filePath);
         }
-        protected static Object ParseJson(String jsonString)
+        protected static dynamic ParseJson(String jsonString)
         {
             try
             {
                 return JObject.Parse(jsonString);
             }
-            catch (Exception)
+            catch
             {
                 try
                 {
