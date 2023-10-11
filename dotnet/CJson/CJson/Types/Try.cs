@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using CJson.Exceptions;
+using Newtonsoft.Json.Linq;
 
 namespace CJson.Types
 {
@@ -67,6 +68,16 @@ namespace CJson.Types
             {
                 return false;
             }
+        }
+        public static String GetType(dynamic value)
+        {
+            String type = value.GetType().Name.ToLower();
+
+            if (type.Contains("int")) return "int";
+            else if (type.Contains("string")) return "string";
+            else if (type.Contains("double")) return "double";
+            else if (type.Contains("bool")) return "bool";
+            else throw new UnrecognizedTypeException(type + " is not recognized");
         }
     }
 }

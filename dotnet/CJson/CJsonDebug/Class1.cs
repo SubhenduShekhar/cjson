@@ -12,9 +12,12 @@ namespace CJsonDebug
     {
         public static void Main(String[] args)
         {
-            CJson<Target> cJson = new CJson<Target>(new CJson.Path(@"C:\Users\Home\OneDrive\Desktop\projects\cjson\tests\test-files\targetRelativeCalls.cjson"));
-            Target t = cJson.deserialize();
+            CJson<Target> cJson = new CJson<Target>(new CJson.Path(@"C:\Users\Home\OneDrive\Desktop\projects\cjson\tests\test-files\VariableInjection.cjson"));
+            //Target t = cJson.Deserialize();
+            cJson.Inject("fruit", "orangle");
+            Target t = cJson.Inject("quantity", 1).Deserialize();
 
+            String s = CJson<String>.ToString(t);
         }
     }
 }

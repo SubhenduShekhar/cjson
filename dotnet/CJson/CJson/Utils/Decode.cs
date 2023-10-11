@@ -3,6 +3,7 @@ using CJson.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,6 +13,7 @@ namespace CJson.Utils
     {
         protected static List<String> runtimeValList = new List<String>();
         protected List<String> matchedPaths;
+        protected Boolean isDeseralized;
         public Decode(Path filePath) : base(filePath)
         {
         }
@@ -101,26 +103,31 @@ namespace CJson.Utils
         /// <exception cref="NotImplementedException"></exception>
         private String DecodeByDepth(String curFile)
         {
-            if (isFilePath)
+            if (!this.isDeseralized)
             {
-                Boolean isImportModified = true, isCommentModified = true, isRuntimeKeyModified = true, isRelPathModified = true;
-
-                while(isImportModified | isCommentModified | isRuntimeKeyModified | isRelPathModified)
+                if (isFilePath)
                 {
-                    this.DecodeImport(this.content, curFile, ref isImportModified)
-                        .DecodeSingleStatement(ref isCommentModified)
-                        .DecodeRuntimeKeys(ref isRuntimeKeyModified)
-                        .RelativePathsToStringKeys(ref isRelPathModified);
+                    Boolean isImportModified = true, isCommentModified = true, isRuntimeKeyModified = true, isRelPathModified = true;
+
+                    while (isImportModified | isCommentModified | isRuntimeKeyModified | isRelPathModified)
+                    {
+                        this.DecodeImport(this.content, curFile, ref isImportModified)
+                            .DecodeSingleStatement(ref isCommentModified)
+                            .DecodeRuntimeKeys(ref isRuntimeKeyModified)
+                            .RelativePathsToStringKeys(ref isRelPathModified);
+                    }
+
+                    this.json = ParseJson(this.content);
+                    this.isDeseralized = true;
+
+                    return this.DecodeRelativePaths().Get();
                 }
-
-                this.json = ParseJson(this.content);
-
-                return this.DecodeRelativePaths().Get();
+                else
+                    throw new NotImplementedException("String parser is not implemented yet");
             }
-            else
-                throw new NotImplementedException("String parser is not implemented yet");
+            else return this.content;
         }
-        private String Get()
+        protected String Get()
         {
             return this.content;
         }
@@ -192,5 +199,75 @@ namespace CJson.Utils
         /// Decode root for all keywords
         /// </summary>
         public String DecodeKeywords => DecodeByDepth(filePath);
+        protected Decode ReplaceContent(String key, dynamic value)
+        {
+            if (this.content.Contains("\"<-" + key + "->\""))
+            {
+                if (Try.GetType(value).Equals("string"))
+                    this.content = this.content.Replace("<-" + key + "->", value);
+                else
+                    this.content = this.content.Replace("\"<-" + key + "->\"", value.ToString());
+            }
+            return this;
+        }
+        public String InjectData(String key, dynamic value) => ReplaceContent(key, value).Get();
+        protected static String GetAsString(dynamic value)
+        {
+            if (value == null) return "null";
+            else if(value.GetType().Name.ToLower().Contains("int")
+                || value.GetType().Name.ToLower().Contains("double")
+                || value.GetType().Name.ToLower().Contains("bool"))
+            {
+                //foreach (FieldInfo eachField in value.GetType().DeclaredFields)
+                return value.ToString();
+                //return null;
+            }
+            else if(value.GetType().Name.ToLower().Contains("string"))
+            {
+                //foreach (FieldInfo eachField in value.GetType().DeclaredFields)
+                return "\"" + value.ToString() + "\"";
+                //return null;
+            }
+            else if(value.GetType().Name.ToLower().Contains("list"))
+            {
+                String values = "[";
+                foreach(dynamic eachValue in value)
+                {
+                    if (eachValue.GetType().Name.ToLower().Contains("string"))
+                        values += "\"" + eachValue + "\",";
+                    else
+                        values += GetAsString(eachValue) + ",";
+                }
+                values = values.Substring(0, values.Length - 1);
+                return values + "]";
+            }
+            else if(value.GetType().Name.ToLower().Contains("dictionary"))
+            {
+                String values = "{";
+                //Dictionary<String, dynamic> dictObj = (Dictionary<String, dynamic>)value;
+                foreach(String eachKey in value.Keys)
+                {
+                    if (value[eachKey] != null)
+                    {
+                        if (value[eachKey].GetType().Name.Contains("string"))
+                            values += "\"" + eachKey + "\":\"" + value[eachKey].ToString() + "\",";
+                        else
+                            values += "\"" + eachKey + "\":" + value[eachKey].ToString() + ",";
+                    }
+                    else return "null";
+                }
+                return values.Substring(0, values.Length - 1) + "}";
+            }
+            else
+            {
+                String values = "{";
+                foreach (FieldInfo eachField in value.GetType().DeclaredFields)
+                {
+                    dynamic a = GetAsString(eachField.GetValue(value));
+                    values += "\"" + eachField.Name + "\":" + a.ToString() + ",";
+                }
+                return values.Substring(0, values.Length - 1) + "}";
+            }
+        }
     }
 }
