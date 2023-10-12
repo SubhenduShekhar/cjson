@@ -217,17 +217,9 @@ namespace CJson.Utils
             else if(value.GetType().Name.ToLower().Contains("int")
                 || value.GetType().Name.ToLower().Contains("double")
                 || value.GetType().Name.ToLower().Contains("bool"))
-            {
-                //foreach (FieldInfo eachField in value.GetType().DeclaredFields)
                 return value.ToString();
-                //return null;
-            }
             else if(value.GetType().Name.ToLower().Contains("string"))
-            {
-                //foreach (FieldInfo eachField in value.GetType().DeclaredFields)
                 return "\"" + value.ToString() + "\"";
-                //return null;
-            }
             else if(value.GetType().Name.ToLower().Contains("list"))
             {
                 String values = "[";
@@ -244,7 +236,6 @@ namespace CJson.Utils
             else if(value.GetType().Name.ToLower().Contains("dictionary"))
             {
                 String values = "{";
-                //Dictionary<String, dynamic> dictObj = (Dictionary<String, dynamic>)value;
                 foreach(String eachKey in value.Keys)
                 {
                     if (value[eachKey] != null)

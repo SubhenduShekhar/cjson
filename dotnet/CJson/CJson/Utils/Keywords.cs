@@ -24,5 +24,6 @@ namespace CJson.Utils
             return matches;
         }
         internal static string importKey = "$import";
+
     }
 }

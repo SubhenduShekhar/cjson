@@ -63,5 +63,28 @@ namespace CJson.Utils
         {
             this.json = ParseJson(content);
         }
+        public dynamic Parse(String key)
+        {
+            ParsedValue parsedValue = ParseValue(key);
+            return parsedValue.value;
+        }
+        private List<String> Keys(JObject jsonData) => jsonData.Properties().Select(eachObject => eachObject.Name).ToList();
+        private void GetKeys(dynamic jsonData, String prevKey) {
+            if (jsonData.GetType().Name.ToLower().Contains("jobject"))
+            {
+                foreach(String eachJsonData in Keys(jsonData))
+                {
+                    if(((JObject)jsonData).GetValue(eachJsonData).GetType().Name.ToLower().Contains("jsonarray"))
+                    {
+                        Boolean allRaw = true
+
+                        // Here to be written next...
+                    }
+                }
+            }
+            else if (jsonData.GetType().Name.ToLower().Contains("jsonarray"))
+                foreach (dynamic eachData in (JArray)jsonData)
+                    GetKeys(eachData, "");
+        }
     }
 }
