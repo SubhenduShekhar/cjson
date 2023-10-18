@@ -1,18 +1,12 @@
 ﻿using CJson.Types;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Remoting;
-using System.Text;
-using System.Text.Json.Nodes;
-using System.Threading.Tasks;
 
 namespace CJson.Utils
 {
     public class Json : Is
     {
         protected dynamic json;
+        private readonly List<String> dataTypes = new List<String>() { "string", "int", "bool", "double" };
         public Json(String content) : base(content) { }
         public Json(Path filePath) : base(filePath.FilePath, true) { }
 
@@ -69,22 +63,5 @@ namespace CJson.Utils
             return parsedValue.value;
         }
         private List<String> Keys(JObject jsonData) => jsonData.Properties().Select(eachObject => eachObject.Name).ToList();
-        private void GetKeys(dynamic jsonData, String prevKey) {
-            if (jsonData.GetType().Name.ToLower().Contains("jobject"))
-            {
-                foreach(String eachJsonData in Keys(jsonData))
-                {
-                    if(((JObject)jsonData).GetValue(eachJsonData).GetType().Name.ToLower().Contains("jsonarray"))
-                    {
-                        Boolean allRaw = true
-
-                        // Here to be written next...
-                    }
-                }
-            }
-            else if (jsonData.GetType().Name.ToLower().Contains("jsonarray"))
-                foreach (dynamic eachData in (JArray)jsonData)
-                    GetKeys(eachData, "");
-        }
     }
 }
