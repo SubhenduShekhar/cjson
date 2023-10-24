@@ -3,6 +3,9 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace CJson.Utils
 {
@@ -29,13 +32,13 @@ namespace CJson.Utils
         {
             return File.ReadAllText(filePath);
         }
-        protected static Object ParseJson(String jsonString)
+        protected static dynamic ParseJson(String jsonString)
         {
             try
             {
                 return JObject.Parse(jsonString);
             }
-            catch (Exception)
+            catch
             {
                 try
                 {
@@ -54,21 +57,21 @@ namespace CJson.Utils
                 Int32 intVar = Convert.ToInt32(testVar);
                 return "int";
             }
-            catch(Exception)
+            catch (Exception)
             {
                 try
                 {
                     Double doubleVar = Convert.ToDouble(testVar);
                     return "double";
                 }
-                catch(Exception)
+                catch (Exception)
                 {
                     try
                     {
                         Boolean stringVar = Convert.ToBoolean(testVar);
                         return "boolean";
                     }
-                    catch(Exception)
+                    catch (Exception)
                     {
                         return "string";
                     }

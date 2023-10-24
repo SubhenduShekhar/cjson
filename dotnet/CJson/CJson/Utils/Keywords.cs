@@ -13,6 +13,7 @@ namespace CJson.Utils
         internal static string singleLineComment { get; } = "//.*";
         internal static string relativeJPath { get; } = "$.";
         internal static string relativeJPathRegex { get; } = @"[$][.][.A-Za-z0-9]*";
+        internal static string modifiedRelativeJPathRegex { get; } = "[\"][<][$][.][.A-Za-z0-9]*[>][\"]";
         internal static string runtimeVals { get; } = @"[<][A-Za-z0-9]*[>]";
         internal static List<string> Match(String content, String regex)
         {
@@ -23,5 +24,6 @@ namespace CJson.Utils
             return matches;
         }
         internal static string importKey = "$import";
+
     }
 }
