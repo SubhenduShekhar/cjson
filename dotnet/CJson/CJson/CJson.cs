@@ -6,10 +6,16 @@ namespace CJson
 {
     public sealed class CJson<Type> : Decode
     {
-        private Type type;
-        public CJson(string content) : base(content) => this.type = default;
-        public CJson(Path filePath) : base(filePath) => this.type = default;
-        public CJson<Type> Parse()
+        private Type? type;
+        public CJson(string content) : base(content)
+        {
+            this.Parse();
+        }
+        public CJson(Path filePath) : base(filePath)
+        {
+            this.Parse();
+        }
+        private CJson<Type> Parse()
         {
             content = DecodeKeywords;
 
@@ -17,26 +23,33 @@ namespace CJson
 
             return this;
         }
-        public CJson<Type> Inject(String key, dynamic value)
+        public Type? Inject(String key, dynamic value)
+        {
+            InjectUsingKeyValuePair(key, value);
+
+            type = this.Deserialize();
+            return type;
+        }
+        public Type? Inject(Dictionary<String, dynamic> injectingValues)
+        {
+            foreach(KeyValuePair<String, dynamic> eachKeyValuePair in injectingValues)
+                InjectUsingKeyValuePair(eachKeyValuePair.Key, eachKeyValuePair.Value);
+
+            type = this.Deserialize();
+            return type;
+        }
+
+        private void InjectUsingKeyValuePair(String key, dynamic value)
         {
             this.content = DecodeKeywords;
 
             this.content = InjectData(key, value);
 
             this.json = ParseJson(this.content);
-
-            return this;
         }
-        public CJson<Type> Inject(Dictionary<String, dynamic> injectingValues)
+        public Type? Deserialize()
         {
-            foreach(KeyValuePair<String, dynamic> eachKeyValuePair in injectingValues)
-                Inject(eachKeyValuePair.Key, eachKeyValuePair.Value);
-
-            return this;
-        }
-        public Type Deserialize()
-        {
-            return JsonSerializer.Deserialize<Type>(this.content);
+            return JsonSerializer.Deserialize<Type>(content);
         }
         public String DeserializeAsString()
         {

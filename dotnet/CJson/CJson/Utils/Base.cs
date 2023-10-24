@@ -1,22 +1,82 @@
-﻿using System;
+﻿using CJson.Exceptions;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CJsonTests
+namespace CJson.Utils
 {
     public class Base
     {
-        private String GetCurrentDirectory
+        protected string filePath;
+        protected string content;
+        protected string[] commaSeparatedLines;
+        protected bool isFilePath;
+
+        public Base(string filePath, bool isFilePath)
         {
-            get
+            this.filePath = filePath;
+            this.content = Read(this.filePath);
+            this.isFilePath = isFilePath;
+        }
+        public Base(String content)
+        {
+            this.content = content;
+            this.filePath = null;
+            this.isFilePath = false;
+        }
+        public static string Read(String filePath)
+        {
+            return File.ReadAllText(filePath);
+        }
+        protected static dynamic ParseJson(String jsonString)
+        {
+            try
             {
-                String path = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName;
-                return Path.Combine(path, "tests", "test-files");
+                return JObject.Parse(jsonString);
+            }
+            catch
+            {
+                try
+                {
+                    return JArray.Parse(jsonString);
+                }
+                catch (Exception)
+                {
+                    throw new JsonSyntaxException();
+                }
             }
         }
-        
+        protected static String GetType(dynamic testVar)
+        {
+            try
+            {
+                Int32 intVar = Convert.ToInt32(testVar);
+                return "int";
+            }
+            catch (Exception)
+            {
+                try
+                {
+                    Double doubleVar = Convert.ToDouble(testVar);
+                    return "double";
+                }
+                catch (Exception)
+                {
+                    try
+                    {
+                        Boolean stringVar = Convert.ToBoolean(testVar);
+                        return "boolean";
+                    }
+                    catch (Exception)
+                    {
+                        return "string";
+                    }
+                }
+            }
+        }
     }
 }

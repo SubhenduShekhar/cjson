@@ -2,6 +2,7 @@
 using CJson.Types;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -64,11 +65,12 @@ namespace CJson.Utils
                     String dirName;
                     if (Path.IsAbsolutePath(importFilePath))
                         dirName = importFilePath;
+                    else if (!Path.IsAbsolutePath(importFilePath) && !isFilePath)
+                        throw new AbsolutePathConstraintError();
                     else
-                    {
-                        String path = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(curFile), importFilePath);
-                        content = content.Replace(eachImportVals, DecodeRecursivly(File.ReadAllText(path), path));
-                    }
+                        dirName = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(curFile), importFilePath);
+                    
+                    content = content.Replace(eachImportVals, DecodeRecursivly(File.ReadAllText(dirName), dirName));
                 }
                 return content;
             }
@@ -123,7 +125,22 @@ namespace CJson.Utils
                     return this.DecodeRelativePaths().Get();
                 }
                 else
-                    throw new NotImplementedException("String parser is not implemented yet");
+                {
+                    Boolean isImportModified = true, isCommentModified = true, isRuntimeKeyModified = true, isRelPathModified = true;
+
+                    while (isImportModified | isCommentModified | isRuntimeKeyModified | isRelPathModified)
+                    {
+                        this.DecodeImport(this.content, curFile, ref isImportModified)
+                            .DecodeSingleStatement(ref isCommentModified)
+                            .DecodeRuntimeKeys(ref isRuntimeKeyModified)
+                            .RelativePathsToStringKeys(ref isRelPathModified);
+                    }
+
+                    this.json = ParseJson(this.content);
+                    this.isDeseralized = true;
+
+                    return this.DecodeRelativePaths().Get();
+                }
             }
             else return this.content;
         }
@@ -240,12 +257,16 @@ namespace CJson.Utils
                 {
                     if (value[eachKey] != null)
                     {
-                        if (value[eachKey].GetType().Name.Contains("string"))
+                        if (value[eachKey].GetType().Name.ToLower().Contains("string"))
                             values += "\"" + eachKey + "\":\"" + value[eachKey].ToString() + "\",";
-                        else
+                        else if (value[eachKey].GetType().Name.ToLower().Contains("int")
+                            || value[eachKey].GetType().Name.ToLower().Contains("double")
+                            || value[eachKey].GetType().Name.ToLower().Contains("bool"))
                             values += "\"" + eachKey + "\":" + value[eachKey].ToString() + ",";
+                        else
+                            values += "\"" + eachKey + "\":" + GetAsString(value[eachKey]) + ",";
                     }
-                    else return "null";
+                    else values += "\"" + eachKey + "\":null,";
                 }
                 return values.Substring(0, values.Length - 1) + "}";
             }
@@ -255,7 +276,7 @@ namespace CJson.Utils
                 foreach (FieldInfo eachField in value.GetType().DeclaredFields)
                 {
                     dynamic a = GetAsString(eachField.GetValue(value));
-                    values += "\"" + eachField.Name + "\":" + a.ToString() + ",";
+                    values += "\"" + eachField.Name.Split("<")[1].Split(">")[0] + "\":" + a.ToString() + ",";
                 }
                 return values.Substring(0, values.Length - 1) + "}";
             }
