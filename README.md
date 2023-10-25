@@ -2,11 +2,12 @@
     <img src="https://github.com/SubhenduShekhar/cjson/blob/main/docs/logo.png?raw=true" width="400" alt="CJSON Logo"/>
     <h2>Coded Javascript Object Notation</h2><br/>
     <h3>
-        CJSON is a data file format(inspired from JSON), but supports logical expressions too. Having extended language support to NodeJS, Python and Java, users has experienced data reusability. For features and examples, please refer to this documentation as base document.
+        CJSON is a data file format(inspired from JSON), but supports logical expressions too. Having extended language support to NodeJS, Python, Java and DotNet, users has experienced data reusability. For features and examples, please refer to this documentation as base document.
     </h3>
     <br/>
     <div>
         <img src="https://img.shields.io/badge/java-mvn-blue" alt="Java Tag">&emsp;
+        <img src="https://img.shields.io/badge/dotnet-nuget-pink" alt="DotNet Tag">&emsp;
         <img src="https://img.shields.io/badge/NODEJS-npmjs-orange" alt="NPM Tag">&emsp;
         <img src="https://img.shields.io/badge/Python-pypi-purple" alt="Python Tag">
     </div>
@@ -27,7 +28,7 @@
 - [Dynamic variable injection](#dynamic-variable-injection)
 - [Single/ Multiple line comments](#single-multiple-line-comments)
 - [Removing key (JAVA only) ![Beta](https://img.shields.io/badge/Status-Beta-yellow)](#removing-key-java-only-beta)
-- [Converting `JAVA object` to `JSON String`]()
+- [Converting `Class object` to `JSON String`]()
 - [Reference Examples](#examples)
 
 ## Features (v2.0.0 or higher)
@@ -89,6 +90,7 @@ It accepts pure java object and returns JSON in string.
 - [NPM](https://github.com/SubhenduShekhar/cjson/blob/main/npm/README.md)
 - [Python](https://github.com/SubhenduShekhar/cjson/blob/main/python/README.md)
 - [Java](https://github.com/SubhenduShekhar/cjson/blob/main/java/Coded-Json/README.md)
+- [DotNet](https://github.com/SubhenduShekhar/cjson/blob/main/dotnet/CJson/README.md)
 
 ## Keywords
 
