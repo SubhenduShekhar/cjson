@@ -43,7 +43,7 @@ jobs:
       run: dotnet build --no-restore
 
   dotnet-test:
-    needs: java-build
+    needs: dotnet-build
     name: .Net Test
 
     runs-on: windows-latest
