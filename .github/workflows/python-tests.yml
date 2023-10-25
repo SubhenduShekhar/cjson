@@ -9,6 +9,7 @@ on:
     paths:
       - python
       - tests/python/**
+      - .github/workflows/python-tests.yml
 
 jobs:
   

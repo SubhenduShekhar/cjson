@@ -8,6 +8,7 @@ on:
       - main
     paths:
       - java/**
+      - .github/workflows/java-tests.yml
 
 jobs:
   

@@ -9,6 +9,7 @@ on:
     paths:
       - npm/**
       - tests/npm/**
+      - .github/workflows/npm-tests.yml
 
 jobs:
   
