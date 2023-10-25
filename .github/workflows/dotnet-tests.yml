@@ -30,7 +30,7 @@ jobs:
     
     - name: Check
       run: |
-        cd ./dotnet/CJson/CJson/bin/Release
+        cd ./CJson/bin/Release
         dir
 
     - name: Artifact store
