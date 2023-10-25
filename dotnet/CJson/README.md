@@ -16,10 +16,48 @@
 
 <br/>
 
+**PLEASE NOTE, ONLY DOTNET V6.0 IS SUPPORTED**
+
 ## Dependency
+
+### .NET CLI
 
 ```console
     dotnet add package CJson --version 1.0.0
+```
+
+### Package Manager
+
+```console
+    NuGet\Install-Package CJson -Version 1.0.0
+```
+
+### PackageReference
+
+```console
+    <PackageReference Include="CJson" Version="1.0.0" />
+```
+
+### Paket CLI
+
+```console
+    paket add CJson --version 1.0.0
+```
+
+### Script & Interactive
+
+```console
+    #r "nuget: CJson, 1.0.0"
+```
+
+### Cake
+
+```console
+    // Install CJson as a Cake Addin
+    #addin nuget:?package=CJson&version=1.0.0
+
+    // Install CJson as a Cake Tool
+    #tool nuget:?package=CJson&version=1.0.0
 ```
 
 
