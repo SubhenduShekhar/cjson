@@ -4,3 +4,5 @@ CJson/CJson/obj
 CJson/CJson/Properties
 CJson/CJson/CJson.csproj.user
 CJson/packages
+CJson/CJsonTests/bin
+CJson/CJsonTests/obj
