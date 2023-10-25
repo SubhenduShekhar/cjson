@@ -1,10 +1,11 @@
 # DotNet test CI pipeline
+
 name: .NET Tests
 
 on:
   push:
     branches: 
-      - issue_84
+      - main
     paths:
       - dotnet/**
 
