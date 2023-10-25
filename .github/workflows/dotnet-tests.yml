@@ -8,6 +8,7 @@ on:
       - main
     paths:
       - dotnet/**
+      - .github/workflows/dotnet-tests.yml
 
 jobs:
   dotnet-build:
@@ -27,6 +28,9 @@ jobs:
         dotnet-version: 6.0.x
     - name: Restore dependencies
       run: dotnet restore
+
+    - name: Build
+      run: dotnet build --no-restore
     
     - name: Check
       run: |
@@ -38,9 +42,6 @@ jobs:
       with:
         name: .Net_nuget
         path: ./dotnet/CJson/CJson/bin/Release
-
-    - name: Build
-      run: dotnet build --no-restore
 
   dotnet-test:
     needs: dotnet-build
