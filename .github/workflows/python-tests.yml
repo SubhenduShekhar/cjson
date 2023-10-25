@@ -29,7 +29,9 @@ jobs:
         python-version: '3.x'
 
     - name: Build package
-      run: python setup.py sdist
+      run: |
+        pip install setuptools
+        python setup.py sdist
     
     - name: Artifact store
       uses: actions/upload-artifact@v3
