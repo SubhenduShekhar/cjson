@@ -1,6 +1,6 @@
 # DotNet test CI pipeline
 
-name: .NET Tests
+name: DotNET Tests
 
 on:
   push:
