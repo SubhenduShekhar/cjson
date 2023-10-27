@@ -12,9 +12,10 @@
         <img src="https://img.shields.io/badge/Python-pypi-purple" alt="Python Tag">
     </div>
     <div>
-        <img src="https://github.com/SubhenduShekhar/cjson/actions/workflows/python-tests.yml/badge.svg" alt="Test Status"/>
-        <img src="https://github.com/SubhenduShekhar/cjson/actions/workflows/java-tests.yml/badge.svg" alt="Test Status"/>
-        <img src="https://github.com/SubhenduShekhar/cjson/actions/workflows/npm-tests.yml/badge.svg" alt="Test Status"/>
+        <img src="https://github.com/SubhenduShekhar/cjson/actions/workflows/python-tests.yml/badge.svg" alt="Python Status"/>
+        <img src="https://github.com/SubhenduShekhar/cjson/actions/workflows/java-tests.yml/badge.svg" alt="Java Status"/>
+        <img src="https://github.com/SubhenduShekhar/cjson/actions/workflows/npm-tests.yml/badge.svg" alt="NPM Status"/>
+        <img src="https://github.com/SubhenduShekhar/cjson/actions/workflows/dotnet-tests.yml/badge.svg" alt="DotNet Status"/>
     </div>
 </div>
 
