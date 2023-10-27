@@ -16,7 +16,7 @@ export var read = (filePath: string) => {
 /**
  * Checks if the path is absolute or relative
  * @param filePath 
- * @returns 
+ * @returns  `true` if the path is absolute, else `false`
  */
 export var isAbsolutePath = (filePath: string) => {
     if(filePath.startsWith("\\"))

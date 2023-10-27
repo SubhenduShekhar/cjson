@@ -171,7 +171,7 @@ export class Cjson extends Is {
      * 
      * Pass the value as json object in `injectingObj`
      * @param injectingObj Runtime values to be injected in json format
-     * @returns 
+     * @returns `JSON` if no errors. Else `undefined`
      */
     public inject(injectingObj: any) {
         let content = this.content;

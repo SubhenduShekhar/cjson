@@ -15,7 +15,7 @@ export function refineRelativePaths(content: string, uniqueKeys: string[]) {
  * Refines runtime variables for `inject()`
  * @param content local instance of json content
  * @param uniqueKeys 
- * @returns 
+ * @returns `content`
  */
 export function refineRuntimeVals(content: string, uniqueKeys: string[]) {
     uniqueKeys?.map(eachKey => {
