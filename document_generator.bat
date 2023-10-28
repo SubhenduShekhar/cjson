@@ -11,7 +11,7 @@ cd ..
 
 ECHO ============================== Cleaning completed =============================
 
-ECHO ====================================== NPM ====================================
+ECHO =============================== Documenting NPM ===============================
 @REM Generate JSDoc
 cd npm
 call npm run document
@@ -20,13 +20,13 @@ cd ..
 
 ECHO =================================== Completed =================================
 
-ECHO ====================================== JAVA ===================================
+ECHO ================================ Documenting  JAVA ============================
 @REM Generate JavaDoc
 call mvn -f java\Coded-Json\pom.xml javadoc:javadoc
 
 ECHO =================================== Completed =================================
 
-ECHO ===================================== Python ==================================
+ECHO ============================== Documenting Python ============================
 @REM Generate PythonDoc for python repository
 cd python/cjson/src
 echo Y | rmdir codedjson.egg-info /s
