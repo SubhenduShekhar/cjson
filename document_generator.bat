@@ -14,6 +14,7 @@ ECHO ============================== Cleaning completed =========================
 ECHO =============================== Documenting NPM ===============================
 @REM Generate JSDoc
 cd npm
+npm i
 call npm run document
 
 cd ..
