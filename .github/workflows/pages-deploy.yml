@@ -46,7 +46,7 @@ jobs:
 
   report:
     runs-on: windows-latest
-    needs: build
+    needs: setup
 
     steps:
       - uses: actions/checkout@v3
