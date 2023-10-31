@@ -14,34 +14,38 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Setup NPM
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
+      # - name: Setup NPM
+      #   uses: actions/setup-node@v3
+      #   with:
+      #     node-version: 16
+
+      # - name: Install NPM packages
+      #   working-directory: ./npm
+      #   run: npm i
       
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 6.0.x
+      # - name: Setup .NET
+      #   uses: actions/setup-dotnet@v3
+      #   with:
+      #     dotnet-version: 6.0.x
       
-      - name: Setup Python
-        uses: actions/setup-python@v3
-        with:
-          python-version: 3.x
+      # - name: Setup Python
+      #   uses: actions/setup-python@v3
+      #   with:
+      #     python-version: 3.x
       
-      - name: Setup Java
-        uses: actions/setup-java@v3
-        with:
-          java-version: '11'
-          distribution: 'temurin'
-          cache: maven
-      - name: Maven build
-        working-directory: ./java/Coded-Json
-        run: mvn -B package --file pom.xml
+      # - name: Setup Java
+      #   uses: actions/setup-java@v3
+      #   with:
+      #     java-version: '11'
+      #     distribution: 'temurin'
+      #     cache: maven
+      # - name: Maven build
+      #   working-directory: ./java/Coded-Json
+      #   run: mvn -B package --file pom.xml
       
       - name: Run document generator
         working-directory: .
-        run: document_generator.bat
+        run: start document_generator.bat
 
   # report:
   #   runs-on: windows-latest
