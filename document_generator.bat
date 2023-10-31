@@ -30,6 +30,8 @@ ECHO =================================== Completed =============================
 
 ECHO ============================== Documenting Python ============================
 @REM Generate PythonDoc for python repository
+call pip install pycco
+
 cd python/cjson/src
 echo Y | rmdir codedjson.egg-info /s
 cd utils

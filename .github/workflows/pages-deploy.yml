@@ -44,20 +44,20 @@ jobs:
         working-directory: ./docs
         run: dir
 
-  # report:
-  #   runs-on: windows-latest
-  #   needs: build
+  report:
+    runs-on: windows-latest
+    needs: build
 
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - name: Create report file
-  #       run: date +%s > report.txt
-  #     - name: Check files
-  #       run: |
-  #         git status
-  #         git config --global user.name "SubhenduShekhar"
-  #         git config --global user.email "subhendushekhargupta@gmail.com"
-  #         git checkout -b test
-  #         git add .
-  #         git commit -m "push files in test"
-  #         git push origin test
+    steps:
+      - uses: actions/checkout@v3
+      - name: Create report file
+        run: date +%s > report.txt
+      - name: Check files
+        run: |
+          git status
+          git config --global user.name "SubhenduShekhar"
+          git config --global user.email "subhendushekhargupta@gmail.com"
+          git checkout -b test
+          git add .
+          git commit -m "push files in test"
+          git push origin test
