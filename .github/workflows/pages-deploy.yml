@@ -2,7 +2,9 @@ name: Pages Deploy
 on: 
   push:
     branches:
-      - docs
+      - main
+    paths:
+      - .github/workflows/pages-deploy.yml
 
 permissions:
   contents: write
@@ -50,7 +52,7 @@ jobs:
           git config --global user.name "SubhenduShekhar"
           git config --global user.email "subhendushekhargupta@gmail.com"
           git fetch
-          git pull origin test
+          git pull origin docs
           git checkout test
           git add .
           git commit -m "push files in test"
