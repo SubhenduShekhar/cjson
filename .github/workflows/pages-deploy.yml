@@ -44,8 +44,8 @@ jobs:
       #   run: mvn -B package --file pom.xml
       
       - name: Run document generator
-        working-directory: .
-        run: start document_generator.bat
+        run: ./document_generator.bat
+        shell: cmd
 
   # report:
   #   runs-on: windows-latest
