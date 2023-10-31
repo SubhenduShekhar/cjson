@@ -50,14 +50,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Create report file
-        run: date +%s > report.txt
-      - name: Check files
+      - name: Push files
         run: |
           git status
           git config --global user.name "SubhenduShekhar"
           git config --global user.email "subhendushekhargupta@gmail.com"
-          git checkout -b test
+          git fetch
+          git pull origin test
+          git checkout test
           git add .
           git commit -m "push files in test"
           git push origin test
