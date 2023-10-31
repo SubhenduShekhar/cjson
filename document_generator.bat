@@ -23,7 +23,8 @@ ECHO =================================== Completed =============================
 
 ECHO ================================ Documenting  JAVA ============================
 @REM Generate JavaDoc
-call mvn -f java\Coded-Json\pom.xml javadoc:javadoc
+call mvn -B package --file ./java/Coded-Json/pom.xml
+call mvn -f java/Coded-Json/pom.xml javadoc:javadoc
 
 ECHO =================================== Completed =================================
 

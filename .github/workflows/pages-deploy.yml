@@ -36,9 +36,13 @@ jobs:
           distribution: 'temurin'
           cache: maven
       
-      # - name: Run document generator
-      #   run: ./document_generator.bat
-      #   shell: cmd
+      - name: Run document generator
+        run: ./document_generator.bat
+        shell: cmd
+
+      - name: Check
+        working-directory: ./docs
+        run: dir
 
   # report:
   #   runs-on: windows-latest
