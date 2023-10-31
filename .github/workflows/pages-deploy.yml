@@ -1,0 +1,19 @@
+name: Pages Deploy
+on: 
+  push:
+    branches:
+      - docs
+
+permissions:
+  contents: write
+
+jobs:
+  report:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Create report file
+        run: date +%s > report.txt
+      - name: Check files
+        run: |
+          git branch -a
