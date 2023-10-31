@@ -13,6 +13,7 @@ jobs:
     runs-on: windows-latest
 
     steps:
+      - uses: actions/checkout@v3
       - name: Setup NPM
         uses: actions/setup-node@v3
         with:
@@ -34,29 +35,27 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
           cache: maven
-
-  build:
-    needs: setup
-    runs-on: windows-latest
-
-    steps:
+      - name: Maven build
+        working-directory: ./java/Coded-Json
+        run: mvn -B package --file pom.xml
+      
       - name: Run document generator
         run: document_generator.bat
 
-  report:
-    runs-on: windows-latest
-    needs: build
+  # report:
+  #   runs-on: windows-latest
+  #   needs: build
 
-    steps:
-      - uses: actions/checkout@v3
-      - name: Create report file
-        run: date +%s > report.txt
-      - name: Check files
-        run: |
-          git status
-          git config --global user.name "SubhenduShekhar"
-          git config --global user.email "subhendushekhargupta@gmail.com"
-          git checkout -b test
-          git add .
-          git commit -m "push files in test"
-          git push origin test
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - name: Create report file
+  #       run: date +%s > report.txt
+  #     - name: Check files
+  #       run: |
+  #         git status
+  #         git config --global user.name "SubhenduShekhar"
+  #         git config --global user.email "subhendushekhargupta@gmail.com"
+  #         git checkout -b test
+  #         git add .
+  #         git commit -m "push files in test"
+  #         git push origin test
