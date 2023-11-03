@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>cjson.py</title>
+  <link rel="stylesheet" href="pycco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div class='section'>
+    <div class='docs'><h1>cjson.py</h1></div>
+  </div>
+  <div class='clearall'>
+  <div class='section' id='section-0'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-0'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">utils.file</span> <span class="kn">import</span> <span class="n">read</span><span class="p">,</span> <span class="n">is_path_absolute</span>
+<span class="kn">from</span> <span class="nn">utils._is</span> <span class="kn">import</span> <span class="n">Is</span>
+<span class="kn">from</span> <span class="nn">utils.keywords</span> <span class="kn">import</span> <span class="n">Keywords</span>
+<span class="kn">from</span> <span class="nn">utils._json</span> <span class="kn">import</span> <span class="n">Json</span><span class="p">,</span> <span class="n">is_content_json</span> <span class="k">as</span> <span class="n">content_json_check</span>
+<span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">path</span>
+<span class="kn">import</span> <span class="nn">json</span><span class="o">,</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">utils._exceptions</span> <span class="kn">import</span> <span class="n">AbsolutePathConstraintError</span><span class="p">,</span> <span class="n">FilePathAndCJSONCotentConflict</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-1'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-1'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">def</span> <span class="nf">is_content_json</span><span class="p">(</span><span class="n">content</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">is_file_path</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Checks if the parsed content is JSON</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">content_json_check</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">is_file_path</span><span class="o">=</span><span class="n">is_file_path</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-2'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-2'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">Cjson</span><span class="p">(</span><span class="n">Is</span><span class="p">):</span>
+    <span class="n">__obj</span><span class="p">:</span><span class="nb">any</span>
+    <span class="n">__file_path</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">__content</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">__is_content_cjson</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">json</span><span class="p">:</span> <span class="n">Json</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-3'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-3'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">is_content_cjson</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Initializes and decodes `CJSON` files.</span>
+
+<span class="sd">            This can also be used for parsing JSON files in `CJSON` way.</span>
+
+<span class="sd">            `content` can be file path and cjson/json type string.</span>
+
+<span class="sd">            Parsing in CJSON way unlocks many functions. For more details, see function documentation.</span>
+
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__obj</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span><span class="p">(</span><span class="n">is_path_absolute</span><span class="p">(</span><span class="n">content</span><span class="p">)</span> <span class="ow">and</span> <span class="n">is_content_cjson</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">FilePathAndCJSONCotentConflict</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">is_content_cjson</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__is_content_cjson</span> <span class="o">=</span> <span class="n">is_content_cjson</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__content</span> <span class="o">=</span> <span class="n">content</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__file_path</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__file_path</span> <span class="o">=</span> <span class="n">content</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__content</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__file_path</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-4'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-4'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__decode_keywords</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">is_changed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">while</span><span class="p">(</span><span class="kc">True</span><span class="p">):</span>
+            <span class="n">is_changed</span> <span class="o">=</span> <span class="kc">False</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_import</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__content</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__decode_import</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__content</span><span class="p">)</span>
+                <span class="n">is_changed</span> <span class="o">=</span> <span class="kc">True</span>
+            
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_single_line_comments</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__content</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__decode_single_line_comment</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__content</span><span class="p">)</span>
+                <span class="n">is_changed</span> <span class="o">=</span> <span class="kc">True</span>
+            
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">is_changed</span><span class="p">:</span>
+                <span class="k">break</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-5'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-5'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__refine_obj</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">content</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__content</span> <span class="o">=</span> <span class="n">content</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">json</span> <span class="o">=</span> <span class="n">Json</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__content</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__obj</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__content</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-6'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-6'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__decode_relative_paths</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">path_keys</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">Keywords</span><span class="o">.</span><span class="n">relative_jpath_regex</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
+        <span class="n">unique_keys</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">each_key</span> <span class="ow">in</span> <span class="n">path_keys</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">each_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">unique_keys</span><span class="p">:</span>
+                <span class="n">unique_keys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">each_key</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">each_key</span> <span class="ow">in</span> <span class="n">unique_keys</span><span class="p">:</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">each_key</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\&quot;</span><span class="s2">&lt;&quot;</span> <span class="o">+</span> <span class="n">each_key</span> <span class="o">+</span> <span class="s2">&quot;&gt;</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__refine_obj</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">content</span><span class="p">)</span>
+    
+        <span class="k">for</span> <span class="n">each_key</span> <span class="ow">in</span> <span class="n">unique_keys</span><span class="p">:</span>
+            <span class="n">key_regex</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&lt;&quot;</span> <span class="o">+</span> <span class="n">each_key</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span>
+            
+            <span class="n">parsed_val</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">json</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">each_key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">Keywords</span><span class="o">.</span><span class="n">relative_jpath</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
+
+            <span class="k">while</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">parsed_val</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;&lt;&quot;</span> <span class="o">+</span> <span class="n">Keywords</span><span class="o">.</span><span class="n">relative_jpath</span><span class="p">)):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__refine_obj</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">content</span><span class="p">)</span>
+                <span class="n">parsed_val</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">json</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">each_key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">Keywords</span><span class="o">.</span><span class="n">relative_jpath</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
+            
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">parsed_val</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">str</span><span class="p">:</span>
+                <span class="n">content</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\&quot;</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">key_regex</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">parsed_val</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">content</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">key_regex</span><span class="p">,</span> <span class="n">parsed_val</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__refine_obj</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">content</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-7'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-7'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Deserializes CJSON context and returns dictionary object in JSON context.</span>
+
+<span class="sd">            Please Note, if any key is detected for runtime variable injections is</span>
+<span class="sd">            replaced with `&lt;-tag-&gt;`. No error/warning is thrown.</span>
+
+<span class="sd">            To inject runtime variables, use `inject` function</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__decode_keywords</span><span class="p">()</span>
+
+        <span class="n">runtime_keys</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">Keywords</span><span class="o">.</span><span class="n">runtime_vals_regex</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__content</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;Call this object to unlock native JSON functions</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__content</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__refine_runtime_vals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__content</span><span class="p">,</span> <span class="n">runtime_keys</span><span class="o">=</span><span class="n">runtime_keys</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">json</span> <span class="o">=</span> <span class="n">Json</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__obj</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">__decode_relative_paths</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__content</span><span class="p">)</span>
+
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Returns the JSON compiled object for the given `CJSON` file. &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__obj</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-8'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-8'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__get_file_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line_item</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">line_item</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">Keywords</span><span class="o">.</span><span class="n">import_key</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-9'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-9'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__decode_import</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line_item</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">global</span> <span class="n">import_file_path</span>
+        
+        <span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_file_path</span><span class="p">(</span><span class="n">line_item</span><span class="o">=</span><span class="n">line_item</span><span class="p">)</span>
+
+        <span class="k">if</span><span class="p">(</span><span class="n">is_path_absolute</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="n">file_path</span><span class="p">)):</span>
+            <span class="n">import_file_path</span> <span class="o">=</span> <span class="n">file_path</span>
+        <span class="k">elif</span><span class="p">(</span><span class="ow">not</span> <span class="n">is_path_absolute</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="n">file_path</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__is_content_cjson</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">AbsolutePathConstraintError</span><span class="p">(</span><span class="s2">&quot;Only absolute path is supported in import statements&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dir_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__file_path</span><span class="p">))</span>
+            <span class="n">import_file_path</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dir_name</span><span class="p">,</span> <span class="n">file_path</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">__content</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__content</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">Keywords</span><span class="o">.</span><span class="n">import_key</span> <span class="o">+</span> <span class="n">file_path</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">read</span><span class="p">(</span><span class="n">import_file_path</span><span class="p">))</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-10'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-10'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__decode_single_line_comment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line_item</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">line_split</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">line_item</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">line_split</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">line_split</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span> <span class="ow">and</span> <span class="n">line_split</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">Keywords</span><span class="o">.</span><span class="n">single_line_comment</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__content</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__content</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">line_split</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s2">&quot;&quot;</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-11'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-11'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__refine_runtime_vals</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">runtime_keys</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
+        <span class="n">unique_keys</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">each_runtime_keys</span> <span class="ow">in</span> <span class="n">runtime_keys</span><span class="p">:</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">each_runtime_keys</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">unique_keys</span><span class="p">):</span>
+                <span class="n">unique_keys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">each_runtime_keys</span><span class="p">)</span>
+        
+        <span class="k">for</span> <span class="n">each_runtime_keys</span> <span class="ow">in</span> <span class="n">unique_keys</span><span class="p">:</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">each_runtime_keys</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\&quot;</span><span class="s2">&lt;-&quot;</span> <span class="o">+</span> <span class="n">each_runtime_keys</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;&lt;&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;&gt;&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;-&gt;</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">content</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-12'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-12'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">inject</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">injecting_obj</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__decode_keywords</span><span class="p">()</span>
+
+        <span class="n">runtime_keys</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">Keywords</span><span class="o">.</span><span class="n">runtime_vals_regex</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__content</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">__content</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__refine_runtime_vals</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__content</span><span class="p">,</span> <span class="n">runtime_keys</span><span class="o">=</span><span class="n">runtime_keys</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;Call this object to unlock native JSON functions</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">json</span> <span class="o">=</span> <span class="n">Json</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__obj</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__decode_relative_paths</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__content</span><span class="p">)</span>
+        
+        <span class="k">for</span> <span class="n">each_key</span> <span class="ow">in</span> <span class="n">injecting_obj</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">injecting_obj</span><span class="p">[</span><span class="n">each_key</span><span class="p">])</span> <span class="o">!=</span> <span class="nb">str</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__content</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__content</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\&quot;</span><span class="s2">&lt;-&quot;</span> <span class="o">+</span> <span class="n">each_key</span> <span class="o">+</span> <span class="s2">&quot;-&gt;</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">injecting_obj</span><span class="p">[</span><span class="n">each_key</span><span class="p">]))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__content</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__content</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&lt;-&quot;</span> <span class="o">+</span> <span class="n">each_key</span> <span class="o">+</span> <span class="s2">&quot;-&gt;&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">injecting_obj</span><span class="p">[</span><span class="n">each_key</span><span class="p">]))</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">__refine_obj</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__content</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__obj</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-13'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-13'>#</a>
+      </div>
+      <p>a = &lsquo;&rsquo;&rsquo;
+{
+    &ldquo;source&rdquo;: $import &ldquo;C:\Users\Home\OneDrive\Desktop\projects\cjson\tests\test-files\source.json&rdquo;,
+    &ldquo;target&rdquo;: {
+        &ldquo;fruit&rdquo;: &ldquo;Apple&rdquo;,
+        &ldquo;size&rdquo;: &ldquo;Large&rdquo;,
+        &ldquo;color&rdquo;: &ldquo;Red&rdquo;
+    }
+}
+&lsquo;&rsquo;&rsquo;
+c = &ldquo;C:\Users\Home\OneDrive\Desktop\projects\cjson\tests\test-files\targetRelativeCalls.cjson&rdquo;</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-14'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-14'>#</a>
+      </div>
+      <p>b = Cjson(c, True)</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-15'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-15'>#</a>
+      </div>
+      <p>k = b.deserialize()
+print(k)</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+</div>
+</body>

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>_json.py</title>
+  <link rel="stylesheet" href="pycco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div class='section'>
+    <div class='docs'><h1>_json.py</h1></div>
+  </div>
+  <div class='clearall'>
+  <div class='section' id='section-0'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-0'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">utils</span> <span class="kn">import</span> <span class="n">file</span>
+<span class="kn">from</span> <span class="nn">utils.keywords</span> <span class="kn">import</span> <span class="n">Keywords</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">NoneType</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-1'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-1'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">def</span> <span class="nf">is_content_json</span><span class="p">(</span><span class="n">content</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">is_file_path</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">is_file_path</span><span class="p">:</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+    
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-2'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-2'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">Json</span><span class="p">:</span>
+    <span class="n">__obj</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">any</span> <span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
+    <span class="n">__json_keys</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">__json_values</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">__file_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span> <span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+    <span class="n">__data_types</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">type</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">bool</span> <span class="p">]</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-3'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-3'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">any</span> <span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">is_file_path</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">str</span> <span class="ow">and</span> <span class="n">is_file_path</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__file_path</span> <span class="o">=</span> <span class="n">obj</span>
+            <span class="n">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__file_path</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__obj</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">is_file_path</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__obj</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__obj</span> <span class="o">=</span> <span class="n">obj</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__file_path</span> <span class="o">=</span> <span class="kc">None</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-4'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-4'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span> <span class="nb">str</span><span class="p">,</span> <span class="kc">None</span> <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span> <span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Run any `JPath` query in parsed `CJSON`/ `JSON`.</span>
+
+<span class="sd">            Returns full `JSON` if `key` is not provided</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__obj</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_value_from_key</span><span class="p">(</span><span class="n">key</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-5'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-5'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">get_all_keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Returns all possible `JSON` keys in parsed `JSON`</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__get_keys</span><span class="p">(</span><span class="n">json_data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__obj</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__json_keys</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-6'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-6'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">get_all_values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Returns all possible `JSON` values in parsed `JSON`</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__json_keys</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">get_all_keys</span><span class="p">()</span>
+        
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__json_keys</span><span class="p">)):</span>
+            <span class="n">value</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_value_from_key</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__json_keys</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__json_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__json_values</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-7'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-7'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__push_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cur_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">prev_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">prev_key</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__json_keys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cur_key</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__json_keys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prev_key</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="n">cur_key</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-8'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-8'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__get_keys</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json_data</span><span class="p">:</span> <span class="nb">any</span><span class="p">,</span> <span class="n">prev_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="k">if</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">json_data</span><span class="p">)</span> <span class="o">==</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">each_key</span> <span class="ow">in</span> <span class="n">json_data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">if</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">json_data</span><span class="p">[</span><span class="n">each_key</span><span class="p">])</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__data_types</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__push_key</span><span class="p">(</span><span class="n">each_key</span><span class="p">,</span> <span class="n">prev_key</span><span class="p">)</span>
+
+                <span class="k">elif</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">json_data</span><span class="p">[</span><span class="n">each_key</span><span class="p">])</span> <span class="o">==</span> <span class="nb">dict</span><span class="p">):</span>
+                    <span class="k">if</span><span class="p">(</span><span class="n">prev_key</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__get_keys</span><span class="p">(</span><span class="n">json_data</span><span class="p">[</span><span class="n">each_key</span><span class="p">],</span> <span class="n">prev_key</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="n">each_key</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__get_keys</span><span class="p">(</span><span class="n">json_data</span><span class="p">[</span><span class="n">each_key</span><span class="p">],</span> <span class="n">each_key</span><span class="p">)</span>
+
+                <span class="k">elif</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">json_data</span><span class="p">[</span><span class="n">each_key</span><span class="p">])</span> <span class="o">==</span> <span class="nb">list</span><span class="p">):</span>
+                    <span class="n">all_raw</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+
+                    <span class="k">for</span> <span class="n">each_in_elif</span> <span class="ow">in</span> <span class="n">json_data</span><span class="p">[</span><span class="n">each_key</span><span class="p">]:</span>
+                        <span class="n">index</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">json_data</span><span class="p">[</span><span class="n">each_key</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">each_in_elif</span><span class="p">))</span>
+
+                        <span class="k">if</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">each_in_elif</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__data_types</span><span class="p">):</span>
+                            <span class="k">continue</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">all_raw</span> <span class="o">=</span> <span class="kc">False</span>
+                            
+                            <span class="k">if</span><span class="p">(</span><span class="n">prev_key</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">__get_keys</span><span class="p">(</span><span class="n">each_in_elif</span><span class="p">,</span> <span class="n">prev_key</span><span class="o">=</span><span class="n">prev_key</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="n">each_key</span> <span class="o">+</span> <span class="s2">&quot;[&quot;</span> <span class="o">+</span> <span class="n">index</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span><span class="p">)</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">__get_keys</span><span class="p">(</span><span class="n">each_in_elif</span><span class="p">,</span> <span class="n">prev_key</span><span class="o">=</span><span class="n">each_key</span> <span class="o">+</span> <span class="s2">&quot;[&quot;</span> <span class="o">+</span> <span class="n">index</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span><span class="p">)</span>
+                    <span class="k">if</span><span class="p">(</span><span class="n">all_raw</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">json_data</span><span class="p">[</span><span class="n">each_key</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__push_key</span><span class="p">(</span><span class="n">each_key</span><span class="p">,</span> <span class="n">prev_key</span><span class="p">)</span>
+
+                <span class="k">elif</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">json_data</span><span class="p">[</span><span class="n">each_key</span><span class="p">])</span> <span class="o">==</span> <span class="n">NoneType</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__push_key</span><span class="p">(</span><span class="n">each_key</span><span class="p">,</span> <span class="n">prev_key</span><span class="p">)</span>
+
+        <span class="k">elif</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">json_data</span><span class="p">)</span> <span class="o">==</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">each_in_elif</span> <span class="ow">in</span> <span class="n">json_data</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__get_keys</span><span class="p">(</span><span class="n">each_in_elif</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-9'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-9'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__get_value_from_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Returns all possible json keys in `CJSON` object</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__obj</span>
+        <span class="k">if</span> <span class="s2">&quot;.&quot;</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
+            <span class="n">key_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">key_list</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="s2">&quot;[&quot;</span> <span class="ow">in</span> <span class="n">key_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">and</span> <span class="s2">&quot;]&quot;</span> <span class="ow">in</span> <span class="n">key_list</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                    <span class="n">key_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">key_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;[&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">key_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;[&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;]&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="n">key_name</span><span class="p">][</span><span class="n">index</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="n">key_list</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">value</span>
+
+</pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+</div>
+</body>
