@@ -55,5 +55,5 @@ jobs:
           git pull origin docs
           git checkout docs
           git add .
-          git commit -m "push files in test"
-          git push origin test
+          git commit -m "push files in docs"
+          git push origin docs
