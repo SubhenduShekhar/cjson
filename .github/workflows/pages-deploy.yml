@@ -51,9 +51,9 @@ jobs:
           git status
           git config --global user.name "SubhenduShekhar"
           git config --global user.email "subhendushekhargupta@gmail.com"
-          git fetch --
+          git fetch
           git pull origin docs
-          git checkout docs
+          git switch docs
           git add .
           git commit -m "push files in docs"
           git push origin docs
