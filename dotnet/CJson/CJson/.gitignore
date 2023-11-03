@@ -1,0 +1,15 @@
+###############
+#    folder   #
+###############
+/**/DROP/
+/**/TEMP/
+/**/packages/
+/**/bin/
+/**/obj/
+_site
+articles/
+api/
+index.md
+log.txt
+docfx.json
+toc.yml
