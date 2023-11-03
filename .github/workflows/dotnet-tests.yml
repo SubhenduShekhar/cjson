@@ -61,4 +61,4 @@ jobs:
           dotnet-version: 6.0.x
 
       - name: Test
-        run: dotnet test --no-build --verbosity normal
+        run: dotnet test CJsonTests/CJsonTests.csproj --no-build --verbosity normal
