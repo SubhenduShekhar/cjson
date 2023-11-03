@@ -53,7 +53,7 @@ jobs:
           git config --global user.email "subhendushekhargupta@gmail.com"
           git fetch
           git pull origin docs
-          git checkout test
+          git checkout docs
           git add .
           git commit -m "push files in test"
           git push origin test
