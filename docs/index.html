@@ -5,17 +5,103 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CJson - Coded JavaScript Object Notation</title>
+    <style>
+        .lnks {
+            text-decoration: none; 
+            font-size: 20px;
+            margin-left: 5%;
+            position: relative;
+            top: 35%;
+            right: 5%;
+        }
+        .introBlck {
+            text-align: center;
+            margin-top: 5%;
+            border: solid 1px gray;
+            width: 40%;
+            border-radius: 10px;
+            padding: 2%;
+            position: relative;
+            left: 5%;
+            display: inline-block;
+        }
+        .gifBlck {
+            display: inline-block;
+            position: relative;
+            left: 25%;
+        }
+        @keyframes HazeAffect {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        .blurMe{
+            animation-name: HazeAffect;
+            animation-duration: 2s;
+        }
+    </style>
+    <script>
+        function launchBg() {
+            alert("asda");
+        }
+        // const canvas = document.getElementById("bg");
+        // /** @type {CanvasRenderingContext2D} */
+        // const ctx = canvas.getContext("2d");
+        // ctx = c.getContext("2d");
+        // ctx.beginPath();
+        // ctx.moveTo(0, 0);
+
+    </script>
 </head>
-<body>
-    <h3>Index to all code document files</h3>
-    <div>
-        <a href="./java/index.html">Java Docs</a>
+<body style="margin: unset; font-family: Segoe UI, Arial, sans-serif; color: gray;">
+    <canvas id="bg" onload="launchBg()"></canvas>
+    <!-- <div style="height: 5em; background-color: #dfdfdf; text-align: end;">
+        <a href="" class="lnks">
+            <span>About Me</span>
+        </a>
+        <a href="" class="lnks">
+            <span>API Docs</span>
+        </a>
+    </div>
+    <div class="blurMe">
+        <div style="font-size: 80px; padding-top: 1%; color: #c11600; text-align: center; font-weight: 600;">CJSON</div>
+        <div style="background-color: gray;
+            width: 20%;
+            height: 2px;
+            position: relative;
+            left: 40%;"></div>
+        <div style="font-size: 30px; text-align: center; margin-top: 1em; font-weight: 300;">Coded JavaScript Object Notation</div>
+        <div style="text-align: center; margin-top: 1%;">
+            <span>Nuget</span>
+            <span style="margin-left: 15%;">Maven</span>
+            <span style="margin-left: 15%;">NPM</span>
+            <span style="margin-left: 15%;">PyPI</span>
+        </div>
     </div>
     <div>
-        <a href="./python/cjson.html">Python Docs</a>
+        <div class="introBlck">
+            <p style="font-size: 30px; font-weight: 300;">Reason Why You Are Here</p>
+            <div style="background-color: gray;
+                width: 20%;
+                height: 2px;
+                position: relative;
+                left: 40%;"></div>
+            <p style="font-size: 20px;
+                font-weight: 300;
+                padding: 2%;
+                background-color: #eaeaea;
+                border-radius: 7px;">CJSON is a data file format(inspired from JSON), 
+                but supports logical expressions too. 
+                Having extended language support to NodeJS, Python, Java and DotNet, users has experienced data reusability. 
+                For features and examples, please refer to this documentation as base document.</p>
+        </div>
+        <div class="gifBlck">
+            <img src="./logo.png" alt="Logo GIF">
+        </div>
     </div>
-    <div>
-        <a href="./npm/index.html">NPM Docs</a>
-    </div>
+    <div></div> -->
 </body>
 </html>
