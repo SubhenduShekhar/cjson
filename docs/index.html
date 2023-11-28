@@ -13,22 +13,22 @@
             position: relative;
             top: 35%;
             right: 5%;
+            color: #cac9ca;
         }
         .introBlck {
             text-align: center;
-            margin-top: 5%;
             border: solid 1px gray;
-            width: 40%;
             border-radius: 10px;
             padding: 2%;
             position: relative;
             left: 5%;
-            display: inline-block;
+            width: 80%;
         }
         .gifBlck {
             display: inline-block;
             position: relative;
-            left: 25%;
+            right: 10%;
+            width: 70%;
         }
         @keyframes HazeAffect {
             from {
@@ -42,66 +42,303 @@
             animation-name: HazeAffect;
             animation-duration: 2s;
         }
+        .main-content {
+            width: 85%;
+            left: 0px;
+            display: table-cell;
+            padding: 10px;
+        }
+        .code {
+            font-family: monospace;
+            border: solid 1px;
+            border-radius: 5px;
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+        .feature-block {
+            width: 99%;
+            margin-left: 15px;
+        }
+        h2 {
+            background-color: #4e4565;
+            padding: 15px;
+            padding-left: 1em;
+            color: white;
+            border-radius: 5px;
+        }
+        .black-lnk {
+            font-size: 15px; 
+            color: #5e5e5e;
+        }
+        .index-root {
+            display: table-cell;
+            border: solid 1px;
+            position: relative;
+            top: 30px;
+            padding: 2px;
+            border-top-right-radius: 5px;
+            width: 7em;
+            overflow: auto;
+        }
+        .test-badges {
+            text-align: center;
+            margin-top: 2em;
+        }
+        #api-langs {
+            float: right;
+            background-color: white;
+            border-radius: 2px;
+            position: absolute;
+            right: 5%;
+            top: 11%;
+            text-align: center;
+        }
+        .example-code {
+            width: 35em;
+            border-radius: 10px;
+            margin-left: 10%;
+            overflow-x: auto;
+            background-color: #e8e8e8;
+        }
+        .centr-header {
+            font-size: 30px; 
+            text-align: center; 
+            margin-top: 1em; 
+            font-weight: 300;
+        }
+        .dditem {
+            border: solid 1px; 
+            padding-left: 2em; 
+            padding-right: 2em;
+        }
     </style>
     <script>
-        function launchBg() {
-            alert("asda");
+        function scrollBlocks(elemId) {
+            document.getElementById(elemId).scrollIntoView();
         }
-        // const canvas = document.getElementById("bg");
-        // /** @type {CanvasRenderingContext2D} */
-        // const ctx = canvas.getContext("2d");
-        // ctx = c.getContext("2d");
-        // ctx.beginPath();
-        // ctx.moveTo(0, 0);
-
     </script>
 </head>
-<body style="margin: unset; font-family: Segoe UI, Arial, sans-serif; color: gray;">
-    <canvas id="bg" onload="launchBg()"></canvas>
-    <!-- <div style="height: 5em; background-color: #dfdfdf; text-align: end;">
-        <a href="" class="lnks">
-            <span>About Me</span>
+<body class="blurMe" style="margin: unset; font-family: Segoe UI, Arial, sans-serif; color: gray;">
+    <canvas width="500" height="500" style="position: absolute;" id="bg" onload="launchBg()"></canvas>
+    <div style="height: 5em; background-color: #4e4565; text-align: end;">
+        <a href="#" style="float: left; position: relative; top: 25%; left: 1%;">
+            <img src="./images/logo-small.png" alt="Logo">
         </a>
-        <a href="" class="lnks">
-            <span>API Docs</span>
+        <a href="https://github.com/SubhenduShekhar" class="lnks">
+            <span>Developer</span>
         </a>
+        <a href="#" class="lnks">
+            <span 
+                onmouseover="javascript:document.getElementById('api-langs').style.display = 'block';"
+                onmouseleave="javascript:document.getElementById('api-langs').style.display = 'none';"
+                >API Docs</span>
+        </a>
+        <div style="display: none;" id="api-langs"
+            onmouseover="javascript:document.getElementById('api-langs').style.display = 'block';" 
+            onmouseleave="javascript:document.getElementById('api-langs').style.display = 'none';">
+            <div class="dditem">
+                <a href="./npm/Cjson.html" style="color: #4e4565;" class="lnks">NPM</a>
+            </div>
+            <div class="dditem">
+                <a href="./python/cjson.html" style="color: #4e4565;" class="lnks">Python</a>
+            </div>
+            <div class="dditem">
+                <a href="./java/index.html" style="color: #4e4565;" class="lnks">Java</a>
+            </div>
+            <div class="dditem">
+                <a href="#" style="color: #4e4565;" onclick="javascript:alert('Documentation for dotnet is in progress')" class="lnks">DotNet</a>
+            </div>
+        </div>
     </div>
-    <div class="blurMe">
+    <div>
         <div style="font-size: 80px; padding-top: 1%; color: #c11600; text-align: center; font-weight: 600;">CJSON</div>
         <div style="background-color: gray;
             width: 20%;
             height: 2px;
             position: relative;
             left: 40%;"></div>
-        <div style="font-size: 30px; text-align: center; margin-top: 1em; font-weight: 300;">Coded JavaScript Object Notation</div>
-        <div style="text-align: center; margin-top: 1%;">
-            <span>Nuget</span>
-            <span style="margin-left: 15%;">Maven</span>
-            <span style="margin-left: 15%;">NPM</span>
-            <span style="margin-left: 15%;">PyPI</span>
+        <div class="centr-header">Coded JavaScript Object Notation</div>
+        <div class="test-badges">
+            <img src="https://github.com/SubhenduShekhar/cjson/actions/workflows/python-tests.yml/badge.svg" alt="Python Status"/>
+            <img src="https://github.com/SubhenduShekhar/cjson/actions/workflows/java-tests.yml/badge.svg" alt="Java Status"/>
+            <img src="https://github.com/SubhenduShekhar/cjson/actions/workflows/npm-tests.yml/badge.svg" alt="NPM Status"/>
+            <img src="https://github.com/SubhenduShekhar/cjson/actions/workflows/dotnet-tests.yml/badge.svg" alt="DotNet Status"/>
+        </div>
+
+        <div class="test-badges">
+            <span>
+                <a class="lnks" style="color: #4e4565;" href="https://github.com/SubhenduShekhar/cjson">GitHub</a>
+            </span>
+            <span>
+                <a class="lnks" style="color: #4e4565;" href="https://mvnrepository.com/artifact/io.github.subhendushekhar.cjson/cjson">Maven</a>
+            </span>
+            <span>
+                <a class="lnks" style="color: #4e4565;" href="https://www.nuget.org/packages?q=cjson">Nuget</a>
+            </span>
+            <span>
+                <a class="lnks" style="color: #4e4565;" href="https://www.npmjs.com/search?q=coded-json">NPM</a>
+            </span>
+            <span>
+                <a class="lnks" style="color: #4e4565;" href="#">PyPi</a>
+            </span>
         </div>
     </div>
-    <div>
-        <div class="introBlck">
-            <p style="font-size: 30px; font-weight: 300;">Reason Why You Are Here</p>
-            <div style="background-color: gray;
-                width: 20%;
-                height: 2px;
+    <div style="display: table; position: relative; top: 0em;" id="feature-root">
+        <div class="index-root">
+            <h3 style="
+                margin: unset;
+                padding: 25px;
+                background-color: #4e4565;
+                color: white;
                 position: relative;
-                left: 40%;"></div>
-            <p style="font-size: 20px;
-                font-weight: 300;
-                padding: 2%;
-                background-color: #eaeaea;
-                border-radius: 7px;">CJSON is a data file format(inspired from JSON), 
-                but supports logical expressions too. 
-                Having extended language support to NodeJS, Python, Java and DotNet, users has experienced data reusability. 
-                For features and examples, please refer to this documentation as base document.</p>
+                top: -25px;
+                left: -3px;
+                border-top-right-radius: 5px;
+                width: 80%;
+                ">Indexes</h3>
+            <div style="position: relative; left: 1em;">
+                <li>
+                    <a onclick="javascript:scrollBlocks('import-other-files')" class="lnks black-lnk" href="#import-other-files">Import Statements</a>
+                </li>
+                <li>
+                    <a onclick="javascript:scrollBlocks('rel-var-ref')" class="lnks black-lnk" href="#relative-variable-reference">Relative Variable Referencing</a>
+                </li>
+                <li>
+                    <a onclick="javascript:scrollBlocks('dyn-var-inj')" class="lnks black-lnk" href="#dynamic-variable-injection">Dynamic Variable Injection</a>
+                </li>
+                <li>
+                    <a onclick="javascript:scrollBlocks('cmnts')" class="lnks black-lnk" href="#comments">Adding Comments</a>
+                </li>
+            </div>
         </div>
-        <div class="gifBlck">
-            <img src="./logo.png" alt="Logo GIF">
+        <div style="display: table-cell;" class="main-content">
+            <h2>Features</h2>
+
+            <div class="feature-block" id="import-other-files">
+                <h3 style="width: inherit;">
+                    <a class="lnks" style="color: #808080d6;" href="#import-other-files">Import Statements</a></h3>
+                <div style="display: table;">
+                    <div style="display: table-cell; width: 50%; vertical-align: top; line-height: 2em;">One of the strong feature which we have introduced is importing CJson/Json files in another CJson file.
+                        It works in the similar way, how we import libraries in programming languages. All you need to import it using 
+                        <span class="code">$import "path/to/target/file"</span> and <span class="code">deserialize</span> the file.</div>
+                    <div style="display: table-cell; width: inherit;">
+                        <pre class="code example-code">
+{
+    "source": $import "./source.json",
+    "target": {
+        "fruit": "apple",
+        "size": "Large",
+        "color": "Red",
+        "quantity": 1
+    }
+}
+                        </pre>
+                        
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-block" id="rel-var-ref">
+                <h3 style="width: inherit;">
+                    <a class="lnks" style="color: #808080d6;" href="#import-other-files">Relative Variable Referencing</a></h3>
+                <div style="display: table;">
+                    <div style="display: table-cell; width: 50%; vertical-align: top; line-height: 2em;">Unlike XPATH for XML files, we have JPATH for JSON files. 
+                        But as the drawback of plain data files, we cannot refer any variable inside a json object to another variable. 
+                        This feature is useful when you have to duplicate the json key, but the value 
+                        will be pulled from another variable which is already present in the json file.
+                        You can also refer to a variable which will be loaded after importing the file.</div>
+                    <div style="display: table-cell; width: inherit;">
+                        <pre class="code example-code">
+{
+    "target": {
+        "fruit": "Apple",
+        "size": "Large",
+        "color": "Red",
+        "secColor": $.target.color,
+        "colorList": [ $.target.color, $.target.secColor ],
+        "digitCheck": 1.5,
+        "digitImport": $.target.digitCheck,
+        "digitArrayImport": [ $.target.digitCheck, $.target.digitImport ]
+    }
+}
+                        </pre>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="feature-block" id="dyn-var-inj">
+                <h3 style="width: inherit;">
+                    <a class="lnks" style="color: #808080d6;" href="#import-other-files">Dynamic Variable Injection</a></h3>
+                <div style="display: table;">
+                    <div style="display: table-cell; width: 50%; vertical-align: top; line-height: 2em;">You can inject a variable dynamically also. 
+                        Instead of replacing a variable value by parsing as `gson` object, put a key in format <br> <span class="code">&ltkeyToBeReplaced&gt</span> 
+                        like below:
+                        <br>
+                        <div class="code">
+
+                        <pre>{
+    "idValue": &ltid&gt
+}</pre></div>
+                        Now create a <span class="code">HashMap</span> with key as <span class="code">&ltid&gt</span> and store relevant value in it.
+                        While invoking <span class="code">&ltinject&gt</span> function, pass the HashMap as the second parameter. </div>
+                    <div style="display: table-cell; width: inherit;">
+                        <pre class="code example-code">
+{
+    "target": {
+        "types": "asd",
+        "fruit": <fruit>,
+        "quantity": <quantity>,
+        "size": "Large",
+        "fruitType": $.target.fruit,
+        "color": "Red",
+        "secColor": $.target.color,
+        "colorList": [ $.target.color, $.target.secColor ],
+        "digitCheck": 1.5,
+        "digitImport": $.target.digitCheck,
+        "digitArrayImport": [ $.target.digitCheck, $.target.digitImport ]
+    },
+    "jsonInjection": <jsonTypeData>
+}
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-block" id="cmnts">
+                <h3 style="width: inherit;">
+                    <a class="lnks" style="color: #808080d6;" href="#import-other-files">Adding Comments</a></h3>
+                <div style="display: table;">
+                    <div style="display: table-cell; width: 50%; vertical-align: top; line-height: 2em;">
+                        CJSON also supports <b>commented lines</b> by adding <span class="code">//</span> at the start of the line.
+                        Only single line comments are supported with the latest version.
+                        We will update once we deploy multi-line comments.
+                    </div>
+                    <div style="display: table-cell; width: inherit;">
+                        <!-- <img src="./images/comments.png" alt="Imports" style="width: 100%; border-radius: 10px; margin-left: 10%;"> -->
+                        <pre class="code example-code">
+{
+    //  This is multi line comment.
+    // And this should also be ignored
+    "sport": {
+        // This is single line comment
+        "q1": {
+            "question": "Which one is correct team name in NBA?",
+            "options": [
+                "New York Bulls",
+                "Los Angeles Kings",
+                "Golden State Warriros",
+                "Huston Rocket"
+            ],
+            "answer": "Huston Rocket"
+        },
+        "q2": null
+    }
+}
+                        </pre>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <div></div> -->
 </body>
 </html>
