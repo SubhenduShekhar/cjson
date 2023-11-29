@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - main
+    # paths:
+    #   - .github/workflows/pages-deploy.yml
 
 permissions:
   contents: write
