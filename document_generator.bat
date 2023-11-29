@@ -2,43 +2,53 @@ ECHO OFF
 
 @REM Cleaning all old files
 
-ECHO ============================== Cleaning old docs ==============================
-cd docs
-echo Y | rmdir npm /s
-echo Y | rmdir python /s
-echo Y | rmdir java /s
-cd ..
+@REM ECHO ============================== Cleaning old docs ==============================
+@REM cd docs
+@REM echo Y | rmdir npm /s
+@REM echo Y | rmdir python /s
+@REM echo Y | rmdir java /s
+@REM cd ..
 
-ECHO ============================== Cleaning completed =============================
+@REM ECHO ============================== Cleaning completed =============================
 
-ECHO =============================== Documenting NPM ===============================
-@REM Generate JSDoc
-cd npm
-call npm i
-call npm run document
+@REM ECHO =============================== Documenting NPM ===============================
+@REM @REM Generate JSDoc
+@REM cd npm
+@REM call npm i
+@REM call npm run document
 
-cd ..
+@REM cd ..
 
-ECHO =================================== Completed =================================
+@REM ECHO =================================== Completed =================================
 
-ECHO ================================ Documenting  JAVA ============================
-@REM Generate JavaDoc
-call mvn -B package --file ./java/Coded-Json/pom.xml
-call mvn -f java/Coded-Json/pom.xml javadoc:javadoc
+@REM ECHO ================================ Documenting  JAVA ============================
+@REM @REM Generate JavaDoc
+@REM call mvn -B package --file ./java/Coded-Json/pom.xml
+@REM call mvn -f java/Coded-Json/pom.xml javadoc:javadoc
 
-ECHO =================================== Completed =================================
+@REM ECHO =================================== Completed =================================
 
-ECHO ============================== Documenting Python ============================
-@REM Generate PythonDoc for python repository
-call pip install pycco
+@REM ECHO ============================== Documenting Python ============================
+@REM @REM Generate PythonDoc for python repository
+@REM call pip install pycco
 
-cd python/cjson/src
-echo Y | rmdir codedjson.egg-info /s
-cd utils
-echo Y | rmdir __pycache__ /s
-cd ../../../..
+@REM cd python/cjson/src
+@REM echo Y | rmdir codedjson.egg-info /s
+@REM cd utils
+@REM echo Y | rmdir __pycache__ /s
+@REM cd ../../../..
 
-call pycco python/cjson/src -d docs/python
+@REM call pycco python/cjson/src -d docs/python
+
+@REM ECHO =================================== Completed =================================
+
+ECHO ================================== Documenting DotNet ==============================
+
+cd dotnet/CJson
+call dotnet build
+call dotnet tool update -g docfx
+call docfx CJson/docfx.json
+copy CJson/_site/ ../../docs/dotnet
 
 ECHO =================================== Completed =================================
 
