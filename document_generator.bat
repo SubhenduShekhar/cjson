@@ -48,7 +48,11 @@ cd dotnet/CJson
 call dotnet build
 call dotnet tool update -g docfx
 call docfx CJson/docfx.json
-copy CJson/_site/ ../../docs/dotnet
+
+cd ../../docs
+mkdir dotnet
+cd ../dotnet/CJson
+copy "./CJson/_site" "../../docs/dotnet" 
 
 ECHO =================================== Completed =================================
 
