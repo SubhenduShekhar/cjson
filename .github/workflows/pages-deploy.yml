@@ -38,9 +38,9 @@ jobs:
           distribution: 'temurin'
           cache: maven
       
-      - name: Run document generator
-        run: ./document_generator.bat
-        shell: cmd
+      # - name: Run document generator
+      #   run: ./document_generator.bat
+      #   shell: cmd
 
       - name: Check
         working-directory: ./docs
@@ -52,7 +52,6 @@ jobs:
           git config --global user.name "SubhenduShekhar"
           git config --global user.email "subhendushekhargupta@gmail.com"
           git fetch
-          git pull origin docs
           git switch docs
           git add .
           git commit -m "push files in docs"
