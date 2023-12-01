@@ -54,4 +54,4 @@ jobs:
           git checkout -b docs
           git add .
           git commit -m "push files in docs"
-          git push origin docs
+          git push origin docs --force
