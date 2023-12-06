@@ -11,4 +11,5 @@ export default class Keywords {
 
     public static pathRegex: RegExp = new RegExp("[A-Za-z0-9:\\.]+", "g");
 
+    public static removeWithSucComa = (key: string, value: string): RegExp => new RegExp("\"" + key.split(".")[key.split(".").length - 1] + "\":\\s*\"" + value + "\",+", "g");
 }

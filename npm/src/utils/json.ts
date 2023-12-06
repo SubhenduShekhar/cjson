@@ -1,4 +1,5 @@
 import * as file from './file';
+import Keywords from './keywords';
 
 /**
  * Checks for `JSON` content
@@ -162,5 +163,36 @@ export class Json {
             this.jsonValues.push(value);
         }
         return this.jsonValues;
+    }
+    private removeWithSucComma(key: string, value: string, content: string) {
+        var uniqueKeys = content.match(Keywords.removeWithSucComa(key, value))?.filter((value, index, array) => { return array.indexOf(value) === index });
+        if(uniqueKeys !== undefined) {
+            for(let i = 0; i < uniqueKeys?.length; i ++) {
+                content = content.replace(uniqueKeys[i], "");
+            }
+        }
+        console.log(content)
+    }
+    private removeWithPreComma(key: string, value: string, content: string) {
+        
+    }
+    private getAllKeyValueMatch(key: string, value: string, content: string) {
+        value = value.replace(/\./g, "\\.")
+                .replace(/\[/g, "\\[")
+                .replace(/\?/g, "\\?")
+                .replace(/\*/g, "\\*")
+                .replace(/\+/g, "\\+")
+                .replace(/\{/g, "\\{")
+                .replace(/\$/g, "\\$")
+                .replace(/\^/g, "\\^");
+        var a = this.removeWithSucComma(key, value, content);
+        
+    }
+    public removeWithKey(key: string, content: string) {
+        if(key.startsWith(Keywords.relativeJPath))
+            key = key.replace(Keywords.relativeJPath, "");
+        
+        var value: string = this.parse(key);
+        this.getAllKeyValueMatch(key, value, content);
     }
 }

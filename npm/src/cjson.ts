@@ -8,7 +8,7 @@ import { refineRelativePaths, refineRuntimeVals } from "./utils/refinery";
 
 
 export class Cjson extends Is {
-    private obj: JSON | undefined;
+    private obj: any;
     private filePath: string ;
     private content: string = "";
     public json: Json | undefined = undefined;
@@ -191,6 +191,25 @@ export class Cjson extends Is {
         this.refineObj(content);
         return this.obj;
     }
+
+    /**
+     * Converts JSON object to string. Just a wrapper over `JSON.stringify()`
+     * @param obj JSON object
+     * @returns JSON string
+     */
+    public toString(obj: any) {
+        if(obj === null) return "{}";
+        else if(!isContentJson(JSON.stringify(obj))) throw new Error("Object is not a JSON");
+        else return JSON.stringify(obj);
+    }
+    public deserializeAsString() : string {
+        this.deserialize();
+        return this.content;
+    }
+    public remove(key: string) {
+        this.deserialize();
+        this.json?.removeWithKey(key, this.content);
+    }
 }
 
 // var a = `
@@ -203,9 +222,9 @@ export class Cjson extends Is {
 //     }
 // }
 // `
-// var a = "C:\\Users\\Home\\OneDrive\\Desktop\\projects\\cjson\\tests\\test-files\\targetRelativeCalls.cjson"
+var a = "C:\\Users\\Home\\OneDrive\\Desktop\\projects\\cjson\\tests\\test-files\\targetRelativeCalls.cjson"
 
-// var cjson = new Cjson(a);
+var cjson = new Cjson(a);
 
-// var b =  cjson.deserialize();
-// console.log(b);
+var b =  cjson.remove("$.source.quiz.sport.q1.question");
+console.log(b);
