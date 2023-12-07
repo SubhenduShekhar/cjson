@@ -191,41 +191,35 @@ export class Cjson extends Is {
         this.refineObj(content);
         return this.obj;
     }
-
     /**
      * Converts JSON object to string. Just a wrapper over `JSON.stringify()`
      * @param obj JSON object
      * @returns JSON string
      */
-    public toString(obj: any) {
+    public static toString(obj: any) {
         if(obj === null) return "{}";
         else if(!isContentJson(JSON.stringify(obj))) throw new Error("Object is not a JSON");
         else return JSON.stringify(obj);
     }
+    /**
+     * Deserializes `CJSON` content and returns content as string.
+     * 
+     * Content will be of pure JSON content and can be parsed as `JSON`
+     * @returns `JSON` equivalent of `CJSON` content in `string`
+     */
     public deserializeAsString() : string {
         this.deserialize();
         return this.content;
     }
+    /**
+     * Removes a key:value from the CJSON context. Key will be JPath in `$.full.path` format
+     * 
+     * The function automatically deserializes before removing. So, no need to explicitely deserialize it.
+     * @param key JPath to the key to be removed.
+     * @returns Resultant content in `JSON` object
+     */
     public remove(key: string) {
         this.deserialize();
         return this.json?.removeWithKey(key, this.content);
     }
 }
-
-// var a = `
-// {
-//     "source": $import "C:\\Users\\Home\\OneDrive\\Desktop\\projects\\cjson\\tests\\test-files\\source.json",
-//     "target": {
-//         "fruit": "Apple",
-//         "size": "Large",
-//         "color": "Red"
-//     }
-// }
-// `
-// var a = "C:\\Users\\Home\\OneDrive\\Desktop\\projects\\cjson\\tests\\test-files\\targetRelativeCalls.cjson"
-var a = "C:\\Users\\632400\\Desktop\\projects\\cjson\\tests\\test-files\\targetRelativeCalls.cjson"
-
-var cjson = new Cjson(a);
-
-var b =  cjson.remove("$.source.quiz.sport.q1.answer");
-console.log(b);

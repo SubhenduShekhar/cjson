@@ -166,7 +166,7 @@ export class Json {
         return this.jsonValues;
     }
     private removeWithSucComma(key: string, value: string, content: string) {
-        var uniqueKeys = content.match(Keywords.removeWithSucComa(key, value))?.filter((value, index, array) => { return array.indexOf(value) === index });
+        var uniqueKeys = content.match(Keywords.removeWithSucComa(key, regexRefinery(value)))?.filter((value, index, array) => { return array.indexOf(value) === index });
         if(uniqueKeys !== undefined) {
             for(let i = 0; i < uniqueKeys?.length; i ++) {
                 var value = regexRefinery(uniqueKeys[i]);
@@ -176,9 +176,7 @@ export class Json {
         return content;
     }
     private removeWithPreComma(key: string, value: string, content: string) {
-        var uniqueKeys = content.match(Keywords.removeWithPreComa(key, value))?.filter((value, index, array) => { return array.indexOf(value) === index });
-        console.log("-----------");
-        console.log(uniqueKeys);
+        var uniqueKeys = content.match(Keywords.removeWithPreComa(key, regexRefinery(value)))?.filter((value, index, array) => { return array.indexOf(value) === index });
         if(uniqueKeys !== undefined) {
             for(let i = 0; i < uniqueKeys?.length; i ++) {
                 var value = regexRefinery(uniqueKeys[i]);
@@ -188,28 +186,33 @@ export class Json {
         return content;
     }
     private getAllKeyValueMatch(key: string, obj: any) {
-        // value = regexRefinery(value);
-        // content = this.removeWithSucComma(key, value, content);
-        // return this.removeWithPreComma(key, value, content);
-        // console.log(key.split(".").length)
         if(key.split(".").length === 1) {
             let stringObj: string = JSON.stringify(obj);
             let con = this.removeWithPreComma(key, obj[key], stringObj);
-            con = this.removeWithSucComma(key, obj[key], stringObj);
-            console.log(con);
+            con = this.removeWithSucComma(key, obj[key], con);
+            return con;
         }
         else {
             let curKey: string = key.split(".")[0];
-            this.getAllKeyValueMatch(key.replace(curKey + ".", ""), obj[curKey]);
-        }        
+            var a = this.getAllKeyValueMatch(key.replace(curKey + ".", ""), obj[curKey]);
+            if(a !== undefined)
+                obj[curKey] = JSON.parse(a);
+            else
+                obj[curKey] = a;
+            return JSON.stringify(obj);
+        }
     }
+    /**
+     * Removes a key:value from the JSON context. Key will be JPath in `$.full.path` format
+     * 
+     * The function automatically deserializes before removing. So, no need to explicitely deserialize it.
+     * @param key JPath to the key
+     * @param content JSON `string` content from which to be removed.
+     * @returns Resultant content in `JSON` object
+     */
     public removeWithKey(key: string, content: string) {
         if(key.startsWith(Keywords.relativeJPath))
             key = key.replace(Keywords.relativeJPath, "");
-        this.getAllKeyValueMatch(key, JSON.parse(content));
-        // var value: string = this.parse(key);
-        // console.log("Removing - " + key + ":" + value)
-        // return this.getAllKeyValueMatch(key, value, content);
-
+        return JSON.parse(this.getAllKeyValueMatch(key, JSON.parse(content)));
     }
 }
