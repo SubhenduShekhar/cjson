@@ -1,5 +1,6 @@
 import * as file from './file';
 import Keywords from './keywords';
+import { regexRefinery } from './refinery';
 
 /**
  * Checks for `JSON` content
@@ -168,31 +169,47 @@ export class Json {
         var uniqueKeys = content.match(Keywords.removeWithSucComa(key, value))?.filter((value, index, array) => { return array.indexOf(value) === index });
         if(uniqueKeys !== undefined) {
             for(let i = 0; i < uniqueKeys?.length; i ++) {
-                content = content.replace(uniqueKeys[i], "");
+                var value = regexRefinery(uniqueKeys[i]);
+                content = content.replace(new RegExp(value, "g"), "");
             }
         }
-        console.log(content)
+        return content;
     }
     private removeWithPreComma(key: string, value: string, content: string) {
-        
+        var uniqueKeys = content.match(Keywords.removeWithPreComa(key, value))?.filter((value, index, array) => { return array.indexOf(value) === index });
+        console.log("-----------");
+        console.log(uniqueKeys);
+        if(uniqueKeys !== undefined) {
+            for(let i = 0; i < uniqueKeys?.length; i ++) {
+                var value = regexRefinery(uniqueKeys[i]);
+                content = content.replace(new RegExp(value, "g"), "");
+            }
+        }
+        return content;
     }
-    private getAllKeyValueMatch(key: string, value: string, content: string) {
-        value = value.replace(/\./g, "\\.")
-                .replace(/\[/g, "\\[")
-                .replace(/\?/g, "\\?")
-                .replace(/\*/g, "\\*")
-                .replace(/\+/g, "\\+")
-                .replace(/\{/g, "\\{")
-                .replace(/\$/g, "\\$")
-                .replace(/\^/g, "\\^");
-        var a = this.removeWithSucComma(key, value, content);
-        
+    private getAllKeyValueMatch(key: string, obj: any) {
+        // value = regexRefinery(value);
+        // content = this.removeWithSucComma(key, value, content);
+        // return this.removeWithPreComma(key, value, content);
+        // console.log(key.split(".").length)
+        if(key.split(".").length === 1) {
+            let stringObj: string = JSON.stringify(obj);
+            let con = this.removeWithPreComma(key, obj[key], stringObj);
+            con = this.removeWithSucComma(key, obj[key], stringObj);
+            console.log(con);
+        }
+        else {
+            let curKey: string = key.split(".")[0];
+            this.getAllKeyValueMatch(key.replace(curKey + ".", ""), obj[curKey]);
+        }        
     }
     public removeWithKey(key: string, content: string) {
         if(key.startsWith(Keywords.relativeJPath))
             key = key.replace(Keywords.relativeJPath, "");
-        
-        var value: string = this.parse(key);
-        this.getAllKeyValueMatch(key, value, content);
+        this.getAllKeyValueMatch(key, JSON.parse(content));
+        // var value: string = this.parse(key);
+        // console.log("Removing - " + key + ":" + value)
+        // return this.getAllKeyValueMatch(key, value, content);
+
     }
 }

@@ -19,8 +19,18 @@ export function refineRelativePaths(content: string, uniqueKeys: string[]) {
  */
 export function refineRuntimeVals(content: string, uniqueKeys: string[]) {
     uniqueKeys?.map(eachKey => {
-
         content = content.replace(new RegExp(eachKey, "g"), "\"<-" + eachKey.split("<")[1].split(">")[0] + "->\"");
     });
     return content;
+}
+
+export function regexRefinery(content: string) {
+    return content.replace(/\./g, "\\.")
+        .replace(/\[/g, "\\[")
+        .replace(/\?/g, "\\?")
+        .replace(/\*/g, "\\*")
+        .replace(/\+/g, "\\+")
+        .replace(/\{/g, "\\{")
+        .replace(/\$/g, "\\$")
+        .replace(/\^/g, "\\^");
 }

@@ -208,7 +208,7 @@ export class Cjson extends Is {
     }
     public remove(key: string) {
         this.deserialize();
-        this.json?.removeWithKey(key, this.content);
+        return this.json?.removeWithKey(key, this.content);
     }
 }
 
@@ -222,9 +222,10 @@ export class Cjson extends Is {
 //     }
 // }
 // `
-var a = "C:\\Users\\Home\\OneDrive\\Desktop\\projects\\cjson\\tests\\test-files\\targetRelativeCalls.cjson"
+// var a = "C:\\Users\\Home\\OneDrive\\Desktop\\projects\\cjson\\tests\\test-files\\targetRelativeCalls.cjson"
+var a = "C:\\Users\\632400\\Desktop\\projects\\cjson\\tests\\test-files\\targetRelativeCalls.cjson"
 
 var cjson = new Cjson(a);
 
-var b =  cjson.remove("$.source.quiz.sport.q1.question");
+var b =  cjson.remove("$.source.quiz.sport.q1.answer");
 console.log(b);
