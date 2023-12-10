@@ -6,7 +6,34 @@ import { Json, isContentJson } from "./utils/json";
 import { AbsolutePathConstraintError, CJSONContentInsteadOfFilePath } from "./utils/errors";
 import { refineRelativePaths, refineRuntimeVals } from "./utils/refinery";
 
-
+/**
+ * Coded JSON is an extended format of JSON formatted data storage, which gives
+ * you more previledge to organize data into more structured format.
+ * 
+ * Here is an example for `CJSON` format:
+ * 
+ * ```
+ * {
+    "source": $import "./source.json",
+    "target": {
+        "fruit": "Apple",
+        "size": "Large",
+        "color": "Red",
+        "secColor": $.target.color,
+        "colorList": [ $.target.color, $.target.secColor ],
+        // You can add comments like this
+        "digitCheck": 1.5,
+        "digitImport": $.target.digitCheck,
+        "digitArrayImport": [ $.target.digitCheck, $.target.digitImport ]
+    }
+}
+ * ```
+ * 
+ * The above `CJSON` snipped will be deserialized in JSON format and can be used 
+ * as same as other JSON files.
+ * 
+ * For other details, please refer to official page: https://subhendushekhar.github.io/cjson/
+ */
 export class Cjson extends Is {
     private obj: any;
     private filePath: string ;
@@ -93,7 +120,7 @@ export class Cjson extends Is {
      * Deserializes the keywords.
      * @returns `JSON` if no errors. Else `undefined`
      */
-    public deserialize() : JSON | undefined {
+    public deserialize() : any {
         this.decodeKeywords();
         this.decodeRelativePaths(this.content);
         
@@ -223,3 +250,9 @@ export class Cjson extends Is {
         return this.json?.removeWithKey(key, this.content);
     }
 }
+
+
+var cjson = new Cjson("C:\\Users\\Home\\OneDrive\\Desktop\\projects\\cjson\\tests\\test-files\\pure.json");
+var cjsonRemoved = cjson.remove("$.quiz.sport.q1.question");
+
+console.log(JSON.stringify(cjsonRemoved));
