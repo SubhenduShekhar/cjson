@@ -6,9 +6,36 @@ import { Json, isContentJson } from "./utils/json";
 import { AbsolutePathConstraintError, CJSONContentInsteadOfFilePath } from "./utils/errors";
 import { refineRelativePaths, refineRuntimeVals } from "./utils/refinery";
 
-
+/**
+ * Coded JSON is an extended format of JSON formatted data storage, which gives
+ * you more previledge to organize data into more structured format.
+ * 
+ * Here is an example for `CJSON` format:
+ * 
+ * ```
+ * {
+    "source": $import "./source.json",
+    "target": {
+        "fruit": "Apple",
+        "size": "Large",
+        "color": "Red",
+        "secColor": $.target.color,
+        "colorList": [ $.target.color, $.target.secColor ],
+        // You can add comments like this
+        "digitCheck": 1.5,
+        "digitImport": $.target.digitCheck,
+        "digitArrayImport": [ $.target.digitCheck, $.target.digitImport ]
+    }
+}
+ * ```
+ * 
+ * The above `CJSON` snipped will be deserialized in JSON format and can be used 
+ * as same as other JSON files.
+ * 
+ * For other details, please refer to official page: https://subhendushekhar.github.io/cjson/
+ */
 export class Cjson extends Is {
-    private obj: JSON | undefined;
+    private obj: any;
     private filePath: string ;
     private content: string = "";
     public json: Json | undefined = undefined;
@@ -93,7 +120,7 @@ export class Cjson extends Is {
      * Deserializes the keywords.
      * @returns `JSON` if no errors. Else `undefined`
      */
-    public deserialize() : JSON | undefined {
+    public deserialize() : any {
         this.decodeKeywords();
         this.decodeRelativePaths(this.content);
         
@@ -191,21 +218,41 @@ export class Cjson extends Is {
         this.refineObj(content);
         return this.obj;
     }
+    /**
+     * Converts JSON object to string. Just a wrapper over `JSON.stringify()`
+     * @param obj JSON object
+     * @returns JSON string
+     */
+    public static toString(obj: any) {
+        if(obj === null) return "{}";
+        else if(!isContentJson(JSON.stringify(obj))) throw new Error("Object is not a JSON");
+        else return JSON.stringify(obj);
+    }
+    /**
+     * Deserializes `CJSON` content and returns content as string.
+     * 
+     * Content will be of pure JSON content and can be parsed as `JSON`
+     * @returns `JSON` equivalent of `CJSON` content in `string`
+     */
+    public deserializeAsString() : string {
+        this.deserialize();
+        return this.content;
+    }
+    /**
+     * Removes a key:value from the CJSON context. Key will be JPath in `$.full.path` format
+     * 
+     * The function automatically deserializes before removing. So, no need to explicitely deserialize it.
+     * @param key JPath to the key to be removed.
+     * @returns Resultant content in `JSON` object
+     */
+    public remove(key: string) {
+        this.deserialize();
+        return this.json?.removeWithKey(key, this.content);
+    }
 }
 
-// var a = `
-// {
-//     "source": $import "C:\\Users\\Home\\OneDrive\\Desktop\\projects\\cjson\\tests\\test-files\\source.json",
-//     "target": {
-//         "fruit": "Apple",
-//         "size": "Large",
-//         "color": "Red"
-//     }
-// }
-// `
-// var a = "C:\\Users\\Home\\OneDrive\\Desktop\\projects\\cjson\\tests\\test-files\\targetRelativeCalls.cjson"
 
-// var cjson = new Cjson(a);
+var cjson = new Cjson("C:\\Users\\Home\\OneDrive\\Desktop\\projects\\cjson\\tests\\test-files\\pure.json");
+var cjsonRemoved = cjson.remove("$.quiz.sport.q1.question");
 
-// var b =  cjson.deserialize();
-// console.log(b);
+console.log(JSON.stringify(cjsonRemoved));
