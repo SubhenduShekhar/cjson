@@ -23,8 +23,15 @@ export function refineRuntimeVals(content: string, uniqueKeys: string[]) {
     });
     return content;
 }
-
+/**
+ * Refines special characters from the string content.
+ * 
+ * Characters in scope: ,[?*+{$^
+ * @param content content to be refined
+ * @returns 
+ */
 export function regexRefinery(content: string) {
+    if(content === null || content === undefined) return content;
     return content.replace(/\./g, "\\.")
         .replace(/\[/g, "\\[")
         .replace(/\?/g, "\\?")
