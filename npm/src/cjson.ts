@@ -11,8 +11,8 @@ import { refineRelativePaths, refineRuntimeVals } from "./utils/refinery";
  * you more previledge to organize data into more structured format.
  * 
  * Here is an example for `CJSON` format:
+ * @example
  * 
- * ```
  * {
     "source": $import "./source.json",
     "target": {
@@ -27,12 +27,12 @@ import { refineRelativePaths, refineRuntimeVals } from "./utils/refinery";
         "digitArrayImport": [ $.target.digitCheck, $.target.digitImport ]
     }
 }
- * ```
+ * 
  * 
  * The above `CJSON` snipped will be deserialized in JSON format and can be used 
  * as same as other JSON files.
  * 
- * For other details, please refer to official page: https://subhendushekhar.github.io/cjson/
+ * For other details, please refer to official page: {@link https://subhendushekhar.github.io/cjson/}
  */
 export class Cjson extends Is {
     private obj: any;
@@ -43,8 +43,32 @@ export class Cjson extends Is {
     public isContentJson = (isFilePath: boolean): boolean => { return isContentJson(this.content, isFilePath) };
 
     /**
-     * Call this contructor to parse a CJSON file.
-     * @param filePath CJSON file absolute path
+     * Coded JSON is an extended format of JSON formatted data storage, which gives
+     * you more previledge to organize data into more structured format.
+     * 
+     * Here is an example for `CJSON` format:
+     * @example
+     * 
+     * {
+        "source": $import "./source.json",
+        "target": {
+            "fruit": "Apple",
+            "size": "Large",
+            "color": "Red",
+            "secColor": $.target.color,
+            "colorList": [ $.target.color, $.target.secColor ],
+            // You can add comments like this
+            "digitCheck": 1.5,
+            "digitImport": $.target.digitCheck,
+            "digitArrayImport": [ $.target.digitCheck, $.target.digitImport ]
+        }
+    }
+     * 
+     * 
+     * The above `CJSON` snipped will be deserialized in JSON format and can be used 
+     * as same as other JSON files.
+     * 
+     * For other details, please refer to official page: {@link https://subhendushekhar.github.io/cjson/}
      */
     constructor(content: string, isContentCJson?: boolean) {
         super();
@@ -247,12 +271,8 @@ export class Cjson extends Is {
      */
     public remove(key: string) {
         this.deserialize();
-        return this.json?.removeWithKey(key, this.content);
+        this.obj = this.json?.removeWithKey(key, this.content);
+        this.content = Cjson.toString(this.obj);
+        return this;
     }
 }
-
-
-var cjson = new Cjson("C:\\Users\\Home\\OneDrive\\Desktop\\projects\\cjson\\tests\\test-files\\pure.json");
-var cjsonRemoved = cjson.remove("$.quiz.sport.q1.question");
-
-console.log(JSON.stringify(cjsonRemoved));

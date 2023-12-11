@@ -165,27 +165,29 @@ export class Json {
         }
         return this.jsonValues;
     }
-    private removeWithSucComma(key: string, value: string, content: string) {
+    private removeWithSucComma(key: string, value: any, content: string) {
         var uniqueKeys = content.match(Keywords.removeWithSucComa(key, regexRefinery(value)))?.filter((value, index, array) => { return array.indexOf(value) === index });
+        
         if(uniqueKeys !== undefined) {
             for(let i = 0; i < uniqueKeys?.length; i ++) {
-                var value = regexRefinery(uniqueKeys[i]);
-                content = content.replace(new RegExp(value, "g"), "");
+                var val = regexRefinery(uniqueKeys[i]);
+                content = content.replace(new RegExp(val, "g"), "");
             }
         }
         return content;
     }
-    private removeWithPreComma(key: string, value: string, content: string) {
+    private removeWithPreComma(key: string, value: any, content: string) {
         var uniqueKeys = content.match(Keywords.removeWithPreComa(key, regexRefinery(value)))?.filter((value, index, array) => { return array.indexOf(value) === index });
+        
         if(uniqueKeys !== undefined) {
             for(let i = 0; i < uniqueKeys?.length; i ++) {
-                var value = regexRefinery(uniqueKeys[i]);
-                content = content.replace(new RegExp(value, "g"), "");
+                var val = regexRefinery(uniqueKeys[i]);
+                content = content.replace(new RegExp(val, "g"), "");
             }
         }
         return content;
     }
-    private getAllKeyValueMatch(key: string, obj: any) {
+    private removeRecursively(key: string, obj: any) {
         if(key.split(".").length === 1) {
             let stringObj: string = JSON.stringify(obj);
             let con = this.removeWithPreComma(key, obj[key], stringObj);
@@ -194,7 +196,7 @@ export class Json {
         }
         else {
             let curKey: string = key.split(".")[0];
-            var a = this.getAllKeyValueMatch(key.replace(curKey + ".", ""), obj[curKey]);
+            var a = this.removeRecursively(key.replace(curKey + ".", ""), obj[curKey]);
             if(a !== undefined)
                 obj[curKey] = JSON.parse(a);
             else
@@ -213,6 +215,47 @@ export class Json {
     public removeWithKey(key: string, content: string) {
         if(key.startsWith(Keywords.relativeJPath))
             key = key.replace(Keywords.relativeJPath, "");
-        return JSON.parse(this.getAllKeyValueMatch(key, JSON.parse(content)));
+        var value = this.parse(key);
+        
+        if(typeof value !== "object")
+            this.obj = JSON.parse(this.removeRecursively(key, JSON.parse(content)));
+        else {
+            // Replacing with null first and then removing the key:value set
+            var nulledObj: any = this.replaceRecursively(key, null, JSON.parse(content));
+            this.obj = JSON.parse(this.removeRecursively(key, nulledObj));
+        }
+        return this.obj;
+    }
+    /**
+     * Replace a JPath to a specified value. The function context is of JSON and cannot be used in CJSON context.
+     * 
+     * In order to use this in CJSON context, follow below steps:
+     * <ol>
+     * <li>Create CJson object</li>
+     * <li>Deserialize</li>
+     * <li>Deserialize</li>
+     * <li>cjson.json?.replace("$.jpath", value, object)</li>
+     * </ol>
+     * @param key 
+     * @param value 
+     * @param jsonObject 
+     * @returns 
+     */
+    public replace = (jPath: string, value: any, jsonObject: any) => this.replaceRecursively(jPath, value, jsonObject);
+    /**
+     * Recursive function for replacing data in provided key.
+     * @private
+     * @param key 
+     * @param obj 
+     * @returns 
+     */
+    private replaceRecursively(key: string, value: any, obj: any): any {
+        if(key.split(".").length === 1)
+            obj[key] = value;
+        else {
+            let curKey: string = key.split(".")[0];
+            obj[curKey] = this.replaceRecursively(key.replace(curKey + ".", ""), value, obj[curKey]);
+        }
+        return obj;
     }
 }

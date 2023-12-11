@@ -10,7 +10,7 @@
   "scripts": {
     "build": "npx tsc && npm pack",
     "clean": "echo Y | rmdir out /S && del coded-json-*.tgz",
-    "document": "npx tsc && npx jsdoc out/ -r -d ../docs/npm"
+    "document": "npx tsc && npx jsdoc out/ -r -d ../docs/npm -c jsdoc.config.json"
   },
   "keywords": [
     "coded",
