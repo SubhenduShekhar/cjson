@@ -178,6 +178,7 @@ export class Json {
     }
     private removeWithPreComma(key: string, value: string, content: string) {
         var uniqueKeys = content.match(Keywords.removeWithPreComa(key, regexRefinery(value)))?.filter((value, index, array) => { return array.indexOf(value) === index });
+        
         if(uniqueKeys !== undefined) {
             for(let i = 0; i < uniqueKeys?.length; i ++) {
                 var val = regexRefinery(uniqueKeys[i]);
@@ -189,13 +190,18 @@ export class Json {
     private removeRecursively(key: string, obj: any) {
         if(key.split(".").length === 1) {
             let stringObj: string = JSON.stringify(obj);
-            let con = this.removeWithPreComma(key, obj[key], stringObj);
-            con = this.removeWithSucComma(key, obj[key], con);
+            let con = this.removeWithSucComma(key, obj[key], stringObj);
+            
+            if(! isContentJson(con))
+                con = this.removeWithPreComma(key, obj[key], con);
             return con;
         }
         else {
             let curKey: string = key.split(".")[0];
+            // console.log(JSON.stringify(obj))
+            // console.log("-----------------")
             var a = this.removeRecursively(key.replace(curKey + ".", ""), obj[curKey]);
+            // console.log(a)
             if(a !== undefined)
                 obj[curKey] = JSON.parse(a);
             else

@@ -279,6 +279,6 @@ export class Cjson extends Is {
 
 
 var cjson = new Cjson("C:\\Users\\Home\\OneDrive\\Desktop\\projects\\cjson\\tests\\test-files\\pure.json");
-var cjsonRemoved = cjson.remove("$.quiz.sport.q1.question");
+var cjsonRemoved = cjson.remove("$.quiz.sport.q1.options");
 
-console.log(JSON.stringify(cjsonRemoved));
+console.log(cjsonRemoved.deserializeAsString());
