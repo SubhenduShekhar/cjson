@@ -276,3 +276,9 @@ export class Cjson extends Is {
         return this;
     }
 }
+
+var pureJson = "C:\\Users\\632400\\Desktop\\projects\\cjson\\tests\\test-files\\pure.json";
+var cjson = new Cjson(pureJson);
+var removedCjson = cjson.remove("$.quiz.sport.q1.question");
+
+console.log(JSON.stringify(removedCjson.deserialize(), null, 4));
