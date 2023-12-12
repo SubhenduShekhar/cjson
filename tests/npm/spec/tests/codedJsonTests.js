@@ -98,6 +98,25 @@ describe("CJSON Test 1", () => {
         var removedCjson = cjson.remove("$.quiz.sport.q1.question");
         console.log(JSON.stringify(removedCjson.deserialize(), null, 4));
     });
+
+    it("I should be able to deserialize CJSON as JSON string content", () => {
+        var cjson = new Cjson(relativeTargetCjson);
+        var stringContent = cjson.deserializeAsString();
+        assert.equal(JSON.stringify(cjson.deserialize()), JSON.stringify(JSON.parse(stringContent)))
+    });
+
+    it("I should be able to remove a key using remove function", () => {
+        var cjson = new Cjson(pureJsonfilePath);
+        var cjsonRemoved = cjson.remove("$.quiz.sport.q1.question");
+
+        assert.equal(cjsonRemoved.quiz.sport.q1.question, undefined);
+    });
+
+    it("I should be able to stringify JSON object using toString function", ()=> {
+        var fileContent = fs.readFileSync(pureJsonfilePath).toJSON();
+        var stringContent = Cjson.toString(fileContent);
+        assert.equal(JSON.stringify(fileContent), stringContent);
+    });
 });
 
 /**
