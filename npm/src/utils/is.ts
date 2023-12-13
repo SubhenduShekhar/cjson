@@ -1,9 +1,10 @@
+import { Base } from "./base";
 import Keywords from "./keywords";
 
 /**
  * Detects keywords
  */
-export class Is {
+export class Is extends Base {
     /**
      * Detects `import`
      * @param lineItem Comma separated line item in string

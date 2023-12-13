@@ -35,7 +35,7 @@ import { refineRelativePaths, refineRuntimeVals } from "./utils/refinery";
  * For other details, please refer to official page: {@link https://subhendushekhar.github.io/cjson/}
  */
 export class Cjson extends Is {
-    private obj: any;
+    // private obj: any;
     private filePath: string ;
     private content: string = "";
     public json: Json | undefined = undefined;
@@ -69,6 +69,9 @@ export class Cjson extends Is {
      * as same as other JSON files.
      * 
      * For other details, please refer to official page: {@link https://subhendushekhar.github.io/cjson/}
+     * 
+     * @param content Can be path to the CJSON file. In this case the second param can be optional
+     * @param isContentCJson Set this true if you are passing raw CJSON content as `content`
      */
     constructor(content: string, isContentCJson?: boolean) {
         super();
@@ -147,7 +150,6 @@ export class Cjson extends Is {
     public deserialize() : any {
         this.decodeKeywords();
         this.decodeRelativePaths(this.content);
-        
         return this.obj;
     }
     /**
@@ -259,7 +261,9 @@ export class Cjson extends Is {
      * @returns `JSON` equivalent of `CJSON` content in `string`
      */
     public deserializeAsString() : string {
-        this.deserialize();
+        if(this.obj === undefined)
+            this.deserialize();
+        
         return this.content;
     }
     /**
@@ -275,10 +279,45 @@ export class Cjson extends Is {
         this.content = Cjson.toString(this.obj);
         return this;
     }
+    /**
+     * Replace a JPath to a specified value. The function context is of JSON and cannot be used in CJSON context.
+     * 
+     * In order to use this in CJSON context, follow below steps:
+     * <ol>
+     * <li>Create CJson object</li>
+     * <li>Deserialize</li>
+     * <li>Deserialize</li>
+     * <li>cjson.json?.replace("$.jpath", value, object)</li>
+     * </ol>
+     * @param key 
+     * @param value 
+     * @param jsonObject 
+     * @returns 
+     */
+    public replace = (jPath: string, value: any) => {
+        if(jPath.startsWith("$."))
+            jPath = jPath.split("$.")[1];
+        this.obj = this.json?.replace(jPath, value, this.obj);
+        return this;
+    }
 }
 
 
-var cjson = new Cjson("C:\\Users\\Home\\OneDrive\\Desktop\\projects\\cjson\\tests\\test-files\\pure.json");
-var cjsonRemoved = cjson.remove("$.quiz.sport.q1.options");
+// var cjson = new Cjson("C:\\Users\\632400\\Desktop\\projects\\cjson\\tests\\test-files\\target.cjson");
+// cjson.deserialize();
 
-console.log(cjsonRemoved.deserializeAsString());
+// console.log(cjson.json?.parse("$.source.quiz.sport.q1.question"))
+
+// console.log(cjson.json?.parse("$."))
+// var cjsonRemoved = cjson.remove("$.quiz.sport.q1.options");
+// console.log(cjsonRemoved.deserializeAsString());
+// console.log("----------------")
+// cjsonRemoved = cjson.remove("$.quiz.sport.q1.answer");
+// console.log(cjsonRemoved.deserializeAsString());
+// console.log("----------------")
+// cjsonRemoved = cjson.remove("$.quiz.sport.q1.question");
+// console.log(cjsonRemoved.deserializeAsString());
+// console.log("----------------")
+// cjsonRemoved = cjson.remove("$.quiz.maths.q1.question");
+// console.log(cjsonRemoved.deserializeAsString());
+// console.log("----------------")

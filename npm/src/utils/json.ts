@@ -1,3 +1,4 @@
+import { Base } from './base';
 import * as file from './file';
 import Keywords from './keywords';
 import { regexRefinery } from './refinery';
@@ -9,7 +10,7 @@ import { regexRefinery } from './refinery';
  */
 export function isContentJson(content: string, isFilePath?: boolean) {
     if(isFilePath)
-        content = file.read(content);
+        content = file.read(content).toString();
     try {
         JSON.parse(content);
         return true;
@@ -29,13 +30,13 @@ export function separateByComma(content: string) {
 /**
  * `JSON` specific functions
  */
-export class Json {
-    private obj: any | string;
+export class Json extends Base {
     private jsonKeys: string[] = [];
     private jsonValues: string[] = [];
     private filePath: string | undefined;
 
     constructor(obj: any | string, isFilePath?: boolean) {
+        super();
         if(typeof obj === "string" && isFilePath) {
             this.filePath = obj;
             this.obj = JSON.parse(file.read(this.filePath));
@@ -138,6 +139,9 @@ export class Json {
      * @returns Value fetched from key
      */
     public parse(key?: string) {
+        if(key?.startsWith("$."))
+            key = key.split("$.")[1];
+            
         if(key !== undefined)
             return this.getValueFromKey(key);
         else
@@ -191,17 +195,17 @@ export class Json {
         if(key.split(".").length === 1) {
             let stringObj: string = JSON.stringify(obj);
             let con = this.removeWithSucComma(key, obj[key], stringObj);
-            
-            if(! isContentJson(con))
-                con = this.removeWithPreComma(key, obj[key], con);
+            console.log(con);
+            if(! isContentJson(con)) {
+                con = this.removeWithPreComma(key, obj[key], stringObj);
+                con = this.removeWithSucComma(key, obj[key], con);
+            }
             return con;
         }
         else {
             let curKey: string = key.split(".")[0];
-            // console.log(JSON.stringify(obj))
-            // console.log("-----------------")
             var a = this.removeRecursively(key.replace(curKey + ".", ""), obj[curKey]);
-            // console.log(a)
+            
             if(a !== undefined)
                 obj[curKey] = JSON.parse(a);
             else
@@ -246,7 +250,10 @@ export class Json {
      * @param jsonObject 
      * @returns 
      */
-    public replace = (jPath: string, value: any, jsonObject: any) => this.replaceRecursively(jPath, value, jsonObject);
+    public replace = (jPath: string, value: any, obj: any) => {
+        this.obj = this.replaceRecursively(jPath, value, obj);
+        return this;
+    }
     /**
      * Recursive function for replacing data in provided key.
      * @private
