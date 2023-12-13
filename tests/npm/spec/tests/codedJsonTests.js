@@ -145,8 +145,7 @@ describe("JSON Test 2", () => {
     it("I should be able to replace a value using replace()", () => {
         var cjson = new Cjson(cjsonfilePath);
         cjson.deserialize();
-        cjson.json = cjson.json.replace("$.source.quiz.sport.q1.question", "New question");
-
-        console.log(cjson.deserializeAsString());
-    })
+        cjson = cjson.replace("$.source.quiz.sport.q1.question", "New question");
+        
+    });
 });

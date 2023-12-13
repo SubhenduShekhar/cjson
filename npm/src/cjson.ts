@@ -295,16 +295,21 @@ export class Cjson extends Is {
      * @returns 
      */
     public replace = (jPath: string, value: any) => {
+        this.deserialize();
         if(jPath.startsWith("$."))
             jPath = jPath.split("$.")[1];
         this.obj = this.json?.replace(jPath, value, this.obj);
+
+        this.refineObj(Cjson.toString(this.obj));
         return this;
     }
 }
 
 
 // var cjson = new Cjson("C:\\Users\\632400\\Desktop\\projects\\cjson\\tests\\test-files\\target.cjson");
-// cjson.deserialize();
+
+// var cjson = cjson.replace("$.source.quiz.sport.q1.question", "asd");
+// console.log(cjson.deserializeAsString())
 
 // console.log(cjson.json?.parse("$.source.quiz.sport.q1.question"))
 
