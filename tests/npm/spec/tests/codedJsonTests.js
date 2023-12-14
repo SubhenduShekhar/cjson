@@ -146,6 +146,6 @@ describe("JSON Test 2", () => {
         var cjson = new Cjson(cjsonfilePath);
         cjson.deserialize();
         cjson = cjson.replace("$.source.quiz.sport.q1.question", "New question");
-        
+        assert.equal(cjson.json.parse("$.source.quiz.sport.q1.question"), "New question");
     });
 });

@@ -129,6 +129,8 @@ export class Json extends Base {
                     value = value[keyList[j]];
             }
         }
+        else if(key === "")
+            value = this.obj;
         else
             value = value[key];
         return value;
@@ -141,7 +143,6 @@ export class Json extends Base {
     public parse(key?: string) {
         if(key?.startsWith("$."))
             key = key.split("$.")[1];
-            
         if(key !== undefined)
             return this.getValueFromKey(key);
         else
@@ -252,7 +253,7 @@ export class Json extends Base {
      */
     public replace = (jPath: string, value: any, obj: any) => {
         this.obj = this.replaceRecursively(jPath, value, obj);
-        return this;
+        return this.obj;
     }
     /**
      * Recursive function for replacing data in provided key.

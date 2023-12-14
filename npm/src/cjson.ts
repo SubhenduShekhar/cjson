@@ -166,20 +166,21 @@ export class Cjson extends Is {
      */
     private decodeImport(content: string): string {
         var filePath: string = this.getFilePath(content);
+        var fileName: string = filePath.split("/")[filePath.split("/").length - 1];
         var importFilePath: string;
+
 
         if(isAbsolutePath(filePath))
             importFilePath = filePath;
 
         else if(!isAbsolutePath(filePath) && this.isContentCJson) throw AbsolutePathConstraintError("Only absolute path is supported in import statements");
-        
+
         else {
-            var dirname: string = path.dirname(this.filePath);
+            var dirname: string = path.dirname(this.filePath) + filePath.replace(fileName, "");
             importFilePath = path.join(dirname, filePath);
         }
-        
+        console.log(importFilePath) asd
         content = content.replace(Keywords.importKey + filePath + "\"", read(importFilePath))
-
         if(this.isImport(content)) {
             this.decodeImport(content);
             return content;
@@ -299,30 +300,13 @@ export class Cjson extends Is {
         if(jPath.startsWith("$."))
             jPath = jPath.split("$.")[1];
         this.obj = this.json?.replace(jPath, value, this.obj);
-
         this.refineObj(Cjson.toString(this.obj));
         return this;
     }
 }
 
 
-// var cjson = new Cjson("C:\\Users\\632400\\Desktop\\projects\\cjson\\tests\\test-files\\target.cjson");
-
+var cjson = new Cjson("C:/Users/632400/Desktop/projects/cjson/tests/test-files/target.cjson");
+console.log(cjson.deserialize());
 // var cjson = cjson.replace("$.source.quiz.sport.q1.question", "asd");
-// console.log(cjson.deserializeAsString())
-
-// console.log(cjson.json?.parse("$.source.quiz.sport.q1.question"))
-
-// console.log(cjson.json?.parse("$."))
-// var cjsonRemoved = cjson.remove("$.quiz.sport.q1.options");
-// console.log(cjsonRemoved.deserializeAsString());
-// console.log("----------------")
-// cjsonRemoved = cjson.remove("$.quiz.sport.q1.answer");
-// console.log(cjsonRemoved.deserializeAsString());
-// console.log("----------------")
-// cjsonRemoved = cjson.remove("$.quiz.sport.q1.question");
-// console.log(cjsonRemoved.deserializeAsString());
-// console.log("----------------")
-// cjsonRemoved = cjson.remove("$.quiz.maths.q1.question");
-// console.log(cjsonRemoved.deserializeAsString());
-// console.log("----------------")
+// console.log(JSON.stringify(cjson.json?.parse("$.source.quiz"), null, 4))
