@@ -164,7 +164,7 @@ export class Cjson extends Is {
      * Decodes `import` keyword
      * @param lineItem Comma separated line item in string
      */
-    private decodeImport(content: string): string {
+    private decodeImport(content: string, curPath?: string): string {
         var filePath: string = this.getFilePath(content);
         var fileName: string = filePath.split("/")[filePath.split("/").length - 1];
         var importFilePath: string;
@@ -176,14 +176,20 @@ export class Cjson extends Is {
         else if(!isAbsolutePath(filePath) && this.isContentCJson) throw AbsolutePathConstraintError("Only absolute path is supported in import statements");
 
         else {
-            var dirname: string = path.dirname(this.filePath) + filePath.replace(fileName, "");
-            importFilePath = path.join(dirname, filePath);
+            var dirname: string = path.join(path.dirname(this.filePath), path.dirname(filePath));
+
+            if(curPath !== undefined)
+                dirname = path.join(curPath, path.dirname(filePath));
+            
+            console.log(path.dirname(filePath))
+            console.log(dirname)
+
+            importFilePath = path.join(dirname, fileName);
         }
-        console.log(importFilePath) asd
-        content = content.replace(Keywords.importKey + filePath + "\"", read(importFilePath))
+        content = content.replace(Keywords.importKey + filePath + "\"", read(importFilePath));
+
         if(this.isImport(content)) {
-            this.decodeImport(content);
-            return content;
+            return this.decodeImport(content, path.dirname(importFilePath));
         } else {
             return content;
         }
@@ -304,9 +310,3 @@ export class Cjson extends Is {
         return this;
     }
 }
-
-
-var cjson = new Cjson("C:/Users/632400/Desktop/projects/cjson/tests/test-files/target.cjson");
-console.log(cjson.deserialize());
-// var cjson = cjson.replace("$.source.quiz.sport.q1.question", "asd");
-// console.log(JSON.stringify(cjson.json?.parse("$.source.quiz"), null, 4))
