@@ -11,8 +11,8 @@ import { refineRelativePaths, refineRuntimeVals } from "./utils/refinery";
  * you more previledge to organize data into more structured format.
  * 
  * Here is an example for `CJSON` format:
+ * @example
  * 
- * ```
  * {
     "source": $import "./source.json",
     "target": {
@@ -27,15 +27,15 @@ import { refineRelativePaths, refineRuntimeVals } from "./utils/refinery";
         "digitArrayImport": [ $.target.digitCheck, $.target.digitImport ]
     }
 }
- * ```
+ * 
  * 
  * The above `CJSON` snipped will be deserialized in JSON format and can be used 
  * as same as other JSON files.
  * 
- * For other details, please refer to official page: https://subhendushekhar.github.io/cjson/
+ * For other details, please refer to official page: {@link https://subhendushekhar.github.io/cjson/}
  */
 export class Cjson extends Is {
-    private obj: any;
+    // private obj: any;
     private filePath: string ;
     private content: string = "";
     public json: Json | undefined = undefined;
@@ -43,8 +43,35 @@ export class Cjson extends Is {
     public isContentJson = (isFilePath: boolean): boolean => { return isContentJson(this.content, isFilePath) };
 
     /**
-     * Call this contructor to parse a CJSON file.
-     * @param filePath CJSON file absolute path
+     * Coded JSON is an extended format of JSON formatted data storage, which gives
+     * you more previledge to organize data into more structured format.
+     * 
+     * Here is an example for `CJSON` format:
+     * @example
+     * 
+     * {
+        "source": $import "./source.json",
+        "target": {
+            "fruit": "Apple",
+            "size": "Large",
+            "color": "Red",
+            "secColor": $.target.color,
+            "colorList": [ $.target.color, $.target.secColor ],
+            // You can add comments like this
+            "digitCheck": 1.5,
+            "digitImport": $.target.digitCheck,
+            "digitArrayImport": [ $.target.digitCheck, $.target.digitImport ]
+        }
+    }
+     * 
+     * 
+     * The above `CJSON` snipped will be deserialized in JSON format and can be used 
+     * as same as other JSON files.
+     * 
+     * For other details, please refer to official page: {@link https://subhendushekhar.github.io/cjson/}
+     * 
+     * @param content Can be path to the CJSON file. In this case the second param can be optional
+     * @param isContentCJson Set this true if you are passing raw CJSON content as `content`
      */
     constructor(content: string, isContentCJson?: boolean) {
         super();
@@ -123,7 +150,6 @@ export class Cjson extends Is {
     public deserialize() : any {
         this.decodeKeywords();
         this.decodeRelativePaths(this.content);
-        
         return this.obj;
     }
     /**
@@ -138,25 +164,32 @@ export class Cjson extends Is {
      * Decodes `import` keyword
      * @param lineItem Comma separated line item in string
      */
-    private decodeImport(content: string): string {
+    private decodeImport(content: string, curPath?: string): string {
         var filePath: string = this.getFilePath(content);
+        var fileName: string = filePath.split("/")[filePath.split("/").length - 1];
         var importFilePath: string;
+
 
         if(isAbsolutePath(filePath))
             importFilePath = filePath;
 
         else if(!isAbsolutePath(filePath) && this.isContentCJson) throw AbsolutePathConstraintError("Only absolute path is supported in import statements");
-        
+
         else {
-            var dirname: string = path.dirname(this.filePath);
-            importFilePath = path.join(dirname, filePath);
+            var dirname: string = path.join(path.dirname(this.filePath), path.dirname(filePath));
+
+            if(curPath !== undefined)
+                dirname = path.join(curPath, path.dirname(filePath));
+            
+            console.log(path.dirname(filePath))
+            console.log(dirname)
+
+            importFilePath = path.join(dirname, fileName);
         }
-        
-        content = content.replace(Keywords.importKey + filePath + "\"", read(importFilePath))
+        content = content.replace(Keywords.importKey + filePath + "\"", read(importFilePath));
 
         if(this.isImport(content)) {
-            this.decodeImport(content);
-            return content;
+            return this.decodeImport(content, path.dirname(importFilePath));
         } else {
             return content;
         }
@@ -235,7 +268,9 @@ export class Cjson extends Is {
      * @returns `JSON` equivalent of `CJSON` content in `string`
      */
     public deserializeAsString() : string {
-        this.deserialize();
+        if(this.obj === undefined)
+            this.deserialize();
+        
         return this.content;
     }
     /**
@@ -247,12 +282,31 @@ export class Cjson extends Is {
      */
     public remove(key: string) {
         this.deserialize();
-        return this.json?.removeWithKey(key, this.content);
+        this.obj = this.json?.removeWithKey(key, this.content);
+        this.content = Cjson.toString(this.obj);
+        return this;
+    }
+    /**
+     * Replace a JPath to a specified value. The function context is of JSON and cannot be used in CJSON context.
+     * 
+     * In order to use this in CJSON context, follow below steps:
+     * <ol>
+     * <li>Create CJson object</li>
+     * <li>Deserialize</li>
+     * <li>Deserialize</li>
+     * <li>cjson.json?.replace("$.jpath", value, object)</li>
+     * </ol>
+     * @param key 
+     * @param value 
+     * @param jsonObject 
+     * @returns 
+     */
+    public replace = (jPath: string, value: any) => {
+        this.deserialize();
+        if(jPath.startsWith("$."))
+            jPath = jPath.split("$.")[1];
+        this.obj = this.json?.replace(jPath, value, this.obj);
+        this.refineObj(Cjson.toString(this.obj));
+        return this;
     }
 }
-
-
-var cjson = new Cjson("C:\\Users\\Home\\OneDrive\\Desktop\\projects\\cjson\\tests\\test-files\\pure.json");
-var cjsonRemoved = cjson.remove("$.quiz.sport.q1.question");
-
-console.log(JSON.stringify(cjsonRemoved));

@@ -1,19 +1,16 @@
+import { Base } from "./base";
 import Keywords from "./keywords";
 
 /**
  * Detects keywords
  */
-export class Is {
+export class Is extends Base {
     /**
      * Detects `import`
      * @param lineItem Comma separated line item in string
      * @returns `true` if found
      */
-    protected isImport(lineItem: string) {
-        if(lineItem.includes(Keywords.importKey))
-            return true;
-        return false;
-    }
+    protected isImport = (lineItem: string) => lineItem.includes(Keywords.importKey)
     /**
      * Checks single line comment
      * @param lineItem Comma separated line item in string

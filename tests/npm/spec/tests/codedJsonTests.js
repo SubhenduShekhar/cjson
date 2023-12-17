@@ -27,6 +27,12 @@ describe("CJSON Test 1", () => {
         assert.equal(JSON.stringify(pureJSONContent), JSON.stringify(jsonStringFromPure));
     });
 
+    it("I should be able to import nested CJSON files", () => {
+        var cjson = new Cjson(cjsonfilePath);
+        var pureJSONContent = cjson.deserialize();
+        assert.equal(cjson.json.parse("$.source.pure.quiz.sport.q1.question"), "Which one is correct team name in NBA?");
+    });
+
     it("I should be able to deserialize comments from json files", () => {
         var cjson = new Cjson(jsonfilePath);
         cjson.deserialize();
@@ -70,6 +76,50 @@ describe("CJSON Test 1", () => {
         assert.equal(deserializedVal.target.fruit, injectObj.fruit);
         assert.equal(JSON.stringify(deserializedVal.jsonInjection), JSON.stringify(injectObj.jsonTypeData))
     });
+
+    it("I should be able to use toString function", () => {
+        assert.equal(Cjson.toString(null), "{}", "Null test passed");
+
+        var cjson = new Cjson(pureJsonfilePath);
+        var obj = cjson.deserialize();
+        
+        var parsedObj = JSON.parse(fs.readFileSync(pureJsonfilePath).toString());
+        parsedObj = JSON.stringify(parsedObj);
+        assert.equal(Cjson.toString(obj), parsedObj, "Pure JSON file is verified with toString");
+    });
+
+    it("I should be able to deserialize CJSON and return JSON string using deserializeAsString()", () => {
+        var cjson = new Cjson(relativeTargetCjson);
+        var stringObj = cjson.deserializeAsString();
+        stringObj = JSON.stringify(JSON.parse(stringObj));
+        
+        var parsedObj = JSON.stringify(cjson.deserialize());
+        assert.equal(stringObj, parsedObj, "Testing deserializeAsString()");
+    });
+
+    it("I should be able to deserialize CJSON as JSON string content", () => {
+        var cjson = new Cjson(relativeTargetCjson);
+        var stringContent = cjson.deserializeAsString();
+        assert.equal(JSON.stringify(cjson.deserialize()), JSON.stringify(JSON.parse(stringContent)))
+    });
+
+    it("I should be able to remove a key using remove function", () => {
+        var cjson = new Cjson(pureJsonfilePath);
+        cjson = cjson.remove("$.quiz.sport.q1.answer");
+        assert.equal(cjson.deserialize().quiz.sport.q1.answer, undefined);
+        cjson = cjson.remove("$.quiz.sport.q1.question");
+        assert.equal(cjson.deserialize().quiz.sport.q1.question, undefined);
+        cjson = cjson.remove("$.quiz.sport.q1.options");
+        assert.equal(cjson.deserialize().quiz.sport.q1.options, undefined);
+        cjson = cjson.remove("$.quiz.sport.q1");
+        assert.equal(cjson.deserialize().quiz.sport.q1, undefined);
+    });
+
+    it("I should be able to stringify JSON object using toString function", ()=> {
+        var fileContent = fs.readFileSync(pureJsonfilePath).toJSON();
+        var stringContent = Cjson.toString(fileContent);
+        assert.equal(JSON.stringify(fileContent), stringContent);
+    });
 });
 
 /**
@@ -86,7 +136,7 @@ describe("JSON Test 2", () => {
         var cjson = new Cjson(cjsonfilePath);
         cjson.deserialize();
         
-        var value = cjson.json.parse("source.quiz.sport.q1.question");
+        var value = cjson.json.parse("$.source.pure.quiz.sport.q1.question");
         assert.equal(value, "Which one is correct team name in NBA?");
     });
 
@@ -96,5 +146,13 @@ describe("JSON Test 2", () => {
 
         var value = JSON.stringify(cjson.json.parse());
         assert.equal(value, JSON.stringify(cjson.deserialize()));
+    });
+
+    it("I should be able to replace a value using replace()", () => {
+        var cjson = new Cjson(cjsonfilePath);
+        cjson.deserialize();
+        var jPath = "$.source.pure.quiz.sport.q1.question"
+        cjson = cjson.replace(jPath, "New question");
+        assert.equal(cjson.json.parse(jPath), "New question");
     });
 });
