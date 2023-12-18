@@ -19,6 +19,14 @@ public class CjsonTests extends Base {
 
         Assertions.assertNotEquals(pure.quiz.keySet().size(), 0, "Pure JSON files deserialized successfully");
     }
+
+    @Test
+    public void iShouldBeAbleToImportNestedCJSONFiles() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError {
+        CJson<Target> cJson = new CJson<>(cjsonfilePath);
+        Target target = cJson.deserialize(Target.class);
+
+        Assertions.assertEquals(target.source.quiz.get("sport").get("q1").question, "Which one is correct team name in NBA?", "Nested CJSON imports passed.");
+    }
     @Test
     public void iShouldBeAbleToDeserializeCommentsFromjsonFiles() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError {
         CJson<Pure> cJson = new CJson<>(jsonfilePath);

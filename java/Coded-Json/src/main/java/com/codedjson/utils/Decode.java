@@ -9,6 +9,8 @@ import com.google.gson.JsonObject;
 
 import java.io.FileNotFoundException;
 import java.lang.reflect.Field;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -29,20 +31,28 @@ public class Decode extends Json {
     private String getFilePath(String content) {
         return content.split(Pattern.quote(Keywords.importKey))[1].split("\"")[0];
     }
-    private String decodeImport(String content) throws AbsolutePathConstraintError, FileNotFoundException {
+    private String decodeImport(String content, String curPath) throws AbsolutePathConstraintError, FileNotFoundException {
         String filePath = this.getFilePath(content);
-        String dirName;
+        String fileName = filePath.split("/")[filePath.split("/").length - 1];
+
+        String importFilePath;
         if(isAbsolutePath(filePath))
-            dirName = filePath;
+            importFilePath = filePath;
         else if(!isFilePath)
             throw new AbsolutePathConstraintError();
-        else
-            dirName = appendPath(getFullPath(), filePath);
+        else {
+            String dirName = appendPath(getFullPath(), getDirectory(filePath));
 
-        content = content.replaceAll(Pattern.quote(Keywords.importKey + filePath + "\""), Matcher.quoteReplacement(read(dirName)));
+            if(! curPath.equals(""))
+                dirName = Paths.get(curPath, getDirectory(filePath)).toString();
+
+            importFilePath = appendPath(dirName, fileName);
+        }
+
+        content = content.replaceAll(Pattern.quote(Keywords.importKey + filePath + "\""), Matcher.quoteReplacement(read(importFilePath)));
 
         if(isImport(content)) {
-            decodeImport(content);
+            return decodeImport(content, getDirectory(importFilePath));
         }
         return content;
     }
@@ -103,7 +113,7 @@ public class Decode extends Json {
             isChanged = false;
 
             if(isImport(content)) {
-                content = decodeImport(content);
+                content = decodeImport(content, "");
                 isChanged = true;
             }
             if(isSingleLineComent(content)) {
