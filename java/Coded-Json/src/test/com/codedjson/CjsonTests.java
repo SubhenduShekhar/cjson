@@ -3,6 +3,7 @@ package com.codedjson;
 import com.codedjson.exceptions.AbsolutePathConstraintError;
 import com.codedjson.exceptions.IllegalJsonType;
 import com.codedjson.exceptions.IllegalValueType;
+import com.codedjson.exceptions.InvalidJPathError;
 import com.codedjson.templates.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -43,7 +44,7 @@ public class CjsonTests extends Base {
         Assertions.assertNotEquals(decodedJson.target.color, null, "Value check in target.color");
     }
     @Test
-    public void iShouldBeAbleToDeserializeRelativePathToLocalVariable() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError, IllegalValueType {
+    public void iShouldBeAbleToDeserializeRelativePathToLocalVariable() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError, IllegalValueType, InvalidJPathError {
         CJson<TargetRelativeCalls> cJson = new CJson<TargetRelativeCalls>(relativeTargetCjson);
 
         TargetRelativeCalls targetRelativeCalls = cJson.deserialize(TargetRelativeCalls.class);
