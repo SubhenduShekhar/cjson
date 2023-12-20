@@ -2,6 +2,7 @@ package com.codedjson;
 
 import com.codedjson.exceptions.AbsolutePathConstraintError;
 import com.codedjson.exceptions.IllegalJsonType;
+import com.codedjson.exceptions.InvalidJPathError;
 import com.codedjson.exceptions.UndeserializedCJSON;
 import com.codedjson.templates.Target;
 import org.junit.jupiter.api.Assertions;
@@ -13,7 +14,7 @@ import java.util.List;
 
 public class CjsonRemoveTests extends Base {
     @Test
-    public void iShouldBeAbleToRemoveAStringKeyValue() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError, UndeserializedCJSON {
+    public void iShouldBeAbleToRemoveAStringKeyValue() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError, UndeserializedCJSON, InvalidJPathError {
         CJson<Target> cJson = new CJson<>(cjsonfilePath);
         cJson.deserialize(Target.class);
         Target target = cJson.remove("$.target.fruit");

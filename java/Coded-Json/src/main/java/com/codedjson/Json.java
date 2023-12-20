@@ -1,6 +1,7 @@
 package com.codedjson;
 
 import com.codedjson.exceptions.IllegalValueType;
+import com.codedjson.exceptions.InvalidJPathError;
 import com.codedjson.exceptions.NullJsonKeys;
 import com.codedjson.types.ParsedValue;
 import com.codedjson.utils.Is;
@@ -15,6 +16,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * All JSON related operations are written in this class.
+ */
 public class Json extends Is {
     protected Object json;
     public List<String> jsonKeys;
@@ -41,7 +45,7 @@ public class Json extends Is {
         }
     }
     /**
-     * Checks if the passed content is of json type
+     * Checks if the passed content is of json type.
      * @param content Test content in string
      * @return boolean
      */
@@ -55,7 +59,7 @@ public class Json extends Is {
         }
     }
     /**
-     * Checks if the file content is of json type
+     * Checks if the file content is of json type.
      * @param path File path
      * @return boolean
      */
@@ -86,7 +90,13 @@ public class Json extends Is {
         String type = getJsonType(jsonData);
         return Arrays.stream(dataTypes).anyMatch(eachItem -> eachItem.equals(type));
     }
-    private void getKeys(Object jsonData, String prevKey) throws Exception {
+
+    /**
+     * Recursion for keys traversal
+     * @param jsonData
+     * @param prevKey
+     */
+    private void getKeys(Object jsonData, String prevKey) {
         if(jsonData.getClass().getName().contains("JsonObject")) {
             for (String eachJsonData : ((JsonObject) jsonData).keySet()) {
                 if(((JsonObject)jsonData).get(eachJsonData).getClass().getName().contains("JsonArray")) {
@@ -122,7 +132,12 @@ public class Json extends Is {
             for (Object eachData : (JsonArray)jsonData)
                 getKeys(eachData, "");
     }
-    public List<String> getAllKeys() throws Exception {
+
+    /**
+     * Iteratively parses all keys and returns it in List&lt String&gt
+     * @return List&lt String&gt of all the keys
+     */
+    public List<String> getAllKeys() {
         jsonKeys = new ArrayList<>();
         getKeys(json, "");
         return jsonKeys;
@@ -147,6 +162,12 @@ public class Json extends Is {
 
         return value;
     }
+    /**
+     * Iteratively parses all values and returns it in List&lt String&gt.<br/>
+     * Requires getAllKeys() before.
+     * @return List&lt String&gt of all the keys
+     * @throws NullJsonKeys If <code>getAllKeys()</code> is not called before
+     */
     public List<Object> getAllValues() throws NullJsonKeys {
         if(jsonKeys.size() == 0)
             throw new NullJsonKeys();
@@ -176,10 +197,25 @@ public class Json extends Is {
         }
         else return new ParsedValue(value, "object");
     }
+
+    /**
+     * Parse value with no keys. Returns the root json object
+     * @return
+     */
     public Object parse() {
         return json;
     }
-    public Object parse(String key) throws IllegalValueType {
+
+    /**
+     * Parse value with JPath as key.
+     * @param key JPath
+     * @return
+     * @throws IllegalValueType
+     */
+    public Object parse(String key) throws IllegalValueType, InvalidJPathError {
+        if(key == null) throw new NullPointerException("Key cannot be null");
+        else if(!key.startsWith("$.")) throw new InvalidJPathError();
+
         ParsedValue value = parseValue(key);
 
         switch (value.type) {

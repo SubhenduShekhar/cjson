@@ -3,6 +3,7 @@ package com.codedjson;
 import com.codedjson.exceptions.AbsolutePathConstraintError;
 import com.codedjson.exceptions.IllegalJsonType;
 import com.codedjson.exceptions.IllegalValueType;
+import com.codedjson.exceptions.InvalidJPathError;
 import com.codedjson.templates.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -18,6 +19,14 @@ public class CjsonTests extends Base {
         Pure pure = cJson.deserialize(Pure.class);
 
         Assertions.assertNotEquals(pure.quiz.keySet().size(), 0, "Pure JSON files deserialized successfully");
+    }
+
+    @Test
+    public void iShouldBeAbleToImportNestedCJSONFiles() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError {
+        CJson<Target> cJson = new CJson<>(cjsonfilePath);
+        Target target = cJson.deserialize(Target.class);
+
+        Assertions.assertEquals(target.source.quiz.get("sport").get("q1").question, "Which one is correct team name in NBA?", "Nested CJSON imports passed.");
     }
     @Test
     public void iShouldBeAbleToDeserializeCommentsFromjsonFiles() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError {
@@ -35,7 +44,7 @@ public class CjsonTests extends Base {
         Assertions.assertNotEquals(decodedJson.target.color, null, "Value check in target.color");
     }
     @Test
-    public void iShouldBeAbleToDeserializeRelativePathToLocalVariable() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError, IllegalValueType {
+    public void iShouldBeAbleToDeserializeRelativePathToLocalVariable() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError, IllegalValueType, InvalidJPathError {
         CJson<TargetRelativeCalls> cJson = new CJson<TargetRelativeCalls>(relativeTargetCjson);
 
         TargetRelativeCalls targetRelativeCalls = cJson.deserialize(TargetRelativeCalls.class);

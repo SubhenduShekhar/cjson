@@ -3,6 +3,7 @@ package com.codedjson;
 import com.codedjson.exceptions.AbsolutePathConstraintError;
 import com.codedjson.exceptions.IllegalJsonType;
 import com.codedjson.exceptions.IllegalValueType;
+import com.codedjson.exceptions.InvalidJPathError;
 import com.codedjson.templates.Pure;
 import com.codedjson.templates.Target;
 import org.junit.jupiter.api.Assertions;
@@ -19,11 +20,19 @@ public class JsonTests extends Base {
         Assertions.assertEquals(CJson.isContentJson(com.codedjson.utils.Base.read(pureJsonfilePath.toString())), true, "IsContentJson check for string content");
     }
     @Test
-    public void iShouldBeAbleToParseJpath() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError, IllegalValueType {
+    public void iShouldBeAbleToParseJpath() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError, IllegalValueType, InvalidJPathError {
         CJson<Target> cJson = new CJson<>(cjsonfilePath);
         cJson.deserialize(Target.class);
-        String value = cJson.parse("source.quiz.sport.q1.question").toString();
+        String value = cJson.parse("$.source.quiz.sport.q1.question").toString();
         Assertions.assertEquals(value, "Which one is correct team name in NBA?", "Parse function value check");
+    }
+    @Test
+    public void iShouldNotBeAbleToParseWithInvalidJpath() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError, IllegalValueType, InvalidJPathError {
+        CJson<Target> cJson = new CJson<>(cjsonfilePath);
+        cJson.deserialize(Target.class);
+        Assertions.assertThrows(InvalidJPathError.class, () -> {
+            String value = cJson.parse("source.quiz.sport.q1.question").toString();
+        });
     }
     @Test
     public void iShouldBeAbleToUseParseWithoutParams() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError {

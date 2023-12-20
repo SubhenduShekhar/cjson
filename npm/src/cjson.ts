@@ -180,9 +180,6 @@ export class Cjson extends Is {
 
             if(curPath !== undefined)
                 dirname = path.join(curPath, path.dirname(filePath));
-            
-            console.log(path.dirname(filePath))
-            console.log(dirname)
 
             importFilePath = path.join(dirname, fileName);
         }
