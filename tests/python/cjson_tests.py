@@ -94,7 +94,7 @@ class JSONTests(unittest.TestCase):
     def test2(self):
         cjson = Cjson(cjson_file_path)
         cjson.deserialize()
-        value = cjson.json.parse("source.quiz.sport.q1.question")
+        value = cjson.json.parse("source.pure.quiz.sport.q1.question")
         self.assertEqual(value, "Which one is correct team name in NBA?")
         add_resut(Result.Pass, "I should be able to parse jpath using `obj< Cjson >.json.parse(\"Valid.JPATH\")`")
     

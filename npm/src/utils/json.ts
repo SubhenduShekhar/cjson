@@ -196,7 +196,6 @@ export class Json extends Base {
         if(key.split(".").length === 1) {
             let stringObj: string = JSON.stringify(obj);
             let con = this.removeWithSucComma(key, obj[key], stringObj);
-            console.log(con);
             if(! isContentJson(con)) {
                 con = this.removeWithPreComma(key, obj[key], stringObj);
                 con = this.removeWithSucComma(key, obj[key], con);
