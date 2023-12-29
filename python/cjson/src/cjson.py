@@ -210,51 +210,12 @@ class Cjson(Is):
 
         return self._obj
 
-    def __get_as_string(obj: any) -> str:
-        if(obj == None):
-            return "null"
-        elif((type(obj) is int) or (type(obj) is float) or (type(obj) is bool)):
-            return str(obj)
-        elif(type(obj) is str):
-            return "\"" + str(obj) + "\""
-        elif(type(obj) is list):
-            li: list = obj
-            values: str = "["
-            for objs in li:
-                if(type(objs) is str):
-                    values += "\"" + objs + "\","
-                else:
-                    values += Cjson.__get_as_string(obj=objs) + ","
-            values = values[-1]
-            return values + "]"
-        elif(type(obj) is dict):
-            values = "{"
-            hashObj: dict = obj
-            for key in hashObj.keys():
-                if hashObj[key] != None:
-                    if type(hashObj[key]) is str:
-                        values += "\"" + key + "\":\"" + hashObj[key] + "\","
-                    else:
-                        values += "\"" + key + "\":" + Cjson.__get_as_string(hashObj[key]) + ","
-                else:
-                    return None
-            return values[-1] + "}"
-        else:
-            values: str = "{"
-            for key in obj.keys():
-                if type(obj[key]) is str:
-                    values += "\"" + key + "\":\"" + obj[key] + "\""
-                else:
-                    values += "\"" + key + "\":" + Cjson.__get_as_string(obj[key])
-            values += "}"
-            return values
-
     def to_string(obj: any) -> str:
         if(type(obj) is dict and type(obj) is list):
             raise UnexpectedCJSONContent()
         if obj == "":
             return "{}"
-        return Cjson.__get_as_string(obj=obj)
+        return json.dumps(obj=obj)
 
     def remove(self, key: str):
         self.deserialize()
@@ -278,3 +239,6 @@ class Cjson(Is):
     
     def get_string(self):
         return self._content
+
+    def parse(self, jpath: str) -> any:
+        return self.json.parse(jpath)

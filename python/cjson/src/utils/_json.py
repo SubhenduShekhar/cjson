@@ -39,6 +39,9 @@ class Json(Base):
 
             Returns full `JSON` if `key` is not provided
         '''
+        if key is not None and key.startswith("$."):
+            key = key.replace("$.", "", 1)
+
         if key is None:
             return self._obj
         else:
@@ -47,12 +50,14 @@ class Json(Base):
     def get_all_keys(self):
         ''' Returns all possible `JSON` keys in parsed `JSON`
         '''
+        self.__json_keys = []
         self.__get_keys(json_data=self._obj)
         return self.__json_keys
 
     def get_all_values(self):
         ''' Returns all possible `JSON` values in parsed `JSON`
         '''
+        self.__json_values = []
         if len(self.__json_keys) == 0:
             self.get_all_keys()
         
@@ -124,6 +129,7 @@ class Json(Base):
 
     def __remove_with_pre_comma(self, key: str, value: any, content: str):
         items: list[str] = re.findall(Keywords.remove_with_pre_coma(key=key, value=self._regex_refinery(str(value))), content)
+        
         if len(items) != 0:
             items = list(set(items))
             for each_item in items:
@@ -145,12 +151,18 @@ class Json(Base):
             # None value to be replaced with null
             if obj[key] is None:
                 con = self.__remove_with_suc_comma(key, "null", string_obj)
+
+                if not is_content_json(content=con):
+                    con = self.__remove_with_pre_comma(key, "null", string_obj)
+                    con = self.__remove_with_suc_comma(key, "null", con)
+
             else:
                 con = self.__remove_with_suc_comma(key, obj[key], string_obj)
 
-            if not is_content_json(content=con):
-                con = self.__remove_with_pre_comma(key, obj[key], string_obj)
-                con = self.__remove_with_suc_comma(key, obj[key], con)
+                if not is_content_json(content=con):
+                    con = self.__remove_with_pre_comma(key, obj[key], string_obj)
+                    con = self.__remove_with_suc_comma(key, obj[key], con)
+            
             return con
         else:
             cur_key: str = key.split(".")[0]
