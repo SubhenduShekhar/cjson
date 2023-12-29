@@ -4,7 +4,7 @@ from utils.keywords import Keywords
 from utils._json import Json, is_content_json as content_json_check
 from os import path
 import json, re
-from utils._exceptions import AbsolutePathConstraintError, FilePathAndCJSONCotentConflict
+from utils._exceptions import AbsolutePathConstraintError, FilePathAndCJSONCotentConflict, UnexpectedCJSONContent
 
 def is_content_json(content: str, is_file_path: bool = False):
         ''' Checks if the parsed content is JSON
@@ -12,9 +12,7 @@ def is_content_json(content: str, is_file_path: bool = False):
         return content_json_check(content, is_file_path=is_file_path)
 
 class Cjson(Is):
-    __obj:any
     __file_path: str
-    __content: str = ""
     __is_content_cjson: bool = False
     json: Json | None = None
 
@@ -27,31 +25,32 @@ class Cjson(Is):
 
             Parsing in CJSON way unlocks many functions. For more details, see function documentation.
 
+            Set `is_content_cjson` as `True` if `content` is raw CJSON content instead of file path
         '''
         super().__init__()
-        self.__obj = None
+        self._obj = None
 
         if(is_path_absolute(content) and is_content_cjson):
             raise FilePathAndCJSONCotentConflict()
         elif is_content_cjson == True:
             self.__is_content_cjson = is_content_cjson
-            self.__content = content
+            self._content = content
             self.__file_path = None
         else:
             self.__file_path = content
-            self.__content = read(self.__file_path)
+            self._content = read(self.__file_path)
     
     def __decode_keywords(self):
         is_changed: bool = False
         while(True):
             is_changed = False
 
-            if self._is_import(self.__content):
-                self.__decode_import(self.__content)
+            if self._is_import(self._content):
+                self._content = self.__decode_import(self._content)
                 is_changed = True
             
-            if self.is_single_line_comments(self.__content):
-                self.__decode_single_line_comment(self.__content)
+            if self.is_single_line_comments(self._content):
+                self.__decode_single_line_comment(self._content)
                 is_changed = True
             
             if not is_changed:
@@ -59,10 +58,10 @@ class Cjson(Is):
     
     def __refine_obj(self, content: str = None):
         if content != None:
-            self.__content = content
+            self._content = content
         
-        self.json = Json(self.__content, False)
-        self.__obj = json.loads(self.__content)
+        self.json = Json(self._content, False)
+        self._obj = json.loads(self._content)
 
     def __decode_relative_paths(self, content: str):
         path_keys: list[str] = re.findall(Keywords.relative_jpath_regex, content)
@@ -103,40 +102,60 @@ class Cjson(Is):
         '''
         self.__decode_keywords()
 
-        runtime_keys: list[str] = re.findall(Keywords.runtime_vals_regex, self.__content)
+        runtime_keys: list[str] = re.findall(Keywords.runtime_vals_regex, self._content)
         '''Call this object to unlock native JSON functions
         '''
-        self.__content = self.__refine_runtime_vals(self.__content, runtime_keys=runtime_keys)
-        self.json = Json(self.__obj)
+        self._content = self.__refine_runtime_vals(self._content, runtime_keys=runtime_keys)
+        self.json = Json(self._obj)
         
-        self.__decode_relative_paths(self.__content)
+        self.__decode_relative_paths(self._content)
 
         ''' Returns the JSON compiled object for the given `CJSON` file. '''
-        return self.__obj
+        return self._obj
     
+    def deserializeAsString(self):
+        ''' Deserializes `CJSON` content and returns content as string.
+
+            Content will be of pure JSON content and can be parsed as `JSON`
+        '''
+        if self._obj == None:
+            self.deserialize()
+
+        return self._content
+
     def __get_file_path(self, line_item: str):
         return line_item.split(Keywords.import_key)[1].split("\"")[0]
 
-    def __decode_import(self, line_item: str):
+    def __decode_import(self, content: str, cur_path: str = None):
         global import_file_path
-        
-        file_path: str = self.__get_file_path(line_item=line_item)
+        file_path: str = self.__get_file_path(line_item=content)
+        file_name: str = file_path.split("/")[len(file_path.split("/")) - 1]
 
         if(is_path_absolute(file_path=file_path)):
             import_file_path = file_path
+
         elif(not is_path_absolute(file_path=file_path) and self.__is_content_cjson):
             raise AbsolutePathConstraintError("Only absolute path is supported in import statements")
         else:
-            dir_name: str = path.dirname(path.abspath(self.__file_path))
-            import_file_path = path.join(dir_name, file_path)
+            dir_name: str = path.join(path.dirname(self.__file_path), path.dirname(file_path))
+
+            if(cur_path != None):
+                dir_name = path.join(cur_path, path.dirname(file_path))
+
+            import_file_path = path.join(dir_name, file_name)
         
-        self.__content = self.__content.replace(Keywords.import_key + file_path + "\"", read(import_file_path))
+        content = content.replace(Keywords.import_key + file_path + "\"", read(import_file_path))
+
+        if(self._is_import(content)):
+            return self.__decode_import(content=content, cur_path=path.dirname(import_file_path))
+        else:
+            return content
 
     def __decode_single_line_comment(self, line_item: str):
         line_split: list[str] = line_item.split("\n")
         for i in range(0, len(line_split)):
             if line_split[i].strip() != "" and line_split[i].strip().startswith(Keywords.single_line_comment):
-                self.__content = self.__content.replace(line_split[i], "")
+                self._content = self._content.replace(line_split[i], "")
     
     def __refine_runtime_vals(self, content: str, runtime_keys: list[str]):
         unique_keys: list[str] = []
@@ -150,40 +169,76 @@ class Cjson(Is):
         
         return content
 
+    def __inject_with_content(self, content: str, key: str, value: any):
+        if type(value) != str:
+            content = content.replace("\"<-" + key + "->\"", json.dumps(value))
+        else:
+            content = content.replace("<-" + key + "->", str(value))
+        return content
+
+    def inject_with_key_value(self, key: str, value: str):
+        content = self._content
+        self.__decode_keywords()
+
+        runtime_keys: list[str] = re.findall(Keywords.runtime_vals_regex, self._content)
+        self._content = self.__refine_runtime_vals(content=self._content, runtime_keys=runtime_keys)
+
+        '''Call this object to unlock native JSON functions
+        '''
+        self.json = Json(self._obj)
+        self.__decode_relative_paths(self._content)
+
+        content = self.__inject_with_content(content=content, key=key, value=value)
+
+        return content
+
     def inject(self, injecting_obj: dict):
         self.__decode_keywords()
 
-        runtime_keys: list[str] = re.findall(Keywords.runtime_vals_regex, self.__content)
+        runtime_keys: list[str] = re.findall(Keywords.runtime_vals_regex, self._content)
         
-        self.__content = self.__refine_runtime_vals(content=self.__content, runtime_keys=runtime_keys)
+        self._content = self.__refine_runtime_vals(content=self._content, runtime_keys=runtime_keys)
         '''Call this object to unlock native JSON functions
         '''
-        self.json = Json(self.__obj)
-        self.__decode_relative_paths(self.__content)
+        self.json = Json(self._obj)
+        self.__decode_relative_paths(self._content)
         
         for each_key in injecting_obj.keys():
-            if type(injecting_obj[each_key]) != str:
-                self.__content = self.__content.replace("\"<-" + each_key + "->\"", json.dumps(injecting_obj[each_key]))
-            else:
-                self.__content = self.__content.replace("<-" + each_key + "->", str(injecting_obj[each_key]))
+            self._content = self.__inject_with_content(self._content, key=each_key, value=injecting_obj[each_key])
         
-        self.__refine_obj(self.__content)
+        self.__refine_obj(self._content)
 
-        return self.__obj
+        return self._obj
 
-# a = '''
-# {
-#     "source": $import "C:\\Users\\Home\\OneDrive\\Desktop\\projects\\cjson\\tests\\test-files\\source.json",
-#     "target": {
-#         "fruit": "Apple",
-#         "size": "Large",
-#         "color": "Red"
-#     }
-# }
-# '''
-# c = "C:\\Users\\Home\\OneDrive\\Desktop\\projects\\cjson\\tests\\test-files\\targetRelativeCalls.cjson"
+    def to_string(obj: any) -> str:
+        if(type(obj) is dict and type(obj) is list):
+            raise UnexpectedCJSONContent()
+        if obj == "":
+            return "{}"
+        return json.dumps(obj=obj)
 
-# b = Cjson(c, True)
+    def remove(self, key: str):
+        self.deserialize()
+        self.json = self.json._remove_with_key(key, self._content)
 
-# k = b.deserialize()
-# print(k)
+        self._obj = self.json._obj
+        self._content = self.json._content
+        return self
+
+    def replace(self, jpath: str, value: str):
+        self.deserialize()
+        if jpath.startswith("$."):
+            jpath = jpath.replace("$.", "", 1)
+
+        self._obj = self.json.replace(jpath=jpath, value=value, obj=self._obj)
+        self._content = self.json._content
+        return self
+    
+    def get_obj(self):
+        return self._obj
+    
+    def get_string(self):
+        return self._content
+
+    def parse(self, jpath: str) -> any:
+        return self.json.parse(jpath)

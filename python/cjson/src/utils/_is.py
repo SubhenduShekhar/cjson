@@ -1,6 +1,7 @@
 from utils.keywords import Keywords
+from utils._base import Base
 
-class Is:
+class Is(Base):
     def _is_import(self, line_item: str):
         return Keywords.import_key in line_item
     

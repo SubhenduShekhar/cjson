@@ -5,12 +5,14 @@ __description = __readme_file.read()
 
 setuptools.setup(
     name="codedjson",
-    version="1.3.2",
-    description="CJSON is a data file format(inspired from JSON), but supports logical expressions too. Having extended language support to NodeJS, Python and Java, users has experienced data reusability. For features and examples, please refer to this documentation as base document.",
+    keywords=["coded", "json", "cjson", "codedjson", "coded-json"],
+    version="2.0.0",
+    description="CJSON is a data file format(inspired from JSON), but supports logical expressions too. Having extended language support to NodeJS, Python and Java, users has experienced data reusability. For features and examples, please refer to official github readme",
     long_description=__description,
     long_description_content_type="text/markdown",
     author="Shubhendu Shekhar Gupta",
     author_email="subhendushekhargupta@gmail.com",
+    url="https://github.com/SubhenduShekhar/cjson",
     packages= [".", "utils/"],
     classifiers=[
         "Development Status :: 3 - Alpha",
