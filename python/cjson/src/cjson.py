@@ -11,7 +11,35 @@ def is_content_json(content: str, is_file_path: bool = False):
         '''
         return content_json_check(content, is_file_path=is_file_path)
 
+
 class Cjson(Is):
+    '''
+    Coded JSON is an extended format of JSON formatted data storage, which gives
+    you more previledge to organize data into more structured format.
+
+    Here is an example for `CJSON` format:
+    
+    {
+        "source": $import "./source.json",
+        "target": {
+            "fruit": "Apple",
+            "size": "Large",
+            "color": "Red",
+            "secColor": $.target.color,
+            "colorList": [ $.target.color, $.target.secColor ],
+            // You can add comments like this
+            "digitCheck": 1.5,
+            "digitImport": $.target.digitCheck,
+            "digitArrayImport": [ $.target.digitCheck, $.target.digitImport ]
+        }
+    }
+
+
+    The above `CJSON` snipped will be deserialized in JSON format and can be used 
+    as same as other JSON files.
+
+    For other details, please refer to official page: https://subhendushekhar.github.io/cjson/
+    '''
     __file_path: str
     __is_content_cjson: bool = False
     json: Json | None = None
@@ -26,6 +54,15 @@ class Cjson(Is):
             Parsing in CJSON way unlocks many functions. For more details, see function documentation.
 
             Set `is_content_cjson` as `True` if `content` is raw CJSON content instead of file path
+
+            Parameters:
+
+            `content` - (str)
+            1. Can be `CJSON` content string
+            2. Can be absolute file path
+
+            `is_content_cjson` - (bool)
+            1. If `content` is `CJSON` string, set this as `True` else, `False`. Default is `False`
         '''
         super().__init__()
         self._obj = None
