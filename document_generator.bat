@@ -41,8 +41,6 @@ move _build/html ../../docs
 cd ../../docs
 rename html python
 
-call pycco python/cjson/src -d docs/python
-
 ECHO =================================== Completed =================================
 
 ECHO ================================== Documenting DotNet ==============================
