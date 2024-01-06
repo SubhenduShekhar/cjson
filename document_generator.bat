@@ -30,7 +30,7 @@ ECHO =================================== Completed =============================
 
 ECHO ============================== Documenting Python ============================
 @REM Generate PythonDoc for python repository
-call pip install pycco
+call pip install sphinx sphinx_rtd_theme
 
 cd python/cjson
 @REM echo Y | rmdir codedjson.egg-info /s
