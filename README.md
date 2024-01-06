@@ -70,7 +70,7 @@ CJSON also supports **commented lines** by adding `//` at the start of the line.
 
 **Please note, inline comments are not supported. Contributers create an issue [here](https://github.com/users/SubhenduShekhar/projects/7)**
 
-### Removing key (JAVA only) ![Beta](https://img.shields.io/badge/Status-Beta-yellow)
+### Removing key
 
 Any JSON key value pair can be removed by providing its JPath.
 Please Note, if you use `remove` before `deserialize` you will receive `UndeserializedCJSON` exception.
@@ -79,7 +79,7 @@ This is because, unless the content is deserialized, CJSON engine has not proces
 
 [Here](https://github.com/SubhenduShekhar/cjson/blob/main/java/Coded-Json/README.md#removing-key) are the examples
 
-### Convert `JAVA Object` to `JSON String` (JAVA only) ![Beta](https://img.shields.io/badge/Status-Beta-yellow)
+### Convert `Class Object` to `JSON String`
 
 Any Java object can be converted to json string by using `toString()` function.
 

@@ -1,5 +1,5 @@
-from utils import file
-from utils.keywords import Keywords
+from utils import _file as file
+from utils._keywords import Keywords
 import json
 from typing import Union
 from types import NoneType
