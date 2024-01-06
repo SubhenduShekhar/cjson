@@ -3,6 +3,11 @@
 # For the full list of built-in configuration values, see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
+import os, sys
+
+sys.path.insert(0, os.path.abspath(os.path.join('src')))
+sys.path.insert(0, os.path.abspath(os.path.join('src', 'utils')))
+
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
@@ -20,6 +25,7 @@ extensions = [
     'sphinx.ext.napoleon'
 ]
 
+numpydoc_show_class_members = False
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
@@ -29,4 +35,3 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = 'sphinx_rtd_theme'
-html_static_path = ['_static']

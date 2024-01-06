@@ -1,8 +1,7 @@
-src
-===
+CJSON
+=====
 
 .. toctree::
    :maxdepth: 4
 
-   cjson
-   utils
+   

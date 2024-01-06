@@ -85,12 +85,11 @@
             margin-top: 2em;
         }
         #api-langs {
-            float: right;
             background-color: white;
             border-radius: 2px;
             position: absolute;
-            right: 5%;
-            top: 11%;
+            right: 3%;
+            top: 4em;
             text-align: center;
         }
         .example-code {
@@ -121,17 +120,18 @@
 <body class="blurMe" style="margin: unset; font-family: Segoe UI, Arial, sans-serif; color: gray;">
     <canvas width="500" height="500" style="position: absolute;" id="bg" onload="launchBg()"></canvas>
     <div style="height: 5em; background-color: #4e4565; text-align: end;">
-        <a href="#" style="float: left; position: relative; top: 25%; left: 1%;">
+        <a href="#" style="float: left; position: relative; top: 25%; left: 1%; padding-bottom: 25px;">
             <img src="./images/logo-small.png" alt="Logo">
         </a>
         <a href="https://github.com/SubhenduShekhar" class="lnks">
             <span>Developer</span>
         </a>
-        <a href="#" class="lnks">
-            <span 
-                onmouseover="javascript:document.getElementById('api-langs').style.display = 'block';"
-                onmouseleave="javascript:document.getElementById('api-langs').style.display = 'none';"
-                >API Docs</span>
+        <a href="#" class="lnks"
+            style="padding-bottom: 25px;"
+            onmouseover="javascript:document.getElementById('api-langs').style.display = 'block';"
+            onmouseleave="javascript:document.getElementById('api-langs').style.display = 'none';"
+        >
+            <span>API Docs</span>
         </a>
         <div style="display: none;" id="api-langs"
             onmouseover="javascript:document.getElementById('api-langs').style.display = 'block';" 
@@ -140,7 +140,7 @@
                 <a href="./npm/Cjson.html" style="color: #4e4565;" class="lnks">NPM</a>
             </div>
             <div class="dditem">
-                <a href="./python/cjson.html" style="color: #4e4565;" class="lnks">Python</a>
+                <a href="./python/index.html" style="color: #4e4565;" class="lnks">Python</a>
             </div>
             <div class="dditem">
                 <a href="./java/index.html" style="color: #4e4565;" class="lnks">Java</a>

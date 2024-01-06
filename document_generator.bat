@@ -32,11 +32,14 @@ ECHO ============================== Documenting Python =========================
 @REM Generate PythonDoc for python repository
 call pip install pycco
 
-cd python/cjson/src
-echo Y | rmdir codedjson.egg-info /s
-cd utils
-echo Y | rmdir __pycache__ /s
-cd ../../../..
+cd python/cjson
+@REM echo Y | rmdir codedjson.egg-info /s
+@REM cd utils
+@REM echo Y | rmdir __pycache__ /s
+call make html
+move _build/html ../../docs
+cd ../../docs
+rename html python
 
 call pycco python/cjson/src -d docs/python
 

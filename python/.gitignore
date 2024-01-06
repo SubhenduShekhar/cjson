@@ -4,3 +4,4 @@ codedjson.egg-info
 build/
 cjson/src/codedjson.egg*
 .pypirc
+_build/

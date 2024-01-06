@@ -7,18 +7,21 @@ import json, re
 from utils._exceptions import AbsolutePathConstraintError, FilePathAndCJSONCotentConflict, UnexpectedCJSONContent
 
 def is_content_json(content: str, is_file_path: bool = False):
-        ''' Checks if the parsed content is JSON
-        '''
-        return content_json_check(content, is_file_path=is_file_path)
+    ''' 
+Checks if the parsed content is JSON
+    '''
+    return content_json_check(content, is_file_path=is_file_path)
 
 
 class Cjson(Is):
     '''
-    Coded JSON is an extended format of JSON formatted data storage, which gives
-    you more previledge to organize data into more structured format.
+Coded JSON is an extended format of JSON formatted data storage, which gives
+you more previledge to organize data into more structured format.
 
-    Here is an example for `CJSON` format:
-    
+Here is an example for `CJSON` format:
+
+::
+
     {
         "source": $import "./source.json",
         "target": {
@@ -34,18 +37,18 @@ class Cjson(Is):
         }
     }
 
+The above `CJSON` snipped will be deserialized in JSON format and can be used 
+as same as other JSON files.
 
-    The above `CJSON` snipped will be deserialized in JSON format and can be used 
-    as same as other JSON files.
-
-    For other details, please refer to official page: https://subhendushekhar.github.io/cjson/
-    '''
+For other details, please refer to official page: https://subhendushekhar.github.io/cjson/
+'''
     __file_path: str
     __is_content_cjson: bool = False
     json: Json | None = None
 
     def __init__(self, content: str, is_content_cjson: bool = False):
-        ''' Initializes and decodes `CJSON` files.
+        ''' 
+        Initializes and decodes `CJSON` files.
 
             This can also be used for parsing JSON files in `CJSON` way.
 
