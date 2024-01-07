@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace CJsonTests.models
 {
-    public class Target
+    public class CJsonContentTarget
     {
-        public Source source { get; set; }
+        public Pure source { get; set; }
         public TargetObj target { get; set; }
     }
 }
