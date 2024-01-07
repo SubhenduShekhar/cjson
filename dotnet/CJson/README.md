@@ -9,9 +9,9 @@
     <div>
         <img src="https://img.shields.io/badge/dotnet-blue" alt="CSharp Tag">
     </div>
-    <!-- <div>
-        <img src="https://github.com/SubhenduShekhar/cjson/actions/workflows/java-tests.yml/badge.svg" alt="Test Status"/>
-    </div> -->
+    <div>
+        <img src="https://github.com/SubhenduShekhar/cjson/actions/workflows/dotnet-tests.yml/badge.svg" alt="DotNet Status"/>
+    </div>
 </div>
 
 <br/>

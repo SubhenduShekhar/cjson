@@ -1,3 +1,7 @@
+---
+_layout: landing
+---
+
 <div align="center">
     <img src="https://github.com/SubhenduShekhar/cjson/blob/main/docs/logo.png?raw=true" width="400" alt="CJSON Logo"/>
     <h2>Coded Javascript Object Notation</h2><br/>
@@ -77,22 +81,11 @@ Please Note, if you use `remove` before `deserialize` you will receive `Undeseri
 
 This is because, unless the content is deserialized, CJSON engine has not processed the CJSON content.
 
-[Here](https://github.com/SubhenduShekhar/cjson/blob/main/java/Coded-Json/README.md#removing-key) are the examples
-
 ### Convert `Class Object` to `JSON String`
 
-Any Java object can be converted to json string by using `toString()` function.
+Any class object can be converted to json string by using `toString()` function.
 
-It accepts pure java object and returns JSON in string.
-
-[Here](https://github.com/SubhenduShekhar/cjson/blob/main/java/Coded-Json/README.md#removing-key) are the examples
-
-### Examples
-
-- [NPM](https://github.com/SubhenduShekhar/cjson/blob/main/npm/README.md)
-- [Python](https://github.com/SubhenduShekhar/cjson/blob/main/python/README.md)
-- [Java](https://github.com/SubhenduShekhar/cjson/blob/main/java/Coded-Json/README.md)
-- [DotNet](https://github.com/SubhenduShekhar/cjson/blob/main/dotnet/CJson/README.md)
+It accepts pure class object and returns JSON in string.
 
 ## Keywords
 

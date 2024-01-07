@@ -33,13 +33,11 @@ ECHO ============================== Documenting Python =========================
 call pip install sphinx sphinx_rtd_theme
 
 cd python/cjson
-@REM echo Y | rmdir codedjson.egg-info /s
-@REM cd utils
-@REM echo Y | rmdir __pycache__ /s
 call make html
 move _build/html ../../docs
 cd ../../docs
 rename html python
+cd ../
 
 ECHO =================================== Completed =================================
 
@@ -48,12 +46,11 @@ ECHO ================================== Documenting DotNet =====================
 cd dotnet/CJson
 call dotnet build
 call dotnet tool update -g docfx
-call docfx CJson/docfx.json
+call docfx docfx.json
 
+move _site ../../docs
 cd ../../docs
-mkdir dotnet
-cd ../dotnet/CJson
-copy "./CJson/_site" "../../docs/dotnet" 
+rename _site dotnet
 
 ECHO =================================== Completed =================================
 
