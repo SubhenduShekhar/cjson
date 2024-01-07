@@ -12,6 +12,7 @@ namespace CJsonTests
         CJson<TargetRelativeCalls> cJsonTargetRelCalls;
         CJson<TargetObj> cJsonTargetObj;
         CJson<VariableInjection> cJsonVariableInjection;
+        CJson<CJsonContentTarget> cJsonContentTarget;
 
         [Test, Description("I Should Be Able To Import Pure JSON Files")]
         public void IShouldBeAbleToImportPureJSONFiles()
@@ -38,7 +39,7 @@ namespace CJsonTests
             cJsonTarget = new CJson<Target>(cjsonFilePath);
             Target target = cJsonTarget.Deserialize();
 
-            Assert.That(target.source.quiz, Is.Not.Null, "Value check in source");
+            Assert.That(target.source.pure.quiz, Is.Not.Null, "Value check in source");
             Assert.That(target.target.color, Is.Not.Null, "Value chcek in target.color");
             Assert.That(target.target.quantity, Is.TypeOf(typeof(Int32)), "Type check passed for target.target.quantity");
         }
@@ -64,8 +65,8 @@ namespace CJsonTests
                 "        \"color\": \"Red\"\n" +
                 "    }\n" +
                 "}";
-            cJsonTarget = new CJson<Target>(cjsonContent);
-            Target target = cJsonTarget.Deserialize();
+            cJsonContentTarget = new CJson<CJsonContentTarget>(cjsonContent);
+            CJsonContentTarget target = cJsonContentTarget.Deserialize();
 
             Assert.That(target.source.quiz["sport"]["q1"].question, Is.Not.Null, "CJSON string with import statement is deserialized successfully");
         }
