@@ -98,7 +98,7 @@ public class Base {
     }
     protected String getDirectory(String absFilePath) {
         absFilePath = Paths.get(absFilePath).toString();
-        String fileName = absFilePath.split("/")[absFilePath.split("/").length - 1];
+        String fileName = Paths.get(absFilePath).getFileName().toString();
         return Paths.get(absFilePath.replace(fileName, "")).toString();
     }
 }

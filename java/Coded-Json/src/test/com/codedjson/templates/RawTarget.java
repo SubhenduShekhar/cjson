@@ -1,6 +1,6 @@
 package com.codedjson.templates;
 
-public class Target {
-    public Source source;
+public class RawTarget {
+    public Pure source;
     public TargetObj target;
 }

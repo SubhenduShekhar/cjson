@@ -19,9 +19,8 @@ public class CjsonRemoveTests extends Base {
         cJson.deserialize(Target.class);
         Target target = cJson.remove("$.target.fruit");
         Assertions.assertNull(target.target.fruit);
-
-        target = cJson.remove("$.source.quiz.sport.q1.options");
-        Assertions.assertNull(target.source.quiz.get("sport").get("q1").options);
+        target = cJson.remove("$.source.pure.quiz.sport.q1.options");
+        Assertions.assertNull(target.source.pure.quiz.get("sport").get("q1").options);
 
         target = cJson.remove("$.target.quantity");
         Assertions.assertNull(target.target.quantity);
@@ -41,13 +40,13 @@ public class CjsonRemoveTests extends Base {
 
         List<String> li = new ArrayList<>();
         li.add("$.target.fruit");
-        li.add("$.source.quiz.sport.q1.options");
+        li.add("$.source.pure.quiz.sport.q1.options");
         li.add("$.target.quantity");
 
         Target target = cJson.remove(li);
 
         Assertions.assertNull(target.target.fruit);
-        Assertions.assertNull(target.source.quiz.get("sport").get("q1").options);
+        Assertions.assertNull(target.source.pure.quiz.get("sport").get("q1").options);
 
         Assertions.assertNull(target.target.quantity);
     }

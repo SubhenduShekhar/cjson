@@ -49,11 +49,19 @@ public class Decode extends Json {
             importFilePath = appendPath(dirName, fileName);
         }
 
-        content = content.replaceAll(Pattern.quote(Keywords.importKey + filePath + "\""), Matcher.quoteReplacement(read(importFilePath)));
-
-        if(isImport(content)) {
-            return decodeImport(content, getDirectory(importFilePath));
+        String innerContent = read(importFilePath);
+        String quoteReplacedContent = null;
+        if(isImport(innerContent)) {
+            quoteReplacedContent = Matcher.quoteReplacement(decodeImport(innerContent, getDirectory(importFilePath)));
         }
+        else
+            quoteReplacedContent = Matcher.quoteReplacement(innerContent);
+
+        content = content.replaceAll(Pattern.quote(Keywords.importKey + filePath + "\""), quoteReplacedContent);
+
+        if(isImport(content))
+            content = decodeImport(content, curPath);
+
         return content;
     }
     private void decodeSingleLineComment() {
@@ -113,7 +121,10 @@ public class Decode extends Json {
             isChanged = false;
 
             if(isImport(content)) {
-                content = decodeImport(content, "");
+                if(this.filePath != null)
+                    content = decodeImport(content, getDirectory(filePath));
+                else
+                    content = decodeImport(content, "");
                 isChanged = true;
             }
             if(isSingleLineComent(content)) {
@@ -145,7 +156,12 @@ public class Decode extends Json {
         if(key.startsWith(Keywords.relativeJPath))
             key = key.replace(Keywords.relativeJPath, "");
 
-        String value = parseValue(key).value.toString();
+        String value = null;
+        try {
+            value = parseValue(key).value.toString();
+        } catch (NullPointerException nullPointerException) {
+            throw new NullPointerException("$." + key + " is not found in deserialized JSON");
+        }
 
         Matcher matcher = Keywords.keyValueSet(key, value, content).matcher(content);
         while (matcher.find()) {
