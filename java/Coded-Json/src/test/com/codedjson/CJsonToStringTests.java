@@ -2,10 +2,7 @@ package com.codedjson;
 
 import com.codedjson.exceptions.AbsolutePathConstraintError;
 import com.codedjson.exceptions.IllegalJsonType;
-import com.codedjson.templates.Pure;
-import com.codedjson.templates.Questions;
-import com.codedjson.templates.Target;
-import com.codedjson.templates.TargetObj;
+import com.codedjson.templates.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -19,8 +16,9 @@ public class CJsonToStringTests extends Base {
     @Test
     public void iShouldBeAbleToConvertJavaObjectToString() throws IllegalAccessException, IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException {
         Target target = new Target();
-        target.source = new Pure();
-        target.source.quiz = new HashMap<>();
+        target.source = new Source();
+        target.source.pure = new Pure();
+        target.source.pure.quiz = new HashMap<>();
 
         HashMap<String, Questions> questionsHashMap = new HashMap<>();
         Questions questions = new Questions();
@@ -32,7 +30,7 @@ public class CJsonToStringTests extends Base {
         questions.answer = "Huston Rocket";
 
         questionsHashMap.put("q1", questions);
-        target.source.quiz.put("sport", questionsHashMap);
+        target.source.pure.quiz.put("sport", questionsHashMap);
 
         String targetString = CJson.toString(target);
         Assertions.assertNotNull(targetString);
@@ -41,20 +39,21 @@ public class CJsonToStringTests extends Base {
         Target deserializedObj = cJson.deserialize(Target.class);
 
         Assertions.assertNotNull(deserializedObj);
-        Assertions.assertEquals(deserializedObj.source.quiz.get("sport").get("q1").question, "Which one is correct team name in NBA?");
-        Assertions.assertEquals(deserializedObj.source.quiz.get("sport").get("q1").options.size(), 4);
-        Assertions.assertEquals(deserializedObj.source.quiz.get("sport").get("q1").answer, "Huston Rocket");
+        Assertions.assertEquals(deserializedObj.source.pure.quiz.get("sport").get("q1").question, "Which one is correct team name in NBA?");
+        Assertions.assertEquals(deserializedObj.source.pure.quiz.get("sport").get("q1").options.size(), 4);
+        Assertions.assertEquals(deserializedObj.source.pure.quiz.get("sport").get("q1").answer, "Huston Rocket");
     }
     @Test
     public void iShouldBeAbleToConvertJavaObjectWithNullsToString() throws IllegalAccessException, IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException {
         Target target = new Target();
-        target.source = new Pure();
-        target.source.quiz = new HashMap<>();
+        target.source = new Source();
+        target.source.pure = new Pure();
+        target.source.pure.quiz = new HashMap<>();
 
         HashMap<String, Questions> questionsHashMap = new HashMap<>();
 
         questionsHashMap.put("q1", null);
-        target.source.quiz.put("sport", questionsHashMap);
+        target.source.pure.quiz.put("sport", questionsHashMap);
 
         String targetString = CJson.toString(target);
         Assertions.assertNotNull(targetString);
@@ -62,13 +61,14 @@ public class CJsonToStringTests extends Base {
         CJson<Target> cJson = new CJson<>(targetString);
         Target deserializedObj = cJson.deserialize(Target.class);
 
-        Assertions.assertNull(deserializedObj.source.quiz.get("q1"));
+        Assertions.assertNull(deserializedObj.source.pure.quiz.get("q1"));
     }
     @Test
     public void iShouldBeAbleToConvertJavaObjectToStringUsingNullArray() throws IllegalAccessException, IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException {
         Target target = new Target();
-        target.source = new Pure();
-        target.source.quiz = new HashMap<>();
+        target.source = new Source();
+        target.source.pure = new Pure();
+        target.source.pure.quiz = new HashMap<>();
 
         HashMap<String, Questions> questionsHashMap = new HashMap<>();
         Questions questions = new Questions();
@@ -77,7 +77,7 @@ public class CJsonToStringTests extends Base {
         questions.answer = "Huston Rocket";
 
         questionsHashMap.put("q1", questions);
-        target.source.quiz.put("sport", questionsHashMap);
+        target.source.pure.quiz.put("sport", questionsHashMap);
 
         String targetString = CJson.toString(target);
         Assertions.assertNotNull(targetString);
@@ -86,9 +86,9 @@ public class CJsonToStringTests extends Base {
         Target deserializedObj = cJson.deserialize(Target.class);
 
         Assertions.assertNotNull(deserializedObj);
-        Assertions.assertEquals(deserializedObj.source.quiz.get("sport").get("q1").question, "Which one is correct team name in NBA?");
-        Assertions.assertNull(deserializedObj.source.quiz.get("sport").get("q1").options);
-        Assertions.assertEquals(deserializedObj.source.quiz.get("sport").get("q1").answer, "Huston Rocket");
+        Assertions.assertEquals(deserializedObj.source.pure.quiz.get("sport").get("q1").question, "Which one is correct team name in NBA?");
+        Assertions.assertNull(deserializedObj.source.pure.quiz.get("sport").get("q1").options);
+        Assertions.assertEquals(deserializedObj.source.pure.quiz.get("sport").get("q1").answer, "Huston Rocket");
     }
     @Test
     public void iShouldBeAbleToConvertJavaObjectToStringWithObjectArray() throws IllegalAccessException, IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException {

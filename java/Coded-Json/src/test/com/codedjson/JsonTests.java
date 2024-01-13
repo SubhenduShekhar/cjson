@@ -23,7 +23,7 @@ public class JsonTests extends Base {
     public void iShouldBeAbleToParseJpath() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError, IllegalValueType, InvalidJPathError {
         CJson<Target> cJson = new CJson<>(cjsonfilePath);
         cJson.deserialize(Target.class);
-        String value = cJson.parse("$.source.quiz.sport.q1.question").toString();
+        String value = cJson.parse("$.source.pure.quiz.sport.q1.question").toString();
         Assertions.assertEquals(value, "Which one is correct team name in NBA?", "Parse function value check");
     }
     @Test

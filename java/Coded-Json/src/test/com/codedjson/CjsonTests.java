@@ -26,7 +26,7 @@ public class CjsonTests extends Base {
         CJson<Target> cJson = new CJson<>(cjsonfilePath);
         Target target = cJson.deserialize(Target.class);
 
-        Assertions.assertEquals(target.source.quiz.get("sport").get("q1").question, "Which one is correct team name in NBA?", "Nested CJSON imports passed.");
+        Assertions.assertEquals(target.source.pure.quiz.get("sport").get("q1").question, "Which one is correct team name in NBA?", "Nested CJSON imports passed.");
     }
     @Test
     public void iShouldBeAbleToDeserializeCommentsFromjsonFiles() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError {
@@ -40,7 +40,7 @@ public class CjsonTests extends Base {
     public void iShouldBeAbleToDeserializeImportsAndComments() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError {
         CJson<Target> cJson = new CJson<>(cjsonfilePath);
         Target decodedJson = cJson.deserialize(Target.class);
-        Assertions.assertNotEquals(decodedJson.source.quiz, null, "Value check in source");
+        Assertions.assertNotEquals(decodedJson.source.pure.quiz, null, "Value check in source");
         Assertions.assertNotEquals(decodedJson.target.color, null, "Value check in target.color");
     }
     @Test
@@ -60,13 +60,13 @@ public class CjsonTests extends Base {
                 "        \"color\": \"Red\"\n" +
                 "    }\n" +
                 "}";
-        CJson<Target> cJson = new CJson<>(cjsonCotent);
-        Target target = cJson.deserialize(Target.class);
+        CJson<RawTarget> cJson = new CJson<>(cjsonCotent);
+        RawTarget target = cJson.deserialize(RawTarget.class);
         Assertions.assertNotNull(target.source.quiz.get("sport").get("q1").question);
     }
     @Test
-    public void iShouldNotBeAbleToDeserializeIfImportStatementIsRelativePath() {
-        String cjsonCotent = "{\n" +
+    public void iShouldNotBeAbleToDeserializeIfImportStatementIsRelativePath() throws IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException {
+        String cjsonContent = "{\n" +
                 "    \"source\": $import \"\\test-files\\source.json\",\n" +
                 "    \"target\": {\n" +
                 "        \"fruit\": \"Apple\",\n" +
@@ -74,7 +74,7 @@ public class CjsonTests extends Base {
                 "        \"color\": \"Red\"\n" +
                 "    }\n" +
                 "}";
-        CJson<Target> cJson = new CJson<>(cjsonCotent);
+        CJson<Target> cJson = new CJson<>(cjsonContent);
 
         Assertions.assertThrows(AbsolutePathConstraintError.class, () -> {
             cJson.deserialize(Target.class);
