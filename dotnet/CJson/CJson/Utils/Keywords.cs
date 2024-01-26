@@ -10,7 +10,7 @@ namespace CJson.Utils
     class Keywords
     {
         internal static string importKeyRegex { get; } = "\\s\\$import [\\\"\\']+.*[\\\"\\']";
-        internal static string singleLineComment { get; } = "//.*";
+        internal static string singleLineComment { get; } = "//";
         internal static string relativeJPath { get; } = "$.";
         internal static string relativeJPathRegex { get; } = @"[$][.][.A-Za-z0-9]*";
         internal static string modifiedRelativeJPathRegex { get; } = "[\"][<][$][.][.A-Za-z0-9]*[>][\"]";

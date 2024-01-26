@@ -2,6 +2,7 @@ using CJson;
 using CJson.Exceptions;
 using CJsonTests.models;
 using NUnit.Framework;
+using Path = CJson.Path;
 
 namespace CJsonTests
 {

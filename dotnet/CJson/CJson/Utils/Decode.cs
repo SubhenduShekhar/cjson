@@ -82,18 +82,19 @@ namespace CJson.Utils
         /// <returns></returns>
         private Decode DecodeSingleStatement(ref Boolean isModified)
         {
-            List<String> commentedLines = MatchAndConfirm(content, Keywords.singleLineComment);
+            this.Scan();
 
-            if (commentedLines.Count == 0) 
+            if (this.commentedLines.Count == 0)
             {
                 isModified = false;
-                return this; 
+                return this;
             }
             else
-                foreach (String eachCommentedLine in commentedLines)
+            {
+                foreach (String eachCommentedLine in this.commentedLines)
                     this.content = this.content.Replace(eachCommentedLine, "");
-
-            isModified = true;
+                isModified = true;
+            }
             return this;
         }
         /// <summary>

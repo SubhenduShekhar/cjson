@@ -17,15 +17,25 @@ namespace CJson.Utils
         };
         public Is(string filePath, bool isFilePath) : base(filePath, isFilePath)
         {
-            scan();
+            Scan();
         }
         public Is(String content) : base(content)
         {
-            scan();
+            Scan();
         }
-        private void scan()
+        protected void Scan()
         {
-            commentedLines = MatchAndConfirm(content, Keywords.singleLineComment);
+            commentedLines = new List<String>();
+
+            foreach (String splitLines in this.content.Split("\r\n"))
+            {
+                //String[] splitByNewLines = splitLines.Split("\\\r\\\n");
+                /*foreach(String line in splitLines)
+                {*/
+                    if(splitLines.Trim().StartsWith(Keywords.singleLineComment))
+                        commentedLines.Add(splitLines);
+                /*}*/
+            }
         }
     }
 }
