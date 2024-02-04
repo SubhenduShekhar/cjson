@@ -113,4 +113,14 @@ public class CjsonTests extends Base {
         TargetRelativeCalls targetRelativeCalls = cJson.deserialize(TargetRelativeCalls.class);
         Assertions.assertEquals(targetRelativeCalls.source.quiz.get("sport").get("q1").question, "Which one is correct team name in NBA?");
     }
+    @Test
+    public void iShouldBeAbleToInjectNull() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError {
+        CJson<TargetObj> cJson = new CJson<>("{\n" +
+                "        \"types\": \"asd\",\n" +
+                "        \"fruit\": <fruit>" +
+                "}");
+        TargetObj targetObj = cJson.inject(TargetObj.class, "fruit", null);
+
+        Assertions.assertNull(targetObj.fruit);
+    }
 }
