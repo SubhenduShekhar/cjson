@@ -50,6 +50,7 @@ Further versions will only be provided for dotnet and java</p>
         - [Get all possible keys](#get-all-possible-keys)
         - [Get all possible values](#get-all-possible-values)
     - [Validate JSON](#validate-json)
+    - [Writing JPath](#writing-jpath)
 - [Reference Examples](#examples)
 
 <br/>
@@ -170,6 +171,17 @@ Returns all values to all possible `JPaths` inside JSON. Before executing this f
 ### Validate JSON
 
 This function validates whether the provided string is JSON content or not.
+
+### Writing JPath
+
+Unline XPath in xml format, JSON has JPath format. THe difference is, instead of `//` or `/`, JPath starts with `$.`
+Below is an example:
+
+`$.path.to.variables`
+
+If any array is encountered, below is the way index is provided:
+
+`$.path.to.array[index].variable`
 
 ### Examples
 

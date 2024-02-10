@@ -66,6 +66,13 @@
             color: white;
             border-radius: 5px;
         }
+        .sub-head {
+            background-color: #4e4565;
+            padding: 15px;
+            padding-left: 1em;
+            color: white;
+            border-radius: 5px;
+        }
         .black-lnk {
             font-size: 15px; 
             color: #5e5e5e;
@@ -109,6 +116,10 @@
             border: solid 1px; 
             padding-left: 2em; 
             padding-right: 2em;
+        }
+        ul {
+            list-style-type: none;
+            padding-left: 15px;
         }
     </style>
     <script>
@@ -196,23 +207,55 @@
                 border-top-right-radius: 5px;
                 width: 80%;
                 ">Indexes</h3>
-            <div style="position: relative; left: 1em;">
-                <li>
-                    <a onclick="javascript:scrollBlocks('import-other-files')" class="lnks black-lnk" href="#import-other-files">Import Statements</a>
-                </li>
-                <li>
-                    <a onclick="javascript:scrollBlocks('rel-var-ref')" class="lnks black-lnk" href="#relative-variable-reference">Relative Variable Referencing</a>
-                </li>
-                <li>
-                    <a onclick="javascript:scrollBlocks('dyn-var-inj')" class="lnks black-lnk" href="#dynamic-variable-injection">Dynamic Variable Injection</a>
-                </li>
-                <li>
-                    <a onclick="javascript:scrollBlocks('cmnts')" class="lnks black-lnk" href="#comments">Adding Comments</a>
-                </li>
+            <div>
+                <section>
+                    <details>
+                        <summary>CJSON Format Features</summary>
+                        <ul>
+                            <li>
+                                <a onclick="javascript:scrollBlocks('import-other-files')" class="lnks black-lnk" href="#import-other-files">Import Statements</a>
+                            </li>
+                            <li>
+                                <a onclick="javascript:scrollBlocks('rel-var-ref')" class="lnks black-lnk" href="#relative-variable-reference">Relative Variable Referencing</a>
+                            </li>
+                            <li>
+                                <a onclick="javascript:scrollBlocks('dyn-var-inj')" class="lnks black-lnk" href="#dynamic-variable-injection">Dynamic Variable Injection</a>
+                            </li>
+                            <li>
+                                <a onclick="javascript:scrollBlocks('cmnts')" class="lnks black-lnk" href="#comments">Adding Comments</a>
+                            </li>
+                        </ul>
+                    </details>
+                    <details>
+                        <summary>CJSON Utility Features</summary>
+                        <ul>
+                            <li>
+                                <a href="#deserializing-cjsonjson-string-content" class="lnks black-lnk">Deserializing CJSON/JSON string content</a>
+                            </li>
+                            <li>
+                                <a href="#removing-key" class="lnks black-lnk">Remove a variable</a>
+                            </li>
+                            <li>
+                                <a href="#convert-class-object-to-json-string" class="lnks black-lnk">Convert class object to JSON string</a>
+                            </li>
+                            <li>
+                                <a href="#parse-data" class="lnks black-lnk">Parse data</a>
+                            </li>
+                            <li>
+                                <a href="#validate-json" class="lnks black-lnk">Validate JSON</a>
+                            </li>
+                            <li>
+                                <a href="#writing-jpath" class="lnks black-lnk">Writing JPath</a>
+                            </li>
+                        </ul>
+                    </details>
+                </section>
             </div>
         </div>
         <div style="display: table-cell;" class="main-content">
             <h2>Features</h2>
+
+            <h3 class="sub-head">CJSON format features</h3>
 
             <div class="feature-block" id="import-other-files">
                 <h3 style="width: inherit;">
@@ -314,7 +357,6 @@
                         We will update once we deploy multi-line comments.
                     </div>
                     <div style="display: table-cell; width: inherit;">
-                        <!-- <img src="./images/comments.png" alt="Imports" style="width: 100%; border-radius: 10px; margin-left: 10%;"> -->
                         <pre class="code example-code">
 {
     //  This is multi line comment.
@@ -335,6 +377,188 @@
     }
 }
                         </pre>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="sub-head">CJSON Utility Features</h3>
+
+            <div class="feature-block" id="deserializing-cjsonjson-string-content">
+                <h3 style="width: inherit;">
+                    <a class="lnks" style="color: #808080d6;" href="#deserializing-cjsonjson-string-content">Deserializing CJSON/JSON string content</a></h3>
+                <div style="display: table;">
+                    <div style="display: table-cell; width: 50%; vertical-align: top; line-height: 2em;">
+                        Parsing of CJSON string content is also possible now. 
+                        You can create CJSON object with a second parameter(specific to language). 
+                        For language specific details, refer below.
+                    </div>
+                    <div style="display: table-cell; width: inherit;">
+                        <pre class="code example-code">
+import com.codedjson.CJson;
+import java.util.HashMap;
+import java.nio.file.Paths;
+                        
+public class Main {
+    public static void main(String[] args) throws Exception {
+                                    
+        HashMap<String, String> data = new HashMap<String, String>();
+        data.put("id", "ID01");
+                                
+        CJson<SerializableClass> cJson = new CJson<>(new Paths("file/path/to/file.cjson"));
+        SerializableClass target = cJson.inject(SerializableClass.class, data);
+                        
+    }
+}                            
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-block" id="removing-key">
+                <h3 style="width: inherit;">
+                    <a class="lnks" style="color: #808080d6;" href="#removing-key">Remove a variable</a></h3>
+                <div style="display: table;">
+                    <div style="display: table-cell; width: 50%; vertical-align: top; line-height: 2em;">
+                        Any JSON key value pair can be removed by providing its JPath.
+Please Note, if you use <span class="code">remove</span> before <span class="code">deserialize</span> you will receive <span class="code">UndeserializedCJSON</span> exception.
+This is because, unless the content is deserialized, CJSON engine has not processed the CJSON content.
+This function returns deserialized class object post removal.
+                    </div>
+                    <div style="display: table-cell; width: inherit;">
+                        <pre class="code example-code">
+import com.codedjson.CJson;
+import java.util.HashMap;
+import java.nio.file.Paths;
+                        
+public class Main {
+    public static void main(String[] args) throws Exception {
+        CJson<SerializableClass> cJson = new CJson<>(new Paths("file/path/to/file.cjson"));
+        cJson.deserialize(SerializableClass.class);
+        SerializableClass value = cJson.remove("$.target.fruit");
+    }
+}
+                        </pre>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="feature-block" id="convert-class-object-to-json-string">
+                <h3 style="width: inherit;">
+                    <a class="lnks" style="color: #808080d6;" href="#convert-class-object-to-json-string">Convert class object to JSON string</a></h3>
+                <div style="display: table;">
+                    <div style="display: table-cell; width: 50%; vertical-align: top; line-height: 2em;">
+                        Any Java object can be converted to json string by using `toString()` function.
+                        It accepts pure java object and returns JSON in string.
+                    </div>
+                    <div style="display: table-cell; width: inherit;">
+                        <pre class="code example-code">
+import com.codedjson.CJson;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.nio.file.Paths;
+import java.util.List;
+                            
+public class Main {
+    public static void main(String[] args) throws Exception {
+        Target target = new Target();
+        target.source = new Pure();
+        target.source.quiz = new HashMap<>();
+                        
+        HashMap<String, Questions> questionsHashMap = new HashMap<>();
+        Questions questions = new Questions();
+        questions.question = "Which one is correct team name in NBA?";
+        questions.options = Arrays.asList("New York Bulls",
+                "Los Angeles Kings",
+                "Golden State Warriros",
+                "Huston Rocket");
+        questions.answer = "Huston Rocket";
+                        
+        questionsHashMap.put("q1", questions);
+        target.source.quiz.put("sport", questionsHashMap);
+                        
+        String targetString = CJson.toString(target);
+    }
+}                            
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-block" id="parse-data">
+                <h3 style="width: inherit;">
+                    <a class="lnks" style="color: #808080d6;" href="#parse-data">Parse data</a></h3>
+                <div style="display: table;">
+                    <div style="display: table-cell; width: 50%; vertical-align: top; line-height: 2em;">
+This function finds the value of the provided JPath as parameter. This function returns <span class="code">Object</span> type data.
+So a type cast will be required to unlock native functions.
+                    </div>
+                    <div style="display: table-cell; width: inherit;">
+                        <pre class="code example-code">
+import com.codedjson.CJson;
+import java.nio.file.Paths;
+                        
+public class Main {
+    public static void main(String[] args) throws Exception {
+                                    
+        CJson<SerializableClass> cJson = new CJson<>(new Paths("file/path/to/file.cjson"));
+        SerializableClass target = cJson.deserialize(SerializableClass.class);
+        Object variable = cJson.parse("$.path.to.variable");
+    }
+}
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-block" id="validate-json">
+                <h3 style="width: inherit;">
+                    <a class="lnks" style="color: #808080d6;" href="#validate-json">Validate JSON</a></h3>
+                <div style="display: table;">
+                    <div style="display: table-cell; width: 50%; vertical-align: top; line-height: 2em;">
+                        <span class="code">isContentJSON()</span> does this activity for you. If you want to validate
+                        given content as JSON, you cna use this check.<br/> This function returns <span class="code">boolean</span>
+                    </div>
+                    <div style="display: table-cell; width: inherit;">
+                        <pre class="code example-code">
+import com.codedjson.CJson;
+                        
+public class Main {
+    public static void main(String[] args) throws Exception {
+                                    
+        String testStr = "{" +
+            \"hello\": \"world\" +
+            \"name\": \"test\" +
+        "}";
+
+        boolean result = CJson.isContentJson(testStr);      // value is true
+
+        // Testing CJson content
+        testStr = "{" +
+            \"hello\": \"world\" +
+            \"data\": $import \"./datafile.json\" +
+        "}";
+
+        result = CJson.isContentJson(testStr);      // value is false
+    }
+}
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-block" id="writing-jpath">
+                <h3 style="width: inherit;">
+                    <a class="lnks" style="color: #808080d6;" href="#writing-jpath">Writing JPath</a></h3>
+                <div style="display: table;">
+                    <div style="display: table-cell; width: 50%; vertical-align: top; line-height: 2em;">
+                        Unline XPath in xml format, JSON has JPath format. THe difference is, instead of
+                         <span class="code">//</span> or <span class="code">/</span>, JPath starts with <span class="code">$.</span><br/>
+                        Below is an example:<br/>
+                        <span class="code">$.path.to.variables</span><br/>
+                        
+                        If any array is encountered, below is the way index is provided:<br/>
+                        <span class="code">$.path.to.array[index].variable</span>
                     </div>
                 </div>
             </div>
