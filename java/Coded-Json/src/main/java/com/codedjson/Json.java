@@ -212,7 +212,7 @@ public class Json extends Is {
      * @return
      * @throws IllegalValueType
      */
-    public Object parse(String key) throws IllegalValueType, InvalidJPathError {
+    public Object parse(String key) throws InvalidJPathError {
         if(key == null) throw new NullPointerException("Key cannot be null");
         else if(!key.startsWith("$.")) throw new InvalidJPathError();
 
@@ -224,7 +224,7 @@ public class Json extends Is {
             case "double": return Double.parseDouble(value.value.toString());
             case "String": return value.value.toString();
             case "null": return null;
-            default: throw new IllegalValueType("Undefined value type : " + value.value.getClass().getTypeName());
+            default: return value.value;
         }
     }
 }
