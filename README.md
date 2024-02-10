@@ -21,10 +21,10 @@
 
 <br/><br/><br/>
 
-<center style="color:red">
+<div align="center" style="color:red">
 <p style="font-size:20px">We are restricting NPM and Python packages to 2.0.0<br/>
 Further versions will only be provided for dotnet and java</p>
-</center>
+</div>
 
 <br/><br/><br/>
 
