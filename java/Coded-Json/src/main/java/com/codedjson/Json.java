@@ -166,7 +166,7 @@ public class Json extends Is {
 
             return value;
         }
-        catch (NullPointerException nullPointerException) {
+        catch (ClassCastException | NullPointerException exception) {
             return null;
         }
     }

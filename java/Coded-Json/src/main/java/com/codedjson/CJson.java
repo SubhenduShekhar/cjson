@@ -22,19 +22,19 @@ import java.util.List;
  *
  * <pre>
  {
-    "source": $import "./source.json",
-    "target": {
-        "fruit": "Apple",
-        "size": "Large",
-        "color": "Red",
-        "secColor": $.target.color,
-        "colorList": [ $.target.color, $.target.secColor ],
-        // You can add comments like this
-        "digitCheck": 1.5,
-        "digitImport": $.target.digitCheck,
-        "digitArrayImport": [ $.target.digitCheck, $.target.digitImport ]
-    }
-}
+ "source": $import "./source.json",
+ "target": {
+ "fruit": "Apple",
+ "size": "Large",
+ "color": "Red",
+ "secColor": $.target.color,
+ "colorList": [ $.target.color, $.target.secColor ],
+ // You can add comments like this
+ "digitCheck": 1.5,
+ "digitImport": $.target.digitCheck,
+ "digitArrayImport": [ $.target.digitCheck, $.target.digitImport ]
+ }
+ }
  </pre>
  *
  *
@@ -88,7 +88,7 @@ public class CJson<T> extends Decode {
     public T deserialize(Class<T> classType) throws UndeserializedCJSON, IllegalJsonType {
         if(isInjectExist && !isInjectDone)
             System.out.println("Runtime variables detected. System may throw error.");
-            //throw new UndeserializedCJSON("Runtime variables detected. Inject before deserialize.");
+        //throw new UndeserializedCJSON("Runtime variables detected. Inject before deserialize.");
 
         content = decodeRelativePathValues(content);
         json = parseJson(content);
@@ -149,6 +149,8 @@ public class CJson<T> extends Decode {
 
         contextConverter();
         content = replaceContent(content, key, value);
+        content = decodeRelativePathValues(content);
+
         json = parseJson(content);
         content = parse().toString();
 
