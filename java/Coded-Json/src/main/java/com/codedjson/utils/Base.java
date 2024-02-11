@@ -19,6 +19,8 @@ public class Base {
     protected Gson gson = new Gson();
     protected String[] commaSeparatedLines;
     protected boolean isFilePath;
+    protected boolean isInjectDone;
+    protected boolean isInjectExist;
 
     protected List<String> commentedLines;
     public Base(String filePath, boolean isFilePath) throws FileNotFoundException {

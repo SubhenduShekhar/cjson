@@ -22,6 +22,7 @@ public class Decode extends Json {
     private static List<String> stringToIgnore = Arrays.asList( "hash", "serialVersionUID", "serialPersistentFields", "CASE_INSENSITIVE_ORDER", "MIN_VALUE", "MAX_VALUE", "TYPE", "digits", "DigitTens", "DigitOnes", "sizeTable", "SIZE", "BYTES", "serialVersionUID",
             "POSITIVE_INFINITY", "NEGATIVE_INFINITY", "NaN", "MIN_NORMAL", "MAX_EXPONENT", "MIN_EXPONENT");
     protected List<String> runtimeVals = new ArrayList<>();
+    private List<String> jpaths = new ArrayList<>();
     public Decode(String filePath, boolean isFilePath) throws FileNotFoundException {
         super(filePath, isFilePath);
     }
@@ -68,31 +69,19 @@ public class Decode extends Json {
         for(String eachLine : commentedLines)
             content = content.replace(eachLine, "");
     }
-    private String decodeRelativePaths(String content) {
-        List<String> jpaths = new ArrayList<>();
-
+    private String decodeRelativePaths(String content) throws IllegalJsonType {
         Matcher matcher = Keywords.relativeJPathRegex.matcher(content);
 
-        while(matcher.find()) {
+        while (matcher.find()) {
             String group = matcher.group();
 
-            if(!jpaths.contains(group)) {
+            if (!jpaths.contains(group)) {
                 jpaths.add(group);
                 content = content.replaceAll(Pattern.quote(group), "\"<" + group.replace("$", "\\$") + ">\"");
             }
         }
 
-        for(String eachJPath : jpaths) {
-            ParsedValue value = parseValue(eachJPath);
-
-            while (value.value.toString().contains("$."))
-                value = parseValue(value.value.toString());
-
-            if(value.type.equals("String"))
-                content = content.replaceAll("\"<" + eachJPath.replace("$", "\\$") + ">\"", Matcher.quoteReplacement("\"" + value.value + "\""));
-            else
-                content = content.replaceAll("\"<" + eachJPath.replace("$", "\\$") + ">\"", Matcher.quoteReplacement(value.value.toString()));
-        }
+        json = parseJson(content);
 
         return content;
     }
@@ -101,6 +90,8 @@ public class Decode extends Json {
         Matcher matcher = Keywords.runtimeVals.matcher(content);
 
         while(matcher.find()) {
+            isInjectDone = false;
+            isInjectExist = true;
             String group = matcher.group();
 
             if(!runtimeVals.contains(group)) {
@@ -134,9 +125,9 @@ public class Decode extends Json {
             content = decodeRuntimeKeys(content);
             if(! isChanged) break;
         }
-        json = parseJson(content);
-
         content = decodeRelativePaths(content);
+
+        json = parseJson(content);
     }
     protected String replaceContent(String content, HashMap<String, Object> injectingObj) {
         for (String key : injectingObj.keySet())
@@ -147,6 +138,8 @@ public class Decode extends Json {
         if (content.contains("\"<-" + key + "->\"")) {
             if(value == null)
                 content = content.replaceAll("\"<-" + key + "->\"", "null");
+            else if(isContentJson(value.toString()))
+                content = content.replaceAll("\"<-" + key + "->\"", (String) value);
             else if (getType(value).equals("string"))
                 content = content.replaceAll("<-" + key + "->", Matcher.quoteReplacement((String) value));
             else
@@ -234,49 +227,33 @@ public class Decode extends Json {
             return values + "}";
         }
     }
-    /*protected void findPathToConstruct(String key, Object value) {
-        String[] keySets = key.split(Matcher.quoteReplacement(Keywords.relativeJPath))[1].split("\\.");
-        String pathConstruct = "";
-        Object valObject = null;
+    protected String decodeRelativePathValues(String content) {
+        Matcher matcher = Keywords.encodedRelativeJPathRegex.matcher(content);
 
-        for(String eachKey : keySets) {
-            if(pathConstruct.equals(""))
-                pathConstruct += eachKey;
+        while (matcher.find()) {
+            String eachJPath = matcher.group();
+
+            ParsedValue value = parseValue(eachJPath);
+
+            while (value.value.toString().contains("$."))
+                value = parseValue(value.value.toString());
+
+            if (value.type.equals("String"))
+                content = content.replaceAll(eachJPath.replace("$", "\\$"), Matcher.quoteReplacement(value.value.toString()));
             else
-                pathConstruct += "." + eachKey;
-            try {
-                Object tempVal = getValueFromKey(pathConstruct);
-                if(tempVal == null) throw new Exception();
-                else valObject = tempVal;
-            }
-            catch (Exception e) {
-                String updatedValue;// = valObject.toString() + ",";
-
-                if(valObject.toString().endsWith("}")) {
-                    updatedValue = valObject.toString().split("}")[0] + ",";
-                    if(value.getClass().getName().toLowerCase().contains("string"))
-                        updatedValue += eachKey + ":\"" + value + "\"";
-                    else
-                        updatedValue += eachKey + ":" + value;
-                    updatedValue += "}";
-                }
-                else if(valObject.toString().endsWith("]")) {
-                    updatedValue = valObject.toString().split("]")[0] + ",";
-                    if(value.getClass().getName().toLowerCase().contains("string"))
-                        updatedValue += eachKey + ":\"" + value + "\"";
-                    else
-                        updatedValue += eachKey + ":" + value;
-                    updatedValue += "]";
-                }
-                else {
-
-                }
-                *//*if(value.getClass().getName().toLowerCase().contains("string"))
-                    updatedValue += eachKey + ":\"" + value + "\"";
-                else
-                    updatedValue += eachKey + ":" + value;*//*
-                content = content.replace(valObject.toString(), updatedValue);
-            }
+                content = content.replaceAll("\"" + eachJPath.replace("$", "\\$") + "\"", Matcher.quoteReplacement(value.value.toString()));
         }
-    }*/
+
+        return content;
+    }
+    protected boolean isRuntimeKeysExist(String content) {
+
+        Matcher matcher = Keywords.runtimeVals.matcher(content);
+
+        while(matcher.find()) {
+            isInjectDone = false;
+            return true;
+        }
+        return false;
+    }
 }

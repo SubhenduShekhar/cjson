@@ -146,10 +146,13 @@ public class Json extends Is {
         if(json == null) throw new NullPointerException("json object is null");
 
         Object value = json;
+        if(key.startsWith("<") && key.endsWith(">"))
+            key = key.substring(1, key.length() - 1);
         if(key.contains(".")) {
             String[] keyList = key.split("\\.");
             for(int j = 0; j < keyList.length; j ++) {
                 if(keyList[j].equals("$")) continue;
+
                 if(keyList[j].contains("[") && keyList[j].contains("]")) {
                     String eachKey = keyList[j].split("\\[")[0];
                     int index = Integer.parseInt(keyList[j].split("\\[")[1].split("\\]")[0]);
