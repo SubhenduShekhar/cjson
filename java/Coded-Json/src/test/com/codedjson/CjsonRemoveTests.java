@@ -23,10 +23,10 @@ public class CjsonRemoveTests extends Base {
         Assertions.assertNull(target.source.pure.quiz.get("sport").get("q1").options);
 
         target = cJson.remove("$.target.quantity");
-        Assertions.assertNull(target.target.quantity);
+        Assertions.assertEquals(target.target.quantity, 0);
     }
     @Test
-    public void iShouldBeAbleToReceiveUndeserializedCJSONExceptionIRemoveWithoutDeserialize() throws FileNotFoundException {
+    public void iShouldBeAbleToReceiveUndeserializedCJSONExceptionIRemoveWithoutDeserialize() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError, UndeserializedCJSON, InvalidJPathError {
         CJson<Target> cJson = new CJson<>(cjsonfilePath);
 
         Assertions.assertThrows(UndeserializedCJSON.class, () -> {
@@ -48,14 +48,14 @@ public class CjsonRemoveTests extends Base {
         Assertions.assertNull(target.target.fruit);
         Assertions.assertNull(target.source.pure.quiz.get("sport").get("q1").options);
 
-        Assertions.assertNull(target.target.quantity);
+        Assertions.assertEquals(target.target.quantity, 0);
     }
     @Test
-    public void iShouldBeAbleToReceiveUndeserializedCJSONExceptionIRemoveWithoutDeserializeInListOfKeys()  throws FileNotFoundException {
+    public void iShouldBeAbleToReceiveUndeserializedCJSONExceptionIRemoveWithoutDeserializeInListOfKeys() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError, UndeserializedCJSON {
         CJson<Target> cJson = new CJson<>(cjsonfilePath);
         List<String> li = new ArrayList<>();
         li.add("$.target.fruit");
-        li.add("$.source.quiz.sport.q1.options");
+        li.add("$.source.pure.quiz.sport.q1.options");
         li.add("$.target.quantity");
 
         Assertions.assertThrows(UndeserializedCJSON.class, () -> {

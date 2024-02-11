@@ -51,25 +51,32 @@ public class CJson<T> extends Decode {
     /**
      * CJson parser using file path.
      * @param filePath
-     * @throws Exception FileNotFoundException
+     * @throws IllegalJsonType
+     * @throws AbsolutePathConstraintError
+     * @throws FileNotFoundException
      */
-    public CJson(Path filePath) throws FileNotFoundException {
+    public CJson(Path filePath) throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError {
         super(filePath.toString(), true);
         this.t = null;
         this.filePath = filePath.toString();
         this.baseFileObj = new File(this.filePath);
+        contextConverter();
     }
     /**
      * Parser for <code>CJSON</code> content.
      * You can directly parse a <code>CJSON</code> string content.<br/>
      * <b>Import statements must have paths absolute. Otherwise it throws absolute path constraint error while deserialization</b>
      * @param content CJSON/JSON content in string
+     * @throws IllegalJsonType
+     * @throws AbsolutePathConstraintError
+     * @throws FileNotFoundException
      */
-    public CJson(String content) {
+    public CJson(String content) throws IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException {
         super(content);
         this.t = null;
         this.filePath = null;
         this.baseFileObj = null;
+        contextConverter();
     }
 
     /**
@@ -77,21 +84,15 @@ public class CJson<T> extends Decode {
      * For more cababilitites, refer to <a href="https://subhendushekhar.github.io/cjson/">Official Page</a>
      * @param classType Java class object equivalent to target JSON
      * @return Java Object equivalent to <code>classType</code>
-     * @throws IllegalJsonType
-     * @throws AbsolutePathConstraintError
-     * @throws FileNotFoundException
      */
-    public T deserialize(Class<T> classType) throws IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException {
-        this.classType = classType;
+    public T deserialize(Class<T> classType) throws UndeserializedCJSON, IllegalJsonType {
+        if(isInjectExist && !isInjectDone)
+            throw new UndeserializedCJSON("Runtime variables detected. Inject before deserialize.");
 
-        if(checks.runtimeKeys(content))
-            System.out.println("Warning: Runtime variables detected. To inject data, use inject() instead");
-
-        decodeKeywords();
-
+        content = decodeRelativePathValues(content);
         json = parseJson(content);
 
-        content = parse().toString();
+        this.classType = classType;
         if(classType.equals(String.class))
             t = (T) content;
         else
@@ -111,22 +112,22 @@ public class CJson<T> extends Decode {
      * This is thrown if import statements contain relative path instead of absolute path
      * @throws FileNotFoundException If the imported file is not found in the directory
      */
-    public T inject(Class<T> classType, HashMap<String, Object> injectingObj) throws IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException {
+    public T inject(Class<T> classType, HashMap<String, Object> injectingObj) throws IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException, UndeserializedCJSON {
+
         if(injectingObj != null || injectingObj.keySet().size() != 0) {
             this.classType = classType;
 
-            decodeKeywords();
+            contextConverter();
             content = replaceContent(content, injectingObj);
 
             json = parseJson(content);
             content = parse().toString();
-        }
 
-        if(classType.equals(String.class))
-            t = (T) content;
-        else
-            t = gson.fromJson(content, classType);
-        return t;
+        }
+        isInjectDone = true;
+        if(isRuntimeKeysExist(content))
+            System.out.println("All runtime values are not injected yet. Deserialization may throw exception");
+        return deserialize(classType);
     }
     /**
      * Injects single key and value. Uses tag <code>&lt;variable&gt;</code><br/>
@@ -142,19 +143,16 @@ public class CJson<T> extends Decode {
      * This is thrown if import statements contain relative path instead of absolute path
      * @throws FileNotFoundException If the imported file is not found in the directory
      */
-    public T inject(Class<T> classType, String key, Object value) throws IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException {
+    public T inject(Class<T> classType, String key, Object value) throws IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException, UndeserializedCJSON {
         this.classType = classType;
 
-        decodeKeywords();
+        contextConverter();
         content = replaceContent(content, key, value);
         json = parseJson(content);
         content = parse().toString();
 
-        if(classType.equals(String.class))
-            t = (T) content;
-        else
-            t = gson.fromJson(content, classType);
-        return t;
+        isInjectDone = true;
+        return deserialize(classType);
     }
     /**
      * Deserializes <code>CJSON</code> content and returns as string.<br/>
@@ -167,7 +165,7 @@ public class CJson<T> extends Decode {
      * @throws FileNotFoundException If the imported file is not found in the directory
      */
     public String deserializeAsString() throws IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException {
-        decodeKeywords();
+        contextConverter();
         json = parseJson(content);
         return content;
     }
@@ -182,7 +180,7 @@ public class CJson<T> extends Decode {
      */
     public T remove(String key) throws IllegalJsonType, UndeserializedCJSON, InvalidJPathError {
         if(!key.startsWith("$.")) throw new InvalidJPathError();
-        if(json == null) throw new UndeserializedCJSON("Undeserialized CJSON content detected. Use deseralize() before remove()");
+        if(classType == null) throw new UndeserializedCJSON("Undeserialized CJSON content detected. Use deseralize() before remove()");
 
         removeWithKey(key);
 
@@ -202,7 +200,7 @@ public class CJson<T> extends Decode {
      * @throws UndeserializedCJSON Throws if the CJSON/JSON is not deserialized. Call deserialize before remove
      */
     public T remove(List<String> keyList) throws IllegalJsonType, UndeserializedCJSON {
-        if(json == null) throw new UndeserializedCJSON("Undeserialized CJSON content detected. Use deseralize() before remove()");
+        if(classType == null) throw new UndeserializedCJSON("Undeserialized CJSON content detected. Use deseralize() before remove()");
         for(String key: keyList)
             removeWithKey(key);
 
@@ -224,5 +222,13 @@ public class CJson<T> extends Decode {
         if(object == null)
             return "{}";
         return getAsString(object);
+    }
+    private void contextConverter() throws IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException {
+        if(checks.runtimeKeys(content))
+            System.out.println("Warning: Runtime variables detected. To inject data, use inject() instead");
+
+        decodeKeywords();
+        json = parseJson(content);
+        content = parse().toString();
     }
 }
