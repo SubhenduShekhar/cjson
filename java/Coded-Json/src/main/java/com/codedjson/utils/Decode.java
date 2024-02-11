@@ -234,14 +234,15 @@ public class Decode extends Json {
             String eachJPath = matcher.group();
 
             ParsedValue value = parseValue(eachJPath);
+            if(value.value != null) {
+                while (value.value.toString().contains("$."))
+                    value = parseValue(value.value.toString());
 
-            while (value.value.toString().contains("$."))
-                value = parseValue(value.value.toString());
-
-            if (value.type.equals("String"))
-                content = content.replaceAll(eachJPath.replace("$", "\\$"), Matcher.quoteReplacement(value.value.toString()));
-            else
-                content = content.replaceAll("\"" + eachJPath.replace("$", "\\$") + "\"", Matcher.quoteReplacement(value.value.toString()));
+                if (value.type.equals("String"))
+                    content = content.replaceAll(eachJPath.replace("$", "\\$"), Matcher.quoteReplacement(value.value.toString()));
+                else
+                    content = content.replaceAll("\"" + eachJPath.replace("$", "\\$") + "\"", Matcher.quoteReplacement(value.value.toString()));
+            }
         }
 
         return content;

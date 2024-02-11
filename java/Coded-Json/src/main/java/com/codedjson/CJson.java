@@ -81,13 +81,14 @@ public class CJson<T> extends Decode {
 
     /**
      * Deserializes CJSON content and returns Java Object equivalent to <code>classType</code>.
-     * For more cababilitites, refer to <a href="https://subhendushekhar.github.io/cjson/">Official Page</a>
+     * For more capabilities, refer to <a href="https://subhendushekhar.github.io/cjson/">Official Page</a>
      * @param classType Java class object equivalent to target JSON
      * @return Java Object equivalent to <code>classType</code>
      */
     public T deserialize(Class<T> classType) throws UndeserializedCJSON, IllegalJsonType {
         if(isInjectExist && !isInjectDone)
-            throw new UndeserializedCJSON("Runtime variables detected. Inject before deserialize.");
+            System.out.println("Runtime variables detected. System may throw error.");
+            //throw new UndeserializedCJSON("Runtime variables detected. Inject before deserialize.");
 
         content = decodeRelativePathValues(content);
         json = parseJson(content);

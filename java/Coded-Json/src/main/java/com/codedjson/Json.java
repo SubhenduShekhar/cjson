@@ -145,25 +145,30 @@ public class Json extends Is {
     protected Object getValueFromKey(String key) {
         if(json == null) throw new NullPointerException("json object is null");
 
-        Object value = json;
-        if(key.startsWith("<") && key.endsWith(">"))
-            key = key.substring(1, key.length() - 1);
-        if(key.contains(".")) {
-            String[] keyList = key.split("\\.");
-            for(int j = 0; j < keyList.length; j ++) {
-                if(keyList[j].equals("$")) continue;
+        try {
+            Object value = json;
+            if(key.startsWith("<") && key.endsWith(">"))
+                key = key.substring(1, key.length() - 1);
+            if(key.contains(".")) {
+                String[] keyList = key.split("\\.");
+                for(int j = 0; j < keyList.length; j ++) {
+                    if(keyList[j].equals("$")) continue;
 
-                if(keyList[j].contains("[") && keyList[j].contains("]")) {
-                    String eachKey = keyList[j].split("\\[")[0];
-                    int index = Integer.parseInt(keyList[j].split("\\[")[1].split("\\]")[0]);
-                    value = ((JsonArray)((( JsonObject )value).get(eachKey))).get(index);
+                    if(keyList[j].contains("[") && keyList[j].contains("]")) {
+                        String eachKey = keyList[j].split("\\[")[0];
+                        int index = Integer.parseInt(keyList[j].split("\\[")[1].split("\\]")[0]);
+                        value = ((JsonArray)((( JsonObject )value).get(eachKey))).get(index);
+                    }
+                    else value = ((JsonObject) value).get(keyList[j]);
                 }
-                else value = ((JsonObject) value).get(keyList[j]);
             }
-        }
-        else value = ((JsonObject)value).get(key);
+            else value = ((JsonObject)value).get(key);
 
-        return value;
+            return value;
+        }
+        catch (NullPointerException nullPointerException) {
+            return null;
+        }
     }
     /**
      * Iteratively parses all values and returns it in List&lt String&gt.<br/>
@@ -182,6 +187,9 @@ public class Json extends Is {
     }
     protected ParsedValue parseValue(String key) {
         Object value = getValueFromKey(key);
+
+        if(value == null)
+            return new ParsedValue(null, "null");
 
         if(value.getClass().getName().contains("JsonPrimitive")) {
             JsonPrimitive jsonPrimitive = (JsonPrimitive) value;
