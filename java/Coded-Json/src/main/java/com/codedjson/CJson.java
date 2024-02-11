@@ -88,7 +88,6 @@ public class CJson<T> extends Decode {
     public T deserialize(Class<T> classType) throws UndeserializedCJSON, IllegalJsonType {
         if(isInjectExist && !isInjectDone)
             System.out.println("Runtime variables detected. System may throw error.");
-        //throw new UndeserializedCJSON("Runtime variables detected. Inject before deserialize.");
 
         content = decodeRelativePathValues(content);
         json = parseJson(content);
