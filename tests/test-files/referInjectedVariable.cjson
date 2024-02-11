@@ -1,0 +1,11 @@
+{
+    "variableInjection": $import "./VariableInjection.cjson",
+    "target": {
+        "fruit": $.variableInjection.target.fruit,
+        "quantity": $.variableInjection.target.quantity,
+        "color": $.variableInjection.target.color,
+        "secColor": $.target.color,
+        "digitCheck": $.variableInjection.target.digitCheck,
+        "digitImport": $.variableInjection.target.digitImport
+    }
+}

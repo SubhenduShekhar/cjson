@@ -1,13 +1,14 @@
 {
     "source": $import "./source.json",
     "relativeCalls": $import "./relativeCalls.json",
+    "variableInjection": $import "./VariableInjection.cjson",
     "target": {
         "fruit": "Apple",
         "size": "Large",
         "color": "Red",
         "secColor": $.target.color,
         "colorList": [ $.target.color, $.target.secColor ],
-        "digitCheck": 1.5,
+        "digitCheck": $.variableInjection.target.digitCheck,
         "digitImport": $.target.digitCheck,
         "digitArrayImport": [ $.target.digitCheck, $.target.digitImport ]
     }
