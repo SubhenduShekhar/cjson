@@ -226,11 +226,14 @@ public class CJson<T> extends Decode {
         return getAsString(object);
     }
     private void contextConverter() throws IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException {
-        if(checks.runtimeKeys(content))
-            System.out.println("Warning: Runtime variables detected. To inject data, use inject() instead");
+        if(!isContextConverted) {
+            if (checks.runtimeKeys(content))
+                System.out.println("Warning: Runtime variables detected. To inject data, use inject() instead");
 
-        decodeKeywords();
-        json = parseJson(content);
-        content = parse().toString();
+            decodeKeywords();
+            json = parseJson(content);
+            content = parse().toString();
+            isContextConverted = true;
+        }
     }
 }

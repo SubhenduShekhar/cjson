@@ -137,4 +137,13 @@ public class CjsonTests extends Base {
         Assertions.assertEquals(referInjectedVariable.variableInjection.target.fruit, "Apple");
         Assertions.assertEquals(referInjectedVariable.variableInjection.target.quantity, 100);
     }
+    @Test
+    public void iShouldBeAbleToInjectValuesForKeysWithSpecialCharacters() throws IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException, UndeserializedCJSON, InvalidJPathError {
+        CJson<TargetObj> cJson = new CJson<>("{\n" +
+                "        \"types\": \"asd\",\n" +
+                "        \"fruit\": <fruit!@#$%^&*()>" +
+                "}");
+        cJson.inject(TargetObj.class, "fruit!@#$%^&*()", "apple");
+        Assertions.assertEquals(cJson.parse("$.fruit"), "apple");
+    }
 }

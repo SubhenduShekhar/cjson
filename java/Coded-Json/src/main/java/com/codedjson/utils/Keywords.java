@@ -9,7 +9,7 @@ public class Keywords {
     public static String relativeJPath = "$.";
     public static Pattern relativeJPathRegex = Pattern.compile("[$][.][.A-Za-z0-9]*");
     public static Pattern encodedRelativeJPathRegex = Pattern.compile("[<][$.][.A-Za-z0-9]*[>]");
-    public static Pattern runtimeVals = Pattern.compile("[<][A-Za-z0-9]*[>]");
+    public static Pattern runtimeVals = Pattern.compile("<[^-].*[^-]>");
     private static Pattern removeWithPreComma(String key, String value, String content) {
         Pattern pattern = Pattern.compile(",+\"" + key.split("\\.")[key.split("\\.").length - 1] + "\":\"?" + value + "\"?");
         Matcher matcher = pattern.matcher(content);
