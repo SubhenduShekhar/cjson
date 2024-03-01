@@ -136,6 +136,7 @@ public class Decode extends Json {
     }
     protected String replaceContent(String content, String key, Object value) {
         if (content.contains("\"<-" + key + "->\"")) {
+            key = Pattern.quote(key);
             if(value == null)
                 content = content.replaceAll("\"<-" + key + "->\"", "null");
             else if(isContentJson(value.toString()))

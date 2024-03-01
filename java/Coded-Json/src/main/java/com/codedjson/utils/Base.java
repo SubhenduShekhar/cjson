@@ -21,7 +21,7 @@ public class Base {
     protected boolean isFilePath;
     protected boolean isInjectDone;
     protected boolean isInjectExist;
-
+    protected boolean isContextConverted = false;
     protected List<String> commentedLines;
     public Base(String filePath, boolean isFilePath) throws FileNotFoundException {
         this.filePath = filePath;
