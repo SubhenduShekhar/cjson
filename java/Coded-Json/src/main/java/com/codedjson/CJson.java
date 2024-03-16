@@ -237,3 +237,4 @@ public class CJson<T> extends Decode {
         }
     }
 }
+
