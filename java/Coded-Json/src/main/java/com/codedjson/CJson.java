@@ -234,3 +234,4 @@ public class CJson<T> extends Decode {
         content = parse().toString();
     }
 }
+
