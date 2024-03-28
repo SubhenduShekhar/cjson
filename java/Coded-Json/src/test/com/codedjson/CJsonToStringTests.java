@@ -5,9 +5,11 @@ import com.codedjson.exceptions.IllegalJsonType;
 import com.codedjson.exceptions.UndeserializedCJSON;
 import com.codedjson.templates.*;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -109,5 +111,31 @@ public class CJsonToStringTests extends Base {
 
         CJson<List> cJson = new CJson<>(targetString);
         cJson.deserialize(List.class);
+    }
+    @Test
+    @DisplayName("I Should Be Able To Convert Java Object Array To String")
+    public void iShouldBeABleToConvertJavaObjectArrayToString() throws IllegalAccessException {
+        List<Fruits> fruits = new ArrayList<>();
+        Fruits fruits1 = new Fruits();
+        fruits1.color = "Red";
+        fruits1.name = "Apple";
+
+        Fruits fruits2 = new Fruits();
+        fruits1.color = "Orange";
+        fruits1.name = "Orange";
+
+        fruits.add(fruits1);
+        fruits.add(fruits2);
+
+        System.out.println(CJson.toString(fruits));
+    }
+    @Test
+    @DisplayName("I Should Be Able To Convert Null Java Object Array To String")
+    public void iShouldBeABleToConvertNullAndEmptyJavaObjectArrayToString() throws IllegalAccessException {
+        List<Fruits> fruits = null;
+        Assertions.assertEquals("{}", CJson.toString(fruits), "Failed to convert null array object");
+
+        fruits = new ArrayList<>();
+        Assertions.assertEquals("[]", CJson.toString(fruits), "Failed to convert empty array object");
     }
 }
