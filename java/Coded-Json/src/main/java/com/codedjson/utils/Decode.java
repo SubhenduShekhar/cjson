@@ -191,6 +191,11 @@ public class Decode extends Json {
         }
         else if(object.getClass().getName().toLowerCase().contains("arraylist")) {
             List<Object> li = (List<Object>) object;
+            if(li == null)
+                return "[]";
+            else if(li.size() == 0)
+                return "[]";
+
             String values = "[";
             for(Object obj : li) {
                 if(obj.getClass().getName().toLowerCase().contains("string"))

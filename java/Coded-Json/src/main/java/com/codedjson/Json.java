@@ -188,7 +188,7 @@ public class Json extends Is {
     protected ParsedValue parseValue(String key) {
         Object value = getValueFromKey(key);
 
-        if(value == null)
+        if(value == null || value.toString().equals("null"))
             return new ParsedValue(null, "null");
 
         if(value.getClass().getName().contains("JsonPrimitive")) {

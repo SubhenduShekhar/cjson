@@ -77,9 +77,7 @@ public class CjsonTests extends Base {
                 "    }\n" +
                 "}";
 
-        Assertions.assertThrows(AbsolutePathConstraintError.class, () -> {
-            CJson<Target> cJson = new CJson<>(cjsonContent);
-        });
+        Assertions.assertThrows(AbsolutePathConstraintError.class, () -> new CJson<>(cjsonContent) );
     }
     @Test
     public void iShouldBeAbleToInjectRuntimeValuesUsingKeyValue() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError, UndeserializedCJSON {
@@ -145,5 +143,14 @@ public class CjsonTests extends Base {
                 "}");
         cJson.inject(TargetObj.class, "fruit!@#$%^&*()", "apple");
         Assertions.assertEquals(cJson.parse("$.fruit"), "apple");
+    }
+    @Test
+    public void iShouldBeAbleToInjectSpecialCharacters() throws IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException, UndeserializedCJSON, InvalidJPathError {
+        CJson<TargetObj> cJson = new CJson<>("{\n" +
+                "        \"types\": \"asd\",\n" +
+                "        \"fruit\": <fruit!:@#$%^&*()>" +
+                "}");
+        cJson.inject(TargetObj.class, "fruit!:@#$%^&*()", null);
+        Assertions.assertEquals(cJson.parse("$.fruit"), null);
     }
 }
