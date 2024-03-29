@@ -111,27 +111,4 @@ public class JsonTests extends Base {
         assertEquals(pure.quiz.get("sport").get("q1").options, questions.get(1).options);
         assertEquals(pure.quiz.get("sport").get("q1").answer, questions.get(1).answer);
     }
-
-    @Test
-    public void iShouldBeAbleToRetrieveValueForTheArrayKey() throws IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException, UndeserializedCJSON {
-        CJson<Pure> cjson = new CJson<>(pureJsonfilePath);
-        Pure pure = cjson.deserialize(Pure.class);
-
-        JsonObject value = (JsonObject) cjson.getValueFromKey("quiz");
-
-        assertNotNull(value);
-        assertEquals(pure.quiz.size(),value.size());
-
-        List<Questions> questions = new ArrayList<>();
-
-        pure.quiz.keySet().forEach(key->
-                questions.add(gson.fromJson(value.get(key).getAsJsonObject().get("q1"), Questions.class)));
-
-        assertEquals(pure.quiz.get("maths").get("q1").question, questions.get(0).question);
-        assertEquals(pure.quiz.get("maths").get("q1").options, questions.get(0).options);
-        assertEquals(pure.quiz.get("maths").get("q1").answer, questions.get(0).answer);
-        assertEquals(pure.quiz.get("sport").get("q1").question, questions.get(1).question);
-        assertEquals(pure.quiz.get("sport").get("q1").options, questions.get(1).options);
-        assertEquals(pure.quiz.get("sport").get("q1").answer, questions.get(1).answer);
-    }
 }
