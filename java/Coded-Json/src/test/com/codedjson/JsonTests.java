@@ -124,7 +124,7 @@ public class JsonTests extends Base {
 
         List<Questions> questions = new ArrayList<>();
 
-        pure.quiz.keySet().stream().forEach(key->
+        pure.quiz.keySet().forEach(key->
                 questions.add(gson.fromJson(value.get(key).getAsJsonObject().get("q1"), Questions.class)));
 
         assertEquals(pure.quiz.get("maths").get("q1").question, questions.get(0).question);
