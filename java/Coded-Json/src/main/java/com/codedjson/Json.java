@@ -208,7 +208,6 @@ public class Json extends Is {
         }
         else return new ParsedValue(value, "object");
     }
-
     /**
      * Parse value with no keys. Returns the root json object
      * @return

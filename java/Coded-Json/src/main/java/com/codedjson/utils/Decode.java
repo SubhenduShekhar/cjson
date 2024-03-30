@@ -98,7 +98,7 @@ public class Decode extends Json {
                 String variable = group.split("<")[1].split(">")[0];
                 runtimeVals.add(variable);
 
-                if(!content.contains("\"<" + Matcher.quoteReplacement(group) + ">\"")) {
+                if(!content.contains("\"" + Matcher.quoteReplacement(group) + "\"")) {
                     variable = "\"<-" + variable + "->\"";
                     content = content.replaceAll(Pattern.quote(group), Matcher.quoteReplacement(variable));
                 }
