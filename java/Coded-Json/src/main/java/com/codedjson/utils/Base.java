@@ -73,21 +73,34 @@ public class Base {
 
     protected String getType(Object var) {
         try {
-            int obj = (int) var;
+            /*
+               Parsing instead of casting
+            */
+            int obj = Integer.parseInt(var.toString());
             return "int";
         }
         catch (Exception intEx) {
             try {
-                Double obj = (Double) var;
+                Double obj = Double.parseDouble(var.toString());
                 return "double";
             }
             catch (Exception doubleEx) {
                 try {
-                    boolean obj = (boolean) var;
-                    return "boolean";
+                    boolean obj = Boolean.parseBoolean(var.toString());
+                    if(var.toString().equals(String.valueOf(obj)))
+                      return "boolean";
+                    else
+                      throw new ClassCastException("Could not parse var:- "+var+" to boolean");
+
                 }
                 catch (Exception boolEx) {
-                    return "string";
+                    /*
+                       If the var is not string, return "non-raw"
+                    */
+                    if(var.getClass().getName().contains("String"))
+                        return "string";
+                    else
+                        return "non-raw";
                 }
             }
         }

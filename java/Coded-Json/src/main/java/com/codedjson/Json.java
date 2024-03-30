@@ -98,33 +98,38 @@ public class Json extends Is {
      */
     private void getKeys(Object jsonData, String prevKey) {
         if(jsonData.getClass().getName().contains("JsonObject")) {
-            for (String eachJsonData : ((JsonObject) jsonData).keySet()) {
-                if(((JsonObject)jsonData).get(eachJsonData).getClass().getName().contains("JsonArray")) {
-                    boolean allRaw = true;
-                    for(int i = 0; i < ((JsonObject)jsonData).get(eachJsonData).getAsJsonArray().size(); i ++) {
-                        String type = getJsonType(((JsonObject)jsonData).getAsJsonArray(eachJsonData).get(i));
-                        if(Arrays.stream(dataTypes).anyMatch(eachItem -> eachItem.equals(type)))
-                            continue;
-                        else {
-                            allRaw = false;
-                            if(!prevKey.equals(""))
-                                getKeys(((JsonObject) jsonData).getAsJsonArray(eachJsonData).get(i), prevKey + "." + eachJsonData + "[" + i + "]");
-                            else
-                                getKeys(((JsonObject) jsonData).getAsJsonArray(eachJsonData).get(i), eachJsonData + "[" + i + "]");
-                        }
-                    }
-                    if(allRaw && ((JsonObject) jsonData).getAsJsonArray(eachJsonData).size() != 0) {
-                        for(int i = 0; i < ((JsonObject) jsonData).getAsJsonArray(eachJsonData).size(); i ++)
-                            pushKey(eachJsonData + "[" + i + "]", prevKey);
-                    }
+            for (String key : ((JsonObject) jsonData).keySet()) {
+                JsonElement nodeValue = ((JsonObject) jsonData).get(key);
+                if(nodeValue.getClass().getName().contains("JsonArray")) {
+                    /*
+                       Adding a key that holds this JsonArray Value inside the JsonNode
+                    */
+                    pushKey(key, prevKey);
+//                    boolean allRaw = true;
+//                    for(int i = 0; i < nodeValue.getAsJsonArray().size(); i ++) {
+//                        String type = getJsonType(((JsonObject)jsonData).getAsJsonArray(key).get(i));
+//                        if(Arrays.stream(dataTypes).anyMatch(eachItem -> eachItem.equals(type)))
+//                            continue;
+//                        else {
+//                            allRaw = false;
+//                            if(!prevKey.equals(""))
+//                                getKeys(((JsonObject) jsonData).getAsJsonArray(key).get(i), prevKey + "." + key + "[" + i + "]");
+//                            else
+//                                getKeys(((JsonObject) jsonData).getAsJsonArray(key).get(i), key + "[" + i + "]");
+//                        }
+//                    }
+//                    if(allRaw && ((JsonObject) jsonData).getAsJsonArray(key).size() != 0) {
+//                        for(int i = 0; i < ((JsonObject) jsonData).getAsJsonArray(key).size(); i ++)
+//                            pushKey(key + "[" + i + "]", prevKey);
+//                    }
                 }
-                else if(rawDataTypeCheck(((JsonObject) jsonData).get(eachJsonData)))
-                    pushKey(eachJsonData, prevKey);
-                else if(isContentJson(((JsonObject) jsonData).get(eachJsonData).toString())) {
+                else if(rawDataTypeCheck(nodeValue))
+                    pushKey(key, prevKey);
+                else if(isContentJson(nodeValue.toString())) {
                     if(! prevKey.equals(""))
-                        getKeys(((JsonObject) jsonData).get(eachJsonData), prevKey + "." + eachJsonData);
+                        getKeys(nodeValue, prevKey + "." + key);
                     else
-                        getKeys(((JsonObject) jsonData).get(eachJsonData), eachJsonData);
+                        getKeys(nodeValue, key);
                 }
             }
         }
