@@ -153,7 +153,7 @@ public class CjsonTests extends Base {
                 "        \"fruit\": <fruit!:@#$%^&*()>" +
                 "}");
         cJson.inject(TargetObj.class, "fruit!:@#$%^&*()", null);
-        Assertions.assertEquals(cJson.parse("$.fruit"), null);
+        Assertions.assertNull(cJson.parse("$.fruit"));
     }
     @Test
     @Description("I Should Be Able To Deserialize Raw Data In Injection Quotes")
