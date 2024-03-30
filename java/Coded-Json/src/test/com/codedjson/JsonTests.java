@@ -3,16 +3,15 @@ package com.codedjson;
 import com.codedjson.exceptions.*;
 import com.codedjson.templates.Pure;
 import com.codedjson.templates.Questions;
+import com.codedjson.templates.SimpleJson;
 import com.codedjson.templates.Target;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
-import java.util.Collections;
 import java.util.List;
-import java.util.HashSet;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -81,12 +80,10 @@ public class JsonTests extends Base {
 
     @Test
     public void iShouldBeAbleToRetrieveAllTheKeys() throws IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException, UndeserializedCJSON {
-        CJson<Pure> cjson = new CJson<>(pureJsonfilePath);
-        JsonObject pureJson = JsonParser.parseString(cjson.deserializeAsString()).getAsJsonObject();
+        CJson<SimpleJson> cjson = new CJson<>(simpleJsonFilePath);
         List<String> keys = cjson.getAllKeys();
         assertNotNull(keys);
-        assertEquals(pureJson.keySet().size(), keys.size());
-        assertEquals(pureJson.keySet(), new HashSet<>(Collections.singletonList(keys.get(0))));
+        assertEquals(13, keys.size());
     }
 
     @Test
@@ -110,5 +107,33 @@ public class JsonTests extends Base {
         assertEquals(pure.quiz.get("sport").get("q1").question, questions.get(1).question);
         assertEquals(pure.quiz.get("sport").get("q1").options, questions.get(1).options);
         assertEquals(pure.quiz.get("sport").get("q1").answer, questions.get(1).answer);
+    }
+
+    @Test
+    public void iShouldBeAbleToRetrieveValueForKeyFromCJson() throws IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException, UndeserializedCJSON, NullJsonKeys {
+        CJson<SimpleJson> simple = new CJson<>(simpleJsonFilePath);
+
+        JsonArray jsArray = new JsonArray();
+        jsArray.add("10");
+        jsArray.add("11");
+        jsArray.add("12");
+        jsArray.add("13");
+
+        Object value = simple.getValueFromKey("quiz.maths.q1.options");
+
+        assertNotNull(value);
+        assertEquals(jsArray, value);
+    }
+
+    @Test
+    public void iShouldGetEmptyJsonString() throws IllegalAccessException {
+        assertEquals("{}", CJson.toString(null));
+    }
+
+    @Test
+    public void iShouldGetNullJsonKeys() throws IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException {
+        CJson<Pure> pure = new CJson<>("{}");
+        pure.getAllKeys();
+        assertThrows(NullJsonKeys.class, pure::getAllValues);
     }
 }
