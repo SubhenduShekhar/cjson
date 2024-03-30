@@ -7,6 +7,7 @@ import com.codedjson.templates.SimpleJson;
 import com.codedjson.templates.Target;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -19,6 +20,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.util.Collections;
+import java.util.HashSet;
 
 public class JsonTests extends Base {
     @Test
