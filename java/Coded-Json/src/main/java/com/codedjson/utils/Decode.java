@@ -98,7 +98,7 @@ public class Decode extends Json {
                 String variable = group.split("<")[1].split(">")[0];
                 runtimeVals.add(variable);
 
-                if(!content.contains("\"<" + Matcher.quoteReplacement(group) + ">\"")) {
+                if(!content.contains("\"" + Matcher.quoteReplacement(group) + "\"")) {
                     variable = "\"<-" + variable + "->\"";
                     content = content.replaceAll(Pattern.quote(group), Matcher.quoteReplacement(variable));
                 }
@@ -191,6 +191,11 @@ public class Decode extends Json {
         }
         else if(object.getClass().getName().toLowerCase().contains("arraylist")) {
             List<Object> li = (List<Object>) object;
+            if(li == null)
+                return "[]";
+            else if(li.size() == 0)
+                return "[]";
+
             String values = "[";
             for(Object obj : li) {
                 if(obj.getClass().getName().toLowerCase().contains("string"))

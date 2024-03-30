@@ -1,4 +1,5 @@
-﻿using CJson.Utils;
+﻿using CJson.Exceptions;
+using CJson.Utils;
 using System.Text.Json;
 
 namespace CJson
@@ -117,6 +118,23 @@ namespace CJson
         {
             if (value == null) return "{}";
             return GetAsString(value);
+        }
+        public CJson<Type> Remove(String jPath)
+        {
+            if (!jPath.StartsWith("$.")) throw new InvalidJPathError();
+            
+            RemoveWithKey(jPath);
+
+            this.json = ParseJson(content);
+
+            return this;
+        }
+        public CJson<Type> Remove(List<String> jPathList)
+        {
+            foreach(String jPath in jPathList)
+                RemoveWithKey(jPath);
+
+            return this;
         }
     }
 }
