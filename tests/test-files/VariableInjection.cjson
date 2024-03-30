@@ -10,7 +10,8 @@
         "colorList": [ $.target.color, $.target.secColor ],
         "digitCheck": 1.5,
         "digitImport": $.target.digitCheck,
-        "digitArrayImport": [ $.target.digitCheck, $.target.digitImport ]
+        "digitArrayImport": [ $.target.digitCheck, $.target.digitImport ],
+        "rawData": "<rawData>"
     },
     "jsonInjection": <jsonTypeData>
 }
