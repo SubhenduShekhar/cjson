@@ -2,7 +2,6 @@ package com.codedjson;
 
 import com.codedjson.exceptions.*;
 import com.codedjson.templates.*;
-import com.sun.org.glassfish.gmbal.Description;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
@@ -156,7 +155,6 @@ public class CjsonTests extends Base {
         Assertions.assertNull(cJson.parse("$.fruit"));
     }
     @Test
-    @Description("I Should Be Able To Deserialize Raw Data In Injection Quotes")
     public void iShouldBeAbleToDeserializeRawDataInInjectionQuotes() throws IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException, VariableInjectionException {
         CJson<VariableInjection> cJson = new CJson<>(variableInjectionCjson);
         Assertions.assertThrows(VariableInjectionException.class, () -> {
