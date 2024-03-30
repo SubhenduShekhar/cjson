@@ -1,9 +1,6 @@
 package com.codedjson;
 
-import com.codedjson.exceptions.AbsolutePathConstraintError;
-import com.codedjson.exceptions.IllegalJsonType;
-import com.codedjson.exceptions.InvalidJPathError;
-import com.codedjson.exceptions.UndeserializedCJSON;
+import com.codedjson.exceptions.*;
 import com.codedjson.templates.Target;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -14,7 +11,7 @@ import java.util.List;
 
 public class CjsonRemoveTests extends Base {
     @Test
-    public void iShouldBeAbleToRemoveAStringKeyValue() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError, UndeserializedCJSON, InvalidJPathError {
+    public void iShouldBeAbleToRemoveAStringKeyValue() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError, UndeserializedCJSON, InvalidJPathError, VariableInjectionException {
         CJson<Target> cJson = new CJson<>(cjsonfilePath);
         cJson.deserialize(Target.class);
         Target target = cJson.remove("$.target.fruit");
@@ -26,7 +23,7 @@ public class CjsonRemoveTests extends Base {
         Assertions.assertEquals(target.target.quantity, 0);
     }
     @Test
-    public void iShouldBeAbleToReceiveUndeserializedCJSONExceptionIRemoveWithoutDeserialize() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError, UndeserializedCJSON, InvalidJPathError {
+    public void iShouldBeAbleToReceiveUndeserializedCJSONExceptionIRemoveWithoutDeserialize() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError {
         CJson<Target> cJson = new CJson<>(cjsonfilePath);
 
         Assertions.assertThrows(UndeserializedCJSON.class, () -> {
@@ -34,7 +31,7 @@ public class CjsonRemoveTests extends Base {
         });
     }
     @Test
-    public void iShouldBeAbleToRemoveUsingListOfKeys()  throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError, UndeserializedCJSON {
+    public void iShouldBeAbleToRemoveUsingListOfKeys() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError, UndeserializedCJSON, VariableInjectionException {
         CJson<Target> cJson = new CJson<>(cjsonfilePath);
         cJson.deserialize(Target.class);
 
@@ -51,7 +48,7 @@ public class CjsonRemoveTests extends Base {
         Assertions.assertEquals(target.target.quantity, 0);
     }
     @Test
-    public void iShouldBeAbleToReceiveUndeserializedCJSONExceptionIRemoveWithoutDeserializeInListOfKeys() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError, UndeserializedCJSON {
+    public void iShouldBeAbleToReceiveUndeserializedCJSONExceptionIRemoveWithoutDeserializeInListOfKeys() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError {
         CJson<Target> cJson = new CJson<>(cjsonfilePath);
         List<String> li = new ArrayList<>();
         li.add("$.target.fruit");

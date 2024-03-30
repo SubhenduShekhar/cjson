@@ -3,6 +3,7 @@ package com.codedjson;
 import com.codedjson.exceptions.AbsolutePathConstraintError;
 import com.codedjson.exceptions.IllegalJsonType;
 import com.codedjson.exceptions.UndeserializedCJSON;
+import com.codedjson.exceptions.VariableInjectionException;
 import com.codedjson.templates.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -16,7 +17,7 @@ import java.util.List;
 
 public class CJsonToStringTests extends Base {
     @Test
-    public void iShouldBeAbleToConvertJavaObjectToString() throws IllegalAccessException, IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException, UndeserializedCJSON {
+    public void iShouldBeAbleToConvertJavaObjectToString() throws IllegalAccessException, IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException, UndeserializedCJSON, VariableInjectionException {
         Target target = new Target();
         target.source = new Source();
         target.source.pure = new Pure();
@@ -46,7 +47,7 @@ public class CJsonToStringTests extends Base {
         Assertions.assertEquals(deserializedObj.source.pure.quiz.get("sport").get("q1").answer, "Huston Rocket");
     }
     @Test
-    public void iShouldBeAbleToConvertJavaObjectWithNullsToString() throws IllegalAccessException, IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException, UndeserializedCJSON {
+    public void iShouldBeAbleToConvertJavaObjectWithNullsToString() throws IllegalAccessException, IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException, UndeserializedCJSON, VariableInjectionException {
         Target target = new Target();
         target.source = new Source();
         target.source.pure = new Pure();
@@ -66,7 +67,7 @@ public class CJsonToStringTests extends Base {
         Assertions.assertNull(deserializedObj.source.pure.quiz.get("q1"));
     }
     @Test
-    public void iShouldBeAbleToConvertJavaObjectToStringUsingNullArray() throws IllegalAccessException, IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException, UndeserializedCJSON {
+    public void iShouldBeAbleToConvertJavaObjectToStringUsingNullArray() throws IllegalAccessException, IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException, UndeserializedCJSON, VariableInjectionException {
         Target target = new Target();
         target.source = new Source();
         target.source.pure = new Pure();
@@ -93,7 +94,7 @@ public class CJsonToStringTests extends Base {
         Assertions.assertEquals(deserializedObj.source.pure.quiz.get("sport").get("q1").answer, "Huston Rocket");
     }
     @Test
-    public void iShouldBeAbleToConvertJavaObjectToStringWithObjectArray() throws IllegalAccessException, IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException, UndeserializedCJSON {
+    public void iShouldBeAbleToConvertJavaObjectToStringWithObjectArray() throws IllegalAccessException, IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException, VariableInjectionException {
         List<TargetObj> targetArray;
 
         TargetObj targetObj = new TargetObj();
@@ -121,13 +122,13 @@ public class CJsonToStringTests extends Base {
         fruits1.name = "Apple";
 
         Fruits fruits2 = new Fruits();
-        fruits1.color = "Orange";
-        fruits1.name = "Orange";
+        fruits2.color = "Orange";
+        fruits2.name = "Orange";
 
         fruits.add(fruits1);
         fruits.add(fruits2);
 
-        System.out.println(CJson.toString(fruits));
+        Assertions.assertNotEquals(CJson.toString(fruits), null);
     }
     @Test
     @DisplayName("I Should Be Able To Convert Null Java Object Array To String")

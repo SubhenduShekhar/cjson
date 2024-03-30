@@ -1,11 +1,9 @@
 package com.codedjson;
 
-import com.codedjson.exceptions.AbsolutePathConstraintError;
-import com.codedjson.exceptions.IllegalJsonType;
-import com.codedjson.exceptions.InvalidJPathError;
-import com.codedjson.exceptions.UndeserializedCJSON;
+import com.codedjson.exceptions.*;
 import com.codedjson.utils.Checks;
 import com.codedjson.utils.Decode;
+import com.google.gson.JsonSyntaxException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -85,7 +83,7 @@ public class CJson<T> extends Decode {
      * @param classType Java class object equivalent to target JSON
      * @return Java Object equivalent to <code>classType</code>
      */
-    public T deserialize(Class<T> classType) throws UndeserializedCJSON, IllegalJsonType {
+    public T deserialize(Class<T> classType) throws IllegalJsonType, VariableInjectionException {
         if(isInjectExist && !isInjectDone)
             System.out.println("Runtime variables detected. System may throw error.");
 
@@ -95,8 +93,16 @@ public class CJson<T> extends Decode {
         this.classType = classType;
         if(classType.equals(String.class))
             t = (T) content;
-        else
-            t = gson.fromJson(content, classType);
+        else {
+            try {
+                t = gson.fromJson(content, classType);
+            }
+            catch (JsonSyntaxException jsonSyntaxException) {
+                if(jsonSyntaxException.getMessage().contains("For input string: "))
+                    throw new VariableInjectionException("Variable requires injection at runtime : " +
+                            jsonSyntaxException.getMessage().split("For input string: ")[1]);
+            }
+        }
         return t;
     }
     /**
@@ -112,7 +118,7 @@ public class CJson<T> extends Decode {
      * This is thrown if import statements contain relative path instead of absolute path
      * @throws FileNotFoundException If the imported file is not found in the directory
      */
-    public T inject(Class<T> classType, HashMap<String, Object> injectingObj) throws IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException, UndeserializedCJSON {
+    public T inject(Class<T> classType, HashMap<String, Object> injectingObj) throws IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException, VariableInjectionException {
 
         if(injectingObj != null || injectingObj.keySet().size() != 0) {
             this.classType = classType;
@@ -143,7 +149,7 @@ public class CJson<T> extends Decode {
      * This is thrown if import statements contain relative path instead of absolute path
      * @throws FileNotFoundException If the imported file is not found in the directory
      */
-    public T inject(Class<T> classType, String key, Object value) throws IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException, UndeserializedCJSON {
+    public T inject(Class<T> classType, String key, Object value) throws IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException, VariableInjectionException {
         this.classType = classType;
 
         contextConverter();

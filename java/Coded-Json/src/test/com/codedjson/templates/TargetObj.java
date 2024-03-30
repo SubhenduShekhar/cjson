@@ -14,4 +14,5 @@ public class TargetObj {
     public String types;
     public int quantity;
     public String fruitType;
+    public String rawData;
 }
