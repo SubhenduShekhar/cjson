@@ -139,6 +139,17 @@ namespace CJsonTests
 
             Assert.That(targetRelativeCalls.target.digitCheck, Is.EqualTo(targetRelativeCallsParsed?.target.digitCheck));
         }
+        [Test, Description("I Should Be Able To Remove Using Key")]
+        public void IShouldBeAbleToRemoveUsingKey()
+        {
+            cJsonTarget = new CJson<Target>(cjsonFilePath);
+
+            Target target = cJsonTarget.Remove("$.target.fruit").Deserialize();
+            Assert.Null(target.target.fruit);
+
+            target = cJsonTarget.Remove("$.target").Deserialize();
+            Assert.Null(target.target);
+        }
 
         [TearDown]
         public void AfterTest()

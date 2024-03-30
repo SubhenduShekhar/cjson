@@ -24,6 +24,29 @@ namespace CJson.Utils
             return matches;
         }
         internal static string importKey = "$import";
-
+        private static List<String> RemoveWithPreComma(String key, String value, String content)
+        {
+            String regex = ",+\"" + key.Split("\\.")[key.Split("\\.").Length - 1] + "\":\"?" + value + "\"?";
+            return Match(content, regex);
+        }
+        private static List<String> RemoveWithSucComma(String key, String value, String content)
+        {
+            String regex = "\"" + key.Split("\\.")[key.Split("\\.").Length - 1] + "\":\\s*\"?" + value + "\"?,+";
+            return Match(content, regex);
+        }
+        internal static List<String> KeyValueSet(String key, String value, String content)
+        {
+            value = value.Replace("\\.", "\\\\.")
+                .Replace("\\[", "\\\\[")
+                .Replace("\\?", "\\\\?")
+                .Replace("\\*", "\\\\*")
+                .Replace("\\+", "\\\\+")
+                .Replace("\\{", "\\\\{")
+                .Replace("\\$", "\\\\$")
+                .Replace("\\^", "\\\\^");
+            List<String> matches = RemoveWithSucComma(key, value, content);
+            if (matches.Count != 0) return matches;
+            else return RemoveWithPreComma(key, value, content);
+        }
     }
 }

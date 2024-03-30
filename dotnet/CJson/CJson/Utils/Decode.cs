@@ -282,5 +282,27 @@ namespace CJson.Utils
                 return values.Substring(0, values.Length - 1) + "}";
             }
         }
+        internal void RemoveWithKey(String key)
+        {
+            if (key.StartsWith(Keywords.relativeJPath))
+                key = key.Replace(Keywords.relativeJPath, "");
+
+            String? value = null;
+
+            try
+            {
+                value = ParseValue(key).value.ToString();
+            }
+            catch (NullReferenceException nullReferenceException)
+            {
+                throw new NullReferenceException("$." + key + " is not found in deserialized JSON");
+            }
+
+            List<String> matchedContent = Keywords.KeyValueSet(key.Split(".")[key.Split(".").Length - 1]
+                , value, content);
+
+            foreach(String eachKeyValueMatch in matchedContent)
+                content = content.Replace(eachKeyValueMatch, "");
+        }
     }
 }
