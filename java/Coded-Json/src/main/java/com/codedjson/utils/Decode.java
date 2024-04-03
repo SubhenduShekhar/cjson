@@ -98,7 +98,8 @@ public class Decode extends Json {
                 String variable = group.split("<")[1].split(">")[0];
                 runtimeVals.add(variable);
 
-                if(!content.contains("\"" + Matcher.quoteReplacement(group) + "\"")) {
+                Matcher ignoreUnderQuotes = Pattern.compile("\"" + Matcher.quoteReplacement(group) + ".*\"").matcher(content);
+                if (!ignoreUnderQuotes.find()) {
                     variable = "\"<-" + variable + "->\"";
                     content = content.replaceAll(Pattern.quote(group), Matcher.quoteReplacement(variable));
                 }

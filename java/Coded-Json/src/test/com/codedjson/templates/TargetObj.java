@@ -15,4 +15,5 @@ public class TargetObj {
     public int quantity;
     public String fruitType;
     public String rawData;
+    public String mixData;
 }
