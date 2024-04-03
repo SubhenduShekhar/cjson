@@ -161,4 +161,11 @@ public class CjsonTests extends Base {
             cJson.deserialize(VariableInjection.class);
         });
     }
+    @Test
+    public void iShouldBeAbleToIgnoreInjectsUnderQuotes() throws IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException, VariableInjectionException {
+        CJson<VariableInjection> cJson = new CJson<>(variableInjectionCjson);
+        cJson.inject(VariableInjection.class, "quantity", 1);
+        VariableInjection variableInjection = cJson.deserialize(VariableInjection.class);
+        Assertions.assertEquals(variableInjection.target.mixData, "<mix>data");
+    }
 }
