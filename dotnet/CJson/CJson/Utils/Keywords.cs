@@ -26,12 +26,12 @@ namespace CJson.Utils
         internal static string importKey = "$import";
         private static List<String> RemoveWithPreComma(String key, String value, String content)
         {
-            String regex = ",+\"" + key.Split("\\.")[key.Split("\\.").Length - 1] + "\":\"?" + value + "\"?";
+            String regex = "\\s*,+\\s*\"" + key.Split("\\.")[key.Split("\\.").Length - 1] + "\"\\s*:\"?\\s*" + value + "\"?\\s*";
             return Match(content, regex);
         }
         private static List<String> RemoveWithSucComma(String key, String value, String content)
         {
-            String regex = "\"" + key.Split("\\.")[key.Split("\\.").Length - 1] + "\":\\s*\"?" + value + "\"?,+";
+            String regex = "\\s*\"" + key.Split("\\.")[key.Split("\\.").Length - 1] + "\"\\s*:\\s*\"?" + value + "\"?\\s*,+\\s*";
             return Match(content, regex);
         }
         internal static List<String> KeyValueSet(String key, String value, String content)

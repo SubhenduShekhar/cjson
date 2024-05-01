@@ -151,10 +151,11 @@ namespace CJson.Utils
         }
         private Decode DecodeRuntimeKeys(ref Boolean isModified)
         {
+            Boolean isAnyKeyModified = true;
             List<String> runtimeVals = MatchAndConfirm(content, Keywords.runtimeVals);
 
             if (runtimeVals.Count == 0)
-                isModified = false;
+                isAnyKeyModified = false;
             else
             {
                 foreach (String eachRuntimeVal in runtimeVals)
@@ -162,14 +163,21 @@ namespace CJson.Utils
                     String variable = eachRuntimeVal.Split("<")[1].Split(">")[0];
                     runtimeValList.Add(variable);
 
-                    if (!content.Contains("\"<" + eachRuntimeVal + ">\""))
+                    List<String> matchedValues = MatchAndConfirm(content, "\".*" + eachRuntimeVal + ".*\"");
+
+                    if (matchedValues.Count == 0)
                     {
                         variable = "\"<-" + variable + "->\"";
                         content = content.Replace(eachRuntimeVal, variable);
+
+                        isModified = true;
                     }
+                    else
+                        isAnyKeyModified = false;
                 }
-                isModified = true;
+                isAnyKeyModified = false;
             }
+            isModified = isAnyKeyModified;
             return this;
         }
         private Decode RelativePathsToStringKeys(ref Boolean isModified)
@@ -201,7 +209,11 @@ namespace CJson.Utils
                 ParsedValue value = ParseValue(eachPath);
 
                 while (value.value.ToString().Contains("$."))
+                {
+                    if (value.value.ToString().StartsWith("<") && value.value.ToString().EndsWith(">"))
+                        value.value = value.value.Split("<")[1].Split(">")[0];
                     value = ParseValue(value.value.ToString());
+                }
 
                 if (value.type.ToString().Equals("string"))
                     this.content = this.content.Replace("\"<" + eachPath + ">\"", "\"" + value.value + "\"");
@@ -291,7 +303,12 @@ namespace CJson.Utils
 
             try
             {
-                value = ParseValue(key).value.ToString();
+                ParsedValue parsedValue = ParseValue(key);
+
+                if (parsedValue.type != "JValue")
+                    value = parsedValue.value.ToString();
+                else
+                    value = Generify(parsedValue.value.ToString());
             }
             catch (NullReferenceException nullReferenceException)
             {

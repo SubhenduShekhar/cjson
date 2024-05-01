@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace CJson.Utils
@@ -15,6 +16,7 @@ namespace CJson.Utils
         protected string content;
         protected string[] commaSeparatedLines;
         protected bool isFilePath;
+        private static Regex trimmer = new Regex(@"\s\s+");
 
         public Base(string filePath, bool isFilePath)
         {
@@ -78,5 +80,6 @@ namespace CJson.Utils
                 }
             }
         }
+        protected static String Generify(String content) => trimmer.Replace(content, "");
     }
 }

@@ -1,6 +1,7 @@
 ﻿using CJson.Exceptions;
 using CJson.Utils;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace CJson
 {
@@ -44,6 +45,8 @@ namespace CJson
         private CJson<Type> Parse()
         {
             content = DecodeKeywords;
+
+            content = Generify(content);
 
             this.json = ParseJson(this.content);
             return this;
