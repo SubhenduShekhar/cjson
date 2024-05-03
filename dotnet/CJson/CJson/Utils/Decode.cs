@@ -252,6 +252,11 @@ namespace CJson.Utils
                 return "\"" + value.ToString() + "\"";
             else if(value.GetType().Name.ToLower().Contains("list"))
             {
+                if (value == null)
+                    return "[]";
+                else if (value.Count == 0)
+                    return "[]";
+
                 String values = "[";
                 foreach(dynamic eachValue in value)
                 {

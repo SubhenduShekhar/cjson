@@ -150,6 +150,12 @@ namespace CJsonTests
             target = cJsonTarget.Remove("$.target").Deserialize();
             Assert.Null(target.target);
         }
+        [Test, Description("I Should Be Able To Convert Empty Array Object To String")]
+        public void iShouldBeAbleToConvertEmptyArrayObjectToString()
+        {
+            List<String> li = new List<String>();
+            Assert.That("[]", Is.EqualTo(CJson<object>.ToString(li)));
+        }
 
         [TearDown]
         public void AfterTest()

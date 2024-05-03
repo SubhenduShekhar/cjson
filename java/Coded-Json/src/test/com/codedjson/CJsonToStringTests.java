@@ -139,4 +139,11 @@ public class CJsonToStringTests extends Base {
         fruits = new ArrayList<>();
         Assertions.assertEquals("[]", CJson.toString(fruits), "Failed to convert empty array object");
     }
+
+    @Test
+    @DisplayName("I Should Be Able To Convert Empty Array Object To String")
+    public void iShouldBeAbleToConvertEmptyArrayObjectToString() throws IllegalAccessException {
+        List<String> li = new ArrayList<>();
+        Assertions.assertEquals(CJson.toString(li), "[]");
+    }
 }
