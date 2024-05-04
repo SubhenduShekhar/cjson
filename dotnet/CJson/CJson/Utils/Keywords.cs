@@ -14,7 +14,7 @@ namespace CJson.Utils
         internal static string relativeJPath { get; } = "$.";
         internal static string relativeJPathRegex { get; } = @"[$][.][.A-Za-z0-9]*";
         internal static string modifiedRelativeJPathRegex { get; } = "[\"][<][$][.][.A-Za-z0-9]*[>][\"]";
-        internal static string runtimeVals { get; } = @"[<][A-Za-z0-9]*[>]";
+        internal static string runtimeVals { get; } = @"[<][^-].*[^-][>]";
         internal static List<string> Match(String content, String regex)
         {
             MatchCollection match = Regex.Matches(content, regex, RegexOptions.IgnoreCase);
