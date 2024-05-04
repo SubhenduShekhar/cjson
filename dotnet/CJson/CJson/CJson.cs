@@ -105,6 +105,10 @@ namespace CJson
         /// <returns>Deserialized class object of Type. Null if Type and CJSON content mismatches</returns>
         public Type? Deserialize()
         {
+            String runtimeInjectRequired = CheckForRuntimeVals();
+            if (runtimeInjectRequired != null)
+                throw new VariableInjectionException("\"Variable requires injection at runtime : \"" + runtimeInjectRequired);
+
             return JsonSerializer.Deserialize<Type>(content);
         }
         public String DeserializeAsString()

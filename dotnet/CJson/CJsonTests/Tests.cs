@@ -2,6 +2,7 @@ using CJson;
 using CJson.Exceptions;
 using CJsonTests.models;
 using NUnit.Framework;
+using NUnit.Framework.Constraints;
 using Path = CJson.Path;
 
 namespace CJsonTests
@@ -49,6 +50,11 @@ namespace CJsonTests
         public void IShouldBeAbleToDeserializeRelativePathToLocalVariable()
         {
             cJsonTargetRelCalls = new CJson<TargetRelativeCalls>(relativeTargetCjson);
+            Dictionary<String, Object> variables = new Dictionary<String, Object>();
+            variables.Add("fruit", "Orange");
+            variables.Add("quantity", 1);
+            variables.Add("jsonTypeData", null);
+            cJsonTargetRelCalls.Inject(variables);
             TargetRelativeCalls targetRelativeCalls = cJsonTargetRelCalls.Deserialize();
 
             Assert.That(targetRelativeCalls.target.digitCheck, Is.EqualTo(cJsonTargetRelCalls.Parse("$.target.digitCheck")), "Digit check passed");
@@ -120,17 +126,24 @@ namespace CJsonTests
         [Test, Description("I Should Be Able To Deserialize And Fetch As String")]
         public void IShouldBeAbleToDeserializeAndFetchAsString()
         {
-            cJsonTargetRelCalls = new CJson<TargetRelativeCalls>(relativeTargetCjson);
-            String targetRelCalsString = cJsonTargetRelCalls.DeserializeAsString();
-            TargetRelativeCalls? targetRelativeCalls = cJsonTargetRelCalls.Deserialize();
+            cJsonPure = new CJson<Pure>(pureJsonfilePath);
+            String cJsonPureString = cJsonPure.DeserializeAsString();
+            Pure? pure = cJsonPure.Deserialize();
 
-            Assert.That(targetRelativeCalls.source.quiz["sport"]["q1"].question, Is.EqualTo("Which one is correct team name in NBA?"));
+            Assert.That(pure?.quiz["sport"]["q1"].question, Is.EqualTo("Which one is correct team name in NBA?"));
         }
 
         [Test, Description("I Should Be Able To Get Json String From Class Object")]
         public void IShouldBeAbleToGetJsonStringFromClassObject()
         {
             cJsonTargetRelCalls = new CJson<TargetRelativeCalls>(relativeTargetCjson);
+            
+            Dictionary<String, dynamic> values = new Dictionary<string, dynamic>();
+            values.Add("jsonTypeData", "placeholder");
+            values.Add("fruit", "apple");
+            values.Add("quantity", 1);
+
+            cJsonTargetRelCalls.Inject(values);
             String targetRelCalsString = cJsonTargetRelCalls.DeserializeAsString();
             TargetRelativeCalls? targetRelativeCalls = cJsonTargetRelCalls.Deserialize();
 
@@ -151,10 +164,42 @@ namespace CJsonTests
             Assert.Null(target.target);
         }
         [Test, Description("I Should Be Able To Convert Empty Array Object To String")]
-        public void iShouldBeAbleToConvertEmptyArrayObjectToString()
+        public void IShouldBeAbleToConvertEmptyArrayObjectToString()
         {
             List<String> li = new List<String>();
             Assert.That("[]", Is.EqualTo(CJson<object>.ToString(li)));
+        }
+        [Test, Description("I Should Be Able To Ignore Injects Under Quotes")]
+        public void IShouldBeAbleToIgnoreInjectsUnderQuotes()
+        {
+            cJsonVariableInjection = new CJson<VariableInjection>(variableInjectionCjson);
+            
+            Dictionary<String, dynamic> values = new Dictionary<string, dynamic>();
+            values.Add("jsonTypeData", "placeholder");
+            values.Add("fruit", "apple");
+            values.Add("quantity", 1);
+            
+            cJsonVariableInjection.Inject(values);
+
+            VariableInjection? variableInjection = cJsonVariableInjection.Deserialize();
+            Assert.That(variableInjection.target.mixData, Is.EqualTo("<mix>data"));
+        }
+        [Test, Description("I Should Be Able To Deserialize Raw Data In Injection Quotes")]
+        public void IShouldBeAbleToDeserializeRawDataInInjectionQuotes()
+        {
+            cJsonVariableInjection = new CJson<VariableInjection>(variableInjectionCjson);
+            VariableInjectionException exception = Assert.Throws<VariableInjectionException>(() => cJsonVariableInjection.Deserialize());
+            Assert.That(exception.Message.Contains("Variable requires injection at runtime"), Is.EqualTo(true));
+        }
+        [Test, Description("I Should Be Able To Inject Special Characters")]
+        public void IShouldBeAbleToInjectSpecialCharacters()
+        {
+            CJson<TargetObj> cJson = new CJson<TargetObj>("{\n" +
+                "        \"types\": \"asd\",\n" +
+                "        \"fruit\": <fruit!:@#$%^&*()>" +
+                "}");
+            cJson.Inject("fruit!:@#$%^&*()", null);
+            Assert.That(cJson.Parse("$.fruit"), Is.Null);
         }
 
         [TearDown]

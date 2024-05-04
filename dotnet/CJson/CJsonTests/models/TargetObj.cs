@@ -19,5 +19,7 @@ namespace CJsonTests.models
         public String types { get; set; }
         public Int32 quantity { get; set; }
         public String fruitType { get; set; }
+        public String rawData { get; set; }
+        public String mixData { get; set; }
     }
 }

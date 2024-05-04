@@ -233,7 +233,9 @@ namespace CJson.Utils
         {
             if (this.content.Contains("\"<-" + key + "->\""))
             {
-                if (Try.GetType(value).Equals("string"))
+                if (value == null)
+                    this.content = this.content.Replace("\"<-" + key + "->\"", "null");
+                else if (Try.GetType(value).Equals("string"))
                     this.content = this.content.Replace("<-" + key + "->", value);
                 else
                     this.content = this.content.Replace("\"<-" + key + "->\"", value.ToString());
@@ -325,6 +327,13 @@ namespace CJson.Utils
 
             foreach(String eachKeyValueMatch in matchedContent)
                 content = content.Replace(eachKeyValueMatch, "");
+        }
+        protected String? CheckForRuntimeVals()
+        {
+            foreach (String eachRuntimeValList in runtimeValList)
+                if (content.Contains("<-" + eachRuntimeValList + "->"))
+                    return eachRuntimeValList;
+            return null;
         }
     }
 }
