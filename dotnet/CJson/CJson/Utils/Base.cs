@@ -17,6 +17,8 @@ namespace CJson.Utils
         protected string[] commaSeparatedLines;
         protected bool isFilePath;
         private static Regex trimmer = new Regex(@"\s\s+");
+        protected bool isInjectDone;
+        protected bool isInjectEist;
 
         public Base(string filePath, bool isFilePath)
         {

@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace CJson.Utils
@@ -160,7 +161,31 @@ namespace CJson.Utils
             {
                 foreach (String eachRuntimeVal in runtimeVals)
                 {
-                    String variable = eachRuntimeVal.Split("<")[1].Split(">")[0];
+                    isInjectDone = false;
+                    isInjectEist = true;
+
+                    if(!runtimeValList.Contains(eachRuntimeVal))
+                    {
+                        String variable = eachRuntimeVal.Split("<")[1].Split(">")[0];
+                        runtimeValList.Add(variable);
+
+                        List<String> ignoreUnderQuotes = MatchAndConfirm(content, "\".*" + eachRuntimeVal + ".*\"");
+
+                        if (eachRuntimeVal.StartsWith("<$."))
+                            continue;
+
+                        if (ignoreUnderQuotes.Count == 0)
+                        {
+                            variable = "\"<-" + variable + "->\"";
+                            this.content = this.content.Replace(eachRuntimeVal, variable);
+
+                            isModified = true;
+                        }
+                        else
+                            isAnyKeyModified = false;
+                    }
+
+                    /*String variable = eachRuntimeVal.Split("<")[1].Split(">")[0];
                     runtimeValList.Add(variable);
 
                     List<String> matchedValues = MatchAndConfirm(content, "\".*" + eachRuntimeVal + ".*\"");
@@ -173,7 +198,7 @@ namespace CJson.Utils
                         isModified = true;
                     }
                     else
-                        isAnyKeyModified = false;
+                        isAnyKeyModified = false;*/
                 }
                 isAnyKeyModified = false;
             }
