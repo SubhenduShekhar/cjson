@@ -1,4 +1,5 @@
 {
+    // asdas
     "source": $import "./sub-dir/source.json",
     "target": {
         "fruit": "Apple",

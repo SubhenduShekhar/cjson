@@ -1,0 +1,19 @@
+{
+    "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+    "scopeName": "source.cjson",
+    "patterns": [
+        {
+            "name": "keyword.control.import",
+            "match": "\\$import .*\""
+        },
+        {
+            "name": "comment",
+            "match": "//.*"
+        },
+        {
+            "name": "variable.name",
+            "match": "\".*\"\\s*:"
+        }
+    ]
+    
+}

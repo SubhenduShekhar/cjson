@@ -17,6 +17,22 @@
         "command": "cjson.helloWorld",
         "title": "Hello World"
       }
+    ],
+    "languages": [
+      {
+        "id": "cjson",
+        "extensions": [
+          ".cjson"
+        ],
+        "configuration": "./syntaxes/language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "cjson",
+        "scopeName": "source.cjson",
+        "path": "./syntaxes/cjson.tmLanguage.json"
+      }
     ]
   },
   "scripts": {
