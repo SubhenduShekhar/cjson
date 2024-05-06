@@ -1,1 +1,5 @@
-docfx_project
+node_modules
+.vscode
+vsc-extension-quickstart.md
+.vscodeignore
+package-lock.json
