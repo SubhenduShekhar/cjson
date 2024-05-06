@@ -1,7 +1,0 @@
-__pycache__
-dist/
-codedjson.egg-info
-build/
-cjson/src/codedjson.egg*
-.pypirc
-_build/
