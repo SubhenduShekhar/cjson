@@ -33,6 +33,12 @@
         "scopeName": "source.cjson",
         "path": "./syntaxes/cjson.tmLanguage.json"
       }
+    ],
+    "snippets": [
+      {
+        "language": "cjson",
+        "path": "./syntaxes/snippets.json"
+      }
     ]
   },
   "scripts": {

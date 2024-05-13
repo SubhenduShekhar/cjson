@@ -1,0 +1,9 @@
+{
+    "import": {
+        "prefix": "import",
+        "body": [
+            "$import \"${1}\""
+        ],
+        "description": "Import Statement"
+    }
+}

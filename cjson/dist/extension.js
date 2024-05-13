@@ -30,11 +30,12 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.registerCommand = void 0;
+exports.registerGoToDefinitionCommand = exports.registerImportFilesCommand = void 0;
 const vscode = __importStar(__webpack_require__(2));
 const completion_items_1 = __webpack_require__(3);
 const utils_1 = __webpack_require__(4);
-function registerCommand() {
+const goto_definition_1 = __webpack_require__(7);
+function registerImportFilesCommand() {
     var fileList = undefined;
     if (vscode.workspace.workspaceFolders?.length != undefined) {
         if (vscode.workspace.workspaceFolders?.length != 0)
@@ -44,10 +45,29 @@ function registerCommand() {
     }
     else
         vscode.window.showErrorMessage("CJSON extension requires opened folder. Select your test data folder and open it");
-    let disposable = vscode.languages.registerCompletionItemProvider({ language: "cjson", scheme: "file" }, new completion_items_1.CompletionItems(fileList), "$import ");
+    let disposable = vscode.languages.registerCompletionItemProvider({ language: "cjson", scheme: "file" }, new completion_items_1.CompletionItems(fileList), "/");
     return disposable;
 }
-exports.registerCommand = registerCommand;
+exports.registerImportFilesCommand = registerImportFilesCommand;
+function registerGoToDefinitionCommand() {
+    return vscode.languages.registerDefinitionProvider({
+        language: "cjson",
+        scheme: "file"
+    }, new goto_definition_1.GoToDefinition());
+}
+exports.registerGoToDefinitionCommand = registerGoToDefinitionCommand;
+// export function cjsonRegisterDocumentLinkCommand() {
+//     return vscode.languages.registerDocumentLinkProvider({
+//         language: "cjson",
+//         scheme: "file"
+//     }, new CJsonDocumentLinkProvider())
+// }
+// export function registerGoToDeclarationCommand() {
+//     return vscode.languages.registerDeclarationProvider({
+//         language: "cjson",
+//         scheme: "file"
+//     }, new GoToDeclaration());
+// }
 
 
 /***/ }),
@@ -77,18 +97,24 @@ class CompletionItems {
         return false;
     }
     provideCompletionItems(document, position, token, context) {
-        if (this.fileList != undefined) {
-            for (let i = 0; i < this.fileList.length; i++) {
-                if (!this.checkAndConfirm(this.fileList[i]))
-                    this.completionItemList.push(new vscode_1.CompletionItem({
-                        label: "\"" + this.fileList[i] + "\""
-                    }));
+        if (context.triggerCharacter === "/") {
+            if (this.fileList != undefined) {
+                for (let i = 0; i < this.fileList.length; i++) {
+                    if (!this.checkAndConfirm(this.fileList[i]))
+                        this.completionItemList.push(new vscode_1.CompletionItem({
+                            label: this.fileList[i]
+                        }));
+                }
             }
+        }
+        else {
+            this.completionItemList = [];
+            console.log("cleared");
         }
         return this.completionItemList;
     }
     resolveCompletionItem(item, token) {
-        throw new Error("Method not implemented.");
+        return item;
     }
 }
 exports.CompletionItems = CompletionItems;
@@ -129,8 +155,9 @@ function convertDirectoryContentPathToRelative(absDirPath, pathToRemove) {
     absDirPath = absDirPath.substring(1);
     var dirContents = fs.readdirSync(absDirPath);
     var relPaths = [];
-    for (let i = 0; i < dirContents.length; i++)
+    for (let i = 0; i < dirContents.length; i++) {
         relPaths.push(dirContents[i].replace(pathToRemove, ""));
+    }
     return relPaths;
 }
 exports.convertDirectoryContentPathToRelative = convertDirectoryContentPathToRelative;
@@ -141,6 +168,40 @@ exports.convertDirectoryContentPathToRelative = convertDirectoryContentPathToRel
 /***/ ((module) => {
 
 module.exports = require("fs");
+
+/***/ }),
+/* 6 */,
+/* 7 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.GoToDefinition = void 0;
+const vscode_1 = __webpack_require__(2);
+class GoToDefinition {
+    provideDefinition(document, position, token) {
+        var locationLink = [];
+        var urlLoc = vscode_1.Uri.file("C:\\Users\\Home\\OneDrive\\Desktop\\projects\\cjson\\tests\\test-files\\targetRelativeCalls.cjson");
+        locationLink.push({
+            targetRange: new vscode_1.Range(new vscode_1.Position(6, 9), new vscode_1.Position(7, 19)),
+            targetUri: urlLoc,
+            originSelectionRange: new vscode_1.Range(new vscode_1.Position(3, 5), new vscode_1.Position(3, 11)),
+            targetSelectionRange: new vscode_1.Range(new vscode_1.Position(7, 9), new vscode_1.Position(7, 17))
+        });
+        return locationLink;
+    }
+}
+exports.GoToDefinition = GoToDefinition;
+// export class GoToDeclaration implements DeclarationProvider {
+//     provideDeclaration(document: TextDocument, position: Position, token: CancellationToken): ProviderResult<Declaration> {
+//         var a:Declaration = {
+//             range: new Range(new Position(4, 5), new Position(4, 11)),
+//             uri: document.uri
+//         }
+//         return a;
+//     }
+// }
+
 
 /***/ })
 /******/ 	]);
@@ -178,14 +239,14 @@ var exports = __webpack_exports__;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.deactivate = exports.activate = void 0;
 const register_1 = __webpack_require__(1);
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
 function activate(context) {
-    let disposable = (0, register_1.registerCommand)();
-    context.subscriptions.push(disposable);
+    let autoComplete = (0, register_1.registerImportFilesCommand)();
+    let goToDefinition = (0, register_1.registerGoToDefinitionCommand)();
+    // disposable = cjsonRegisterDocumentLinkCommand();
+    // disposable = registerGoToDeclarationCommand();
+    context.subscriptions.push(autoComplete, goToDefinition);
 }
 exports.activate = activate;
-// This method is called when your extension is deactivated
 function deactivate() { }
 exports.deactivate = deactivate;
 
