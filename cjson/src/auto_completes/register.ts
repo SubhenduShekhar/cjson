@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { CompletionItems } from './completion-items';
 import { convertDirectoryContentPathToRelative } from '../utils/utils';
-import { GoToDefinition } from './goto-definition';
+import { GoToImportDefinition } from './goto-definition';
 import { CJsonDocumentLinkProvider } from './document-links';
 
 export function registerImportFilesCommand() {
@@ -17,15 +17,15 @@ export function registerImportFilesCommand() {
         vscode.window.showErrorMessage("CJSON extension requires opened folder. Select your test data folder and open it");
 
 	let disposable = vscode.languages.registerCompletionItemProvider({language: "cjson", scheme: "file"}, 
-			new CompletionItems(fileList), "/");
+			new CompletionItems(fileList), ".");
     return disposable;
 }
 
-export function registerGoToDefinitionCommand() {
+export function registerGoToImportDefinitionCommand() {
     return vscode.languages.registerDefinitionProvider({
         language: "cjson",
         scheme: "file"
-    }, new GoToDefinition())
+    }, new GoToImportDefinition())
 }
 
 // export function cjsonRegisterDocumentLinkCommand() {

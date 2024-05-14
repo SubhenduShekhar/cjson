@@ -18,7 +18,8 @@ export class CompletionItems implements CompletionItemProvider {
     }
 
     provideCompletionItems(document: TextDocument, position: Position, token: CancellationToken, context: CompletionContext): ProviderResult<CompletionItem[] | CompletionList<CompletionItem>> {
-        if(context.triggerCharacter === "/") {
+        var positionCharacterMatch = document.getText(new Range(position, new Position(position.line, position.character - 3)));
+        if(positionCharacterMatch === "\"./") {
             if(this.fileList != undefined) {
                 for(let i = 0; i < this.fileList.length; i ++) {
                     if(!this.checkAndConfirm(this.fileList[i])) 
