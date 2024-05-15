@@ -1,7 +1,10 @@
-import { CancellationToken, Definition, DefinitionProvider, DeclarationProvider, Location, LocationLink, Position, ProviderResult, Range, TextDocument, Uri, window, workspace, Declaration } from "vscode";
+import { CancellationToken, Definition, DefinitionProvider, LocationLink, Position, ProviderResult, Range, TextDocument, TextLine, Uri, window, workspace } from "vscode";
 import path from "path";
+import vscode from "vscode";
 
 export class GoToImportDefinition implements DefinitionProvider {
+    importPaths: string[] = [];
+
     findImportInDocument(documentText: string) {
         let importPaths: string[] = []
 
@@ -27,43 +30,28 @@ export class GoToImportDefinition implements DefinitionProvider {
         return new Range(new Position(0, 0), new Position(0, 0))
     }
 
+    checkPositionInRange(range: Range, position: Position) {
+        return range.contains(position);
+    }
+
     provideDefinition(document: TextDocument, position: Position, token: CancellationToken): ProviderResult<Definition | LocationLink[]> {
-        var locationLink: LocationLink[] = [];
-        
-        var importPaths: string[] = this.findImportInDocument(document.getText());
+        this.importPaths = this.findImportInDocument(document.getText());
 
-        var urlLoc: Uri = Uri.file("C:\\Users\\Home\\OneDrive\\Desktop\\projects\\cjson\\tests\\test-files\\targetRelativeCalls.cjson");
-
-        // locationLink.push({
-        //     targetRange: new Range(new Position(6, 9), new Position(7, 19)),
-        //     targetUri: urlLoc,
-        //     originSelectionRange: new Range(new Position(3, 5), new Position(3, 11)),
-        //     targetSelectionRange: new Range(new Position(7, 9), new Position(7, 17))
-        // });
-
-        for(let i = 0; i < importPaths.length; i ++) {
+        for(let i = 0; i < this.importPaths.length; i ++) {
             if(workspace.workspaceFolders !== undefined) {
-                var paths = path.join(workspace.workspaceFolders[0].uri.path, importPaths[i]);
-                var urlLoc: Uri = Uri.file(paths);
+                var originRange = this.findRangeByTextInDocument(document, this.importPaths[i]);
 
-                locationLink.push({
-                    targetRange: new Range(new Position(6, 9), new Position(7, 19)),
-                    targetUri: urlLoc,
-                    originSelectionRange: new Range(new Position(i, 5), new Position(i, 11)),
-                    targetSelectionRange: new Range(new Position(7, 9), new Position(7, 17))
-                });
+                if(this.checkPositionInRange(originRange, position)) {
+                    var paths: string = path.join(path.dirname(document.fileName), this.importPaths[i]);
+
+                    return [{
+                        targetRange: new Range(new Position(0, 9), new Position(700, 19)),
+                        targetUri: Uri.file(paths),
+                        originSelectionRange: originRange,
+                        targetSelectionRange: new Range(new Position(0, 9), new Position(700, 19))
+                    }]
+                }
             }
         }
-        return locationLink;
     }
 }
-
-// export class GoToDeclaration implements DeclarationProvider {
-//     provideDeclaration(document: TextDocument, position: Position, token: CancellationToken): ProviderResult<Declaration> {
-//         var a:Declaration = {
-//             range: new Range(new Position(4, 5), new Position(4, 11)),
-//             uri: document.uri
-//         }
-//         return a;
-//     }
-// }

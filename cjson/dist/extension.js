@@ -34,7 +34,7 @@ exports.registerGoToImportDefinitionCommand = exports.registerImportFilesCommand
 const vscode = __importStar(__webpack_require__(2));
 const completion_items_1 = __webpack_require__(3);
 const utils_1 = __webpack_require__(4);
-const goto_definition_1 = __webpack_require__(7);
+const goto_definition_1 = __webpack_require__(6);
 function registerImportFilesCommand() {
     var fileList = undefined;
     if (vscode.workspace.workspaceFolders?.length != undefined) {
@@ -172,12 +172,6 @@ module.exports = require("fs");
 
 /***/ }),
 /* 6 */
-/***/ ((module) => {
-
-module.exports = require("path");
-
-/***/ }),
-/* 7 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -187,8 +181,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.GoToImportDefinition = void 0;
 const vscode_1 = __webpack_require__(2);
-const path_1 = __importDefault(__webpack_require__(6));
+const path_1 = __importDefault(__webpack_require__(7));
 class GoToImportDefinition {
+    importPaths = [];
     findImportInDocument(documentText) {
         let importPaths = [];
         while (documentText.includes("$import \"")) {
@@ -210,29 +205,25 @@ class GoToImportDefinition {
         }
         return new vscode_1.Range(new vscode_1.Position(0, 0), new vscode_1.Position(0, 0));
     }
+    checkPositionInRange(range, position) {
+        return range.contains(position);
+    }
     provideDefinition(document, position, token) {
-        var locationLink = [];
-        var importPaths = this.findImportInDocument(document.getText());
-        var urlLoc = vscode_1.Uri.file("C:\\Users\\Home\\OneDrive\\Desktop\\projects\\cjson\\tests\\test-files\\targetRelativeCalls.cjson");
-        // locationLink.push({
-        //     targetRange: new Range(new Position(6, 9), new Position(7, 19)),
-        //     targetUri: urlLoc,
-        //     originSelectionRange: new Range(new Position(3, 5), new Position(3, 11)),
-        //     targetSelectionRange: new Range(new Position(7, 9), new Position(7, 17))
-        // });
-        for (let i = 0; i < importPaths.length; i++) {
+        this.importPaths = this.findImportInDocument(document.getText());
+        for (let i = 0; i < this.importPaths.length; i++) {
             if (vscode_1.workspace.workspaceFolders !== undefined) {
-                var paths = path_1.default.join(vscode_1.workspace.workspaceFolders[0].uri.path, importPaths[i]);
-                var urlLoc = vscode_1.Uri.file(paths);
-                locationLink.push({
-                    targetRange: new vscode_1.Range(new vscode_1.Position(6, 9), new vscode_1.Position(7, 19)),
-                    targetUri: urlLoc,
-                    originSelectionRange: new vscode_1.Range(new vscode_1.Position(i, 5), new vscode_1.Position(i, 11)),
-                    targetSelectionRange: new vscode_1.Range(new vscode_1.Position(7, 9), new vscode_1.Position(7, 17))
-                });
+                var originRange = this.findRangeByTextInDocument(document, this.importPaths[i]);
+                if (this.checkPositionInRange(originRange, position)) {
+                    var paths = path_1.default.join(path_1.default.dirname(document.fileName), this.importPaths[i]);
+                    return [{
+                            targetRange: new vscode_1.Range(new vscode_1.Position(0, 9), new vscode_1.Position(700, 19)),
+                            targetUri: vscode_1.Uri.file(paths),
+                            originSelectionRange: originRange,
+                            targetSelectionRange: new vscode_1.Range(new vscode_1.Position(0, 9), new vscode_1.Position(700, 19))
+                        }];
+                }
             }
         }
-        return locationLink;
     }
 }
 exports.GoToImportDefinition = GoToImportDefinition;
@@ -246,6 +237,12 @@ exports.GoToImportDefinition = GoToImportDefinition;
 //     }
 // }
 
+
+/***/ }),
+/* 7 */
+/***/ ((module) => {
+
+module.exports = require("path");
 
 /***/ })
 /******/ 	]);
