@@ -1,4 +1,5 @@
-import { CancellationToken, CompletionContext, CompletionItem, CompletionItemProvider, CompletionList, Position, ProviderResult, TextDocument } from "vscode";
+import { CancellationToken, CompletionContext, CompletionItem, CompletionItemProvider, CompletionList, Position, ProviderResult, Range, TextDocument } from "vscode";
+import * as fs from "fs";
 
 export class CompletionItems implements CompletionItemProvider {
     private fileList: string[] | undefined;
@@ -17,19 +18,25 @@ export class CompletionItems implements CompletionItemProvider {
     }
 
     provideCompletionItems(document: TextDocument, position: Position, token: CancellationToken, context: CompletionContext): ProviderResult<CompletionItem[] | CompletionList<CompletionItem>> {
-        if(this.fileList != undefined) {
-            for(let i = 0; i < this.fileList.length; i ++) {
-                if(!this.checkAndConfirm(this.fileList[i])) 
-                    this.completionItemList.push(new CompletionItem({
-                        label: "\"" + this.fileList[i] + "\""
-                    }))
+        var positionCharacterMatch = document.getText(new Range(position, new Position(position.line, position.character - 3)));
+        if(positionCharacterMatch === "\"./") {
+            if(this.fileList != undefined) {
+                for(let i = 0; i < this.fileList.length; i ++) {
+                    if(!this.checkAndConfirm(this.fileList[i])) 
+                        this.completionItemList.push(new CompletionItem({
+                            label: this.fileList[i]
+                        }))
+                }
             }
         }
-        
+        else {
+            this.completionItemList = [];
+            console.log("cleared")
+        }
         return this.completionItemList;
     }
 
     resolveCompletionItem?(item: CompletionItem, token: CancellationToken): ProviderResult<CompletionItem> {
-        throw new Error("Method not implemented.");
+        return item;
     }
 }
