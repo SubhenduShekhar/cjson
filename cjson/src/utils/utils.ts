@@ -5,8 +5,9 @@ export function convertDirectoryContentPathToRelative(absDirPath: string, pathTo
     var dirContents: string[] = fs.readdirSync(absDirPath);
     var relPaths: string[] = [];
 
-    for(let i = 0; i < dirContents.length; i ++) 
+    for(let i = 0; i < dirContents.length; i ++) {
         relPaths.push(dirContents[i].replace(pathToRemove, ""))
-
+    }
+    
     return relPaths;
 }
