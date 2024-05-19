@@ -1,1 +1,6 @@
 docfx_project
+.vscode
+cjson/dist
+node_modules
+.vscodeignore
+package-lock.json
