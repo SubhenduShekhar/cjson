@@ -20,7 +20,7 @@
         },
         {
             "name": "constant.numeric",
-            "match": "(?<=:)\\s*[0-9]+"
+            "match": "[0-9]+"
         },
         {
             "name": "keyword",
