@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { CompletionItems } from './completion-items';
-import { convertDirectoryContentPathToRelative, setAutCompleteList } from '../utils/utils';
+import { convertDirectoryContentPathToRelative } from '../utils/utils';
 import { GoToImportDefinition } from './goto-definition';
 import { CJsonDocumentLinkProvider } from './document-links';
 import { DirectoryContent } from '../utils/interfaces';
@@ -8,7 +8,7 @@ import { DirectoryContent } from '../utils/interfaces';
 export function registerImportFilesCommand() {
 
 	let disposable = vscode.languages.registerCompletionItemProvider({language: "cjson", scheme: "file"}, 
-			new CompletionItems(setAutCompleteList()), ".", "/", "\\");
+			new CompletionItems(), ".", "/", "\\");
     return disposable;
 }
 

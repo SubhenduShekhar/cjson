@@ -31,8 +31,8 @@ export function setAutCompleteList(relativeFolderPath?: string) {
     
     if(vscode.workspace.workspaceFolders?.length != undefined) {
         if(vscode.workspace.workspaceFolders?.length != 0) 
-            dirContent = convertDirectoryContentPathToRelative(vscode.workspace.workspaceFolders[0].uri.path, 
-                vscode.workspace.workspaceFolders[0].uri.path);
+            dirContent = convertDirectoryContentPathToRelative(path.join(vscode.workspace.workspaceFolders[0].uri.path, relativeFolderPath), 
+                path.join(vscode.workspace.workspaceFolders[0].uri.path, relativeFolderPath));
         else
             dirContent = []
 	}

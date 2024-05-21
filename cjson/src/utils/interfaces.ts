@@ -6,5 +6,6 @@ export interface DirectoryContent {
 
 export interface BackTrackSearchResult {
     strSet: string | null,
-    result: boolean
+    result: boolean,
+    lastValidPath: string | null
 }
