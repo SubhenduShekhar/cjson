@@ -1,5 +1,4 @@
 import { CancellationToken, CompletionContext, CompletionItem, CompletionItemKind, CompletionItemProvider, CompletionList, Position, ProviderResult, Range, TextDocument, window, workspace } from "vscode";
-import * as fs from "fs";
 import { BackTrackSearchResult, DirectoryContent } from "../utils/interfaces";
 import { setAutCompleteList } from "../utils/utils";
 
@@ -9,7 +8,7 @@ export class CompletionItems implements CompletionItemProvider {
     // Condition for checkAndConfirm to work as expected
     private isDirectoryChanged: boolean = false;
 
-    checkAndConfirm(item: string) {
+    private checkAndConfirm(item: string) {
         if(this.isDirectoryChanged)
             return false;
         else {
@@ -20,7 +19,7 @@ export class CompletionItems implements CompletionItemProvider {
         }
     }
 
-    backTrackAndCheckForString(document: TextDocument, position: Position, testChar: string): BackTrackSearchResult {
+    private backTrackAndCheckForString(document: TextDocument, position: Position, testChar: string): BackTrackSearchResult {
         let i = 2;
         if(document.getText().split("\n")[position.line].includes("$import ")) {
             var positionCharacterMatch = document.getText(new Range(position, new Position(position.line, position.character - i)));
@@ -34,14 +33,16 @@ export class CompletionItems implements CompletionItemProvider {
                 return {
                     strSet: positionCharacterMatch.substring(1, positionCharacterMatch.length - 1),
                     result: true,
-                    lastValidPath: lastValidPath.replace(positionCharacterMatch, "")
+                    lastValidPath: lastValidPath.replace(positionCharacterMatch, ""),
+                    fullImportStatement: lastValidPath
                 };
             }
             catch(error) {
                 return {
                     strSet: null,
                     result: false,
-                    lastValidPath: null
+                    lastValidPath: null,
+                    fullImportStatement: lastValidPath
                 };
             }
         }
@@ -49,7 +50,8 @@ export class CompletionItems implements CompletionItemProvider {
             return {
                 strSet: null,
                 result: false,
-                lastValidPath: null
+                lastValidPath: null,
+                fullImportStatement: null
             }
         }
     }
@@ -66,7 +68,11 @@ export class CompletionItems implements CompletionItemProvider {
             this.setCompletionItemsList();
             this.isDirectoryChanged = false;
         }
-
+        else if(triggerToken === ".") {
+            this.completionItemList = [{
+                label: "/"
+            }]
+        }
         else if(triggerToken === "/" || triggerToken === "\\") {
             var backtrackResult: BackTrackSearchResult = this.backTrackAndCheckForString(document, position, ".");
             this.isDirectoryChanged = true;
@@ -74,12 +80,7 @@ export class CompletionItems implements CompletionItemProvider {
             if(backtrackResult.result && backtrackResult.strSet !== null) {
                 if(this.fileList !== undefined) {
                     this.fileList = setAutCompleteList(backtrackResult.strSet);
-                    //for(let i = 0; i < this.fileList.length; i ++) {
-                        // (this.fileList[i].filename === backtrackResult.strSet) && 
-                        //if(this.fileList[i].isDirectory) {
-                            this.setCompletionItemsList();
-                        // }
-                    //}
+                    this.setCompletionItemsList();
                 }
                 else
                     this.completionItemList = [];
@@ -88,19 +89,23 @@ export class CompletionItems implements CompletionItemProvider {
         else {
             this.isDirectoryChanged = true;
             var backtrackResult: BackTrackSearchResult = this.backTrackAndCheckForString(document, position, "/");
-            this.fileList = setAutCompleteList(".");
-            this.setCompletionItemsList();
-            this.isDirectoryChanged = false;
+            if(backtrackResult.fullImportStatement !== null) {
+                let importPaths: string[] = backtrackResult.fullImportStatement?.split("/");
+                if(importPaths[importPaths.length - 1].includes(".json")
+                    || importPaths[importPaths.length - 1].includes(".cjson")) {
+                }
+                else {
+                    this.fileList = setAutCompleteList(".");
+                    this.setCompletionItemsList();
+                    this.isDirectoryChanged = false;
+                }
+            }
         }
         return this.completionItemList;
     }
 
     resolveCompletionItem?(item: CompletionItem, token: CancellationToken): ProviderResult<CompletionItem> {
         return item;
-    }
-
-    private getPreviousCompletePath() {
-
     }
 
     private setCompletionItemsList() {
