@@ -24,7 +24,11 @@
         "extensions": [
           ".cjson"
         ],
-        "configuration": "./syntaxes/language-configuration.json"
+        "configuration": "./syntaxes/language-configuration.json",
+        "icon": {
+          "dark": "./src/images/icon.png",
+          "light": "./src/images/icon.png"
+        }
       }
     ],
     "grammars": [
