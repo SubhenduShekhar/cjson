@@ -4,3 +4,5 @@ vsc-extension-quickstart.md
 .vscodeignore
 package-lock.json
 dist
+java/
+dotnet/
