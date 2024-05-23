@@ -1,12 +1,12 @@
 import * as vscode from 'vscode';
-import { registerImportFilesCommand as autoCompleteRegister, registerGoToImportDefinitionCommand } from './auto_completes/register';
+import { Registers } from './auto_completes/register';
 
 
 export function activate(context: vscode.ExtensionContext) {
 
-	let autoComplete = autoCompleteRegister();
+	let autoComplete = Registers.registerImportFilesCommand();
 
-	let goToDefinition = registerGoToImportDefinitionCommand();
+	let goToDefinition = Registers.registerGoToImportDefinitionCommand();
 
 	// disposable = cjsonRegisterDocumentLinkCommand();
 
