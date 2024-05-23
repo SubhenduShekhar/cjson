@@ -1,6 +1,5 @@
 import { CancellationToken, Definition, DefinitionProvider, LocationLink, Position, ProviderResult, Range, TextDocument, TextLine, Uri, window, workspace } from "vscode";
 import path from "path";
-import vscode from "vscode";
 
 export class GoToImportDefinition implements DefinitionProvider {
     importPaths: string[] = [];

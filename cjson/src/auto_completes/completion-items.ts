@@ -1,10 +1,12 @@
-import { CancellationToken, CompletionContext, CompletionItem, CompletionItemKind, CompletionItemProvider, CompletionList, Position, ProviderResult, Range, TextDocument, window, workspace } from "vscode";
+import { CancellationToken, CompletionContext, CompletionItem, CompletionItemKind, CompletionItemProvider, CompletionList, Position, ProviderResult, Range, TextDocument, commands, window, workspace } from "vscode";
 import { BackTrackSearchResult, DirectoryContent } from "../utils/interfaces";
 import { setAutCompleteList } from "../utils/utils";
+import { Registers } from "./register";
 
 export class CompletionItems implements CompletionItemProvider {
     private fileList: DirectoryContent[] | undefined;
-    private completionItemList: CompletionItem[] = [];
+    public completionItemList: CompletionItem[] = [];
+    public previousCompleteList: CompletionItem[] = [];
     // Condition for checkAndConfirm to work as expected
     private isDirectoryChanged: boolean = false;
 
@@ -58,6 +60,8 @@ export class CompletionItems implements CompletionItemProvider {
 
     provideCompletionItems(document: TextDocument, position: Position, token: CancellationToken, context: CompletionContext): ProviderResult<CompletionItem[] | CompletionList<CompletionItem>> {
         this.fileList = setAutCompleteList();
+        
+        this.previousCompleteList = this.completionItemList;
 
         var positionCharacterMatch = document.getText(new Range(position, new Position(position.line, position.character - 3)));
         var triggerToken: string = document.getText(new Range(position, new Position(position.line, position.character - 1)));
@@ -93,6 +97,9 @@ export class CompletionItems implements CompletionItemProvider {
                 let importPaths: string[] = backtrackResult.fullImportStatement?.split("/");
                 if(importPaths[importPaths.length - 1].includes(".json")
                     || importPaths[importPaths.length - 1].includes(".cjson")) {
+                this.completionItemList.push({
+                    label: importPaths[importPaths.length - 1]
+                })
                 }
                 else {
                     this.fileList = setAutCompleteList(".");
@@ -101,6 +108,10 @@ export class CompletionItems implements CompletionItemProvider {
                 }
             }
         }
+
+        if(this.isCompletionListChanged(this.previousCompleteList, this.completionItemList))
+            Registers.registerGoToImportDefinitionCommand();
+
         return this.completionItemList;
     }
 
@@ -125,5 +136,17 @@ export class CompletionItems implements CompletionItemProvider {
         }
         else 
             this.completionItemList = [];
+    }
+
+    public isCompletionListChanged(sourceCompletionList: CompletionItem[], targetCompletionList: CompletionItem[]): boolean {
+        if(sourceCompletionList.length !== targetCompletionList.length)
+            return true;
+        else {
+            for(let i = 0; i < sourceCompletionList.length; i ++) {
+                if(sourceCompletionList[i].label !== targetCompletionList[i].label)
+                    return true;
+            }
+            return false;
+        }
     }
 }
