@@ -14,8 +14,8 @@
   "contributes": {
     "commands": [
       {
-        "command": "cjson.helloWorld",
-        "title": "Hello World"
+        "command": "cjson.deseralizeAndPreview",
+        "title": "Deserialize And Preview"
       }
     ],
     "languages": [
@@ -37,8 +37,25 @@
         "scopeName": "source.cjson",
         "path": "./syntaxes/cjson.tmLanguage.json"
       }
-    ]
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "when": "resourceExtname == .cjson",
+          "command": "cjson.deseralizeAndPreview",
+          "group": "navigation"
+        }
+      ],
+      "editor/title/context": [
+        {
+          "when": "resourceExtname == .cjson",
+          "command": "cjson.deseralizeAndPreview",
+          "group": "navigation"
+        }
+      ]
+    }
   },
+  
   "scripts": {
     "vscode:prepublish": "npm run package",
     "compile": "webpack",
