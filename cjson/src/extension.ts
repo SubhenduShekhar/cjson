@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { Registers } from './auto_completes/register';
+import { Registers } from './definitions/register';
 
 
 export function activate(context: vscode.ExtensionContext) {
