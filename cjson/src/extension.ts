@@ -8,7 +8,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	let goToDefinition = Registers.registerGoToImportDefinitionCommand();
 
-	let deseralizeAndPreview = Registers.registerDeseralizeAndPreviewCommand();
+	// let deseralizeAndPreview = Registers.registerDeseralizeAndPreviewCommand();
 
 	// disposable = cjsonRegisterDocumentLinkCommand();
 
@@ -16,8 +16,8 @@ export function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(
 		autoComplete,
-		goToDefinition,
-		deseralizeAndPreview
+		goToDefinition
+		// deseralizeAndPreview
 	);
 }
 
