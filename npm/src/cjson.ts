@@ -97,7 +97,7 @@ export class Cjson extends Is {
         while(true) {
             isChanged = false;
             if(this.isImport(this.content)) {
-                this.content = this.decodeImport(this.content);
+                this.content = this.decodeImport(this.content, path.dirname(this.filePath));
                 isChanged = true
             }
             if(this.isSingleLineComment(this.content)) {
@@ -147,10 +147,10 @@ export class Cjson extends Is {
      * Deserializes the keywords.
      * @returns `JSON` if no errors. Else `undefined`
      */
-    public deserialize() : any {
+    public deserialize() : Cjson {
         this.decodeKeywords();
         this.decodeRelativePaths(this.content);
-        return this.obj;
+        return this;
     }
     /**
      * Returns file path from `import` keyword
@@ -164,32 +164,32 @@ export class Cjson extends Is {
      * Decodes `import` keyword
      * @param lineItem Comma separated line item in string
      */
-    private decodeImport(content: string, curPath?: string): string {
+    private decodeImport(content: string, curPath: string): string {
         var filePath: string = this.getFilePath(content);
-        var fileName: string = filePath.split("/")[filePath.split("/").length - 1];
         var importFilePath: string;
-
 
         if(isAbsolutePath(filePath))
             importFilePath = filePath;
 
         else if(!isAbsolutePath(filePath) && this.isContentCJson) throw AbsolutePathConstraintError("Only absolute path is supported in import statements");
 
-        else {
-            var dirname: string = path.join(path.dirname(this.filePath), path.dirname(filePath));
+        else 
+            var importFilePath: string = path.join(curPath, filePath);
+            
+        var innerContent: string = read(importFilePath);
 
-            if(curPath !== undefined)
-                dirname = path.join(curPath, path.dirname(filePath));
+        var qr = "";
+        if(this.isImport(innerContent))
+            qr = this.decodeImport(innerContent, path.dirname(importFilePath))
+        else 
+            qr = innerContent;
+        
+        content = content.replace(Keywords.importKey + filePath + "\"", qr);
 
-            importFilePath = path.join(dirname, fileName);
-        }
-        content = content.replace(Keywords.importKey + filePath + "\"", read(importFilePath));
+        if(this.isImport(content)) 
+            content = this.decodeImport(content, curPath);
 
-        if(this.isImport(content)) {
-            return this.decodeImport(content, path.dirname(importFilePath));
-        } else {
-            return content;
-        }
+        return content;
     }
     /**
      * Identifies comment lines. Can identify multiple lined comments

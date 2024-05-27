@@ -1,9 +1,9 @@
 package com.codedjson;
 
-import com.codedjson.exceptions.*;
-import com.codedjson.utils.Checks;
+import com.codedjson.exceptions.AbsolutePathConstraintError;
 import com.codedjson.utils.Decode;
 import com.google.gson.JsonSyntaxException;
+import jdk.internal.module.Checks;
 
 import java.io.File;
 import java.io.FileNotFoundException;
