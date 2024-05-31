@@ -1,8 +1,18 @@
 {
   "name": "cjson",
   "displayName": "cjson",
-  "description": "Coded JSON formatter and helper",
-  "version": "1.0.0",
+  "description": "CJSON(Coded JSON) Extension Support",
+  "author": {
+    "name": "Shubhendu Shekhar Gupta",
+    "email": "subhendushekhargupta@gmail.com",
+    "url": "https://github.com/SubhenduShekhar"
+  },
+  "repository": {
+    "url": "https://github.com/SubhenduShekhar/cjson/tree/vscode-extn",
+    "type": "git"
+  },
+  "publisher": "ShubhenduShekharGupta",
+  "version": "1.0.1",
   "engines": {
     "vscode": "^1.70.0"
   },
@@ -25,9 +35,10 @@
           ".cjson"
         ],
         "configuration": "./syntaxes/language-configuration.json",
+
         "icon": {
-          "dark": "./src/images/icon.png",
-          "light": "./src/images/icon.png"
+          "dark": "dist/icons/icon.png",
+          "light": "dist/icons/icon.png"
         }
       }
     ],
