@@ -21,10 +21,8 @@
 
 <br/><br/><br/>
 
-<div align="center" style="color:red">
-<p style="font-size:20px">We are restricting NPM and Python packages to 2.0.0<br/>
-Further versions will only be provided for dotnet and java</p>
-</div>
+> [!TIP]
+> Please install <a href="https://marketplace.visualstudio.com/items?itemName=ShubhenduShekharGupta.cjson">CJSON</a> plugin for language support in visual studio code
 
 <br/><br/><br/>
 
