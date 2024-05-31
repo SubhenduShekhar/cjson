@@ -7,3 +7,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ## [Unreleased]
 
 - Initial release
+
+## v1.0.1
+
+- CJSON Language highlights
+- Navigate to definition for `import` statements
+- Comment highlights
+- Icon for CJSON files
