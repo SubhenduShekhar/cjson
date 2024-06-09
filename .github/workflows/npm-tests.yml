@@ -57,6 +57,9 @@ jobs:
       - run: dir
       
       - run: npm i
-        name: Running tests
       
+        name: Compile tests
+      - run: npm run compile
+          
+        name: Running tests
       - run: npm run test
