@@ -17,8 +17,11 @@ export class Is extends Base {
      * @returns `true` if found
      */
     protected isSingleLineComment(lineItem: string) {
-        if(lineItem.includes(Keywords.singleLineComment))
-            return true;
+        var splittedLines: string[] = lineItem.split("\r\n");
+
+        for(let i = 0; i < splittedLines.length; i ++)
+            if(splittedLines[i].trim().startsWith(Keywords.singleLineComment))
+                return true;
         return false;
     }
     /**
@@ -61,5 +64,14 @@ export class Is extends Base {
             Result: true,
             Keys: relativeJPathKeys
         }
+    }
+    protected isRuntimeKeysPresent(content: string) {
+        let runtimeValsList = content.match(Keywords.decodedRuntimeKeys);
+        if(runtimeValsList !== undefined) {
+            this.decodedRuntimeKeyList = runtimeValsList?.filter((value, index, array) => { return array.indexOf(value) === index });
+            return true;
+        }
+        else
+            return false;
     }
 }
