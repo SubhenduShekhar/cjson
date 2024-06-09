@@ -87,6 +87,7 @@ export class Cjson extends Is {
             this.filePath = content;
             this.content = read(this.filePath);
         }
+        this.decodeKeywords();
     }
     /**
      * Root function for decoding keywords
@@ -104,7 +105,12 @@ export class Cjson extends Is {
                 this.decodeSingleLineComment(this.content);
                 isChanged = true
             }
+            this.content = this.decodeRuntimeKeys(this.content);
             if(!isChanged) break;
+        }
+        if(this.isRelativeJPath(this.content)) {
+            this.content = this.decodeRelativePaths(this.content);
+            isChanged = true;
         }
     }
     private refineObj(content?: string) {
@@ -120,26 +126,9 @@ export class Cjson extends Is {
     private decodeRelativePaths(content: string) {
         var uniqueKeys = content.match(Keywords.relativeJPathRegex)?.filter((value, index, array) => { return array.indexOf(value) === index } )
 
-        if(uniqueKeys) {
+        if(uniqueKeys) 
             content = refineRelativePaths(content, uniqueKeys);
 
-            this.refineObj(content);
-
-            uniqueKeys?.map(eachKey => {
-                let keyRegex = new RegExp("\\<" + eachKey.replace("$", "\\$") + "\\>", 'g');
-                
-                while(this.json?.parse(eachKey.split(Keywords.relativeJPath)[1]).toString().startsWith("<$.")) {
-                    this.refineObj(content);
-                }
-
-                if(typeof this.json?.parse(eachKey.split(Keywords.relativeJPath)[1]) !== "string") {
-                    keyRegex = new RegExp("\"\\<" + eachKey.replace("$", "\\$") + "\\>\"", "g");
-
-                    content = content.replace(new RegExp(keyRegex), this.json?.parse(eachKey.split(Keywords.relativeJPath)[1]))
-                } else
-                    content = content.replace(keyRegex, this.json?.parse(eachKey.split(Keywords.relativeJPath)[1]).toString())
-            });
-        }
         this.refineObj(content);
         return content;
     }
@@ -148,9 +137,9 @@ export class Cjson extends Is {
      * @returns `JSON` if no errors. Else `undefined`
      */
     public deserialize() : Cjson {
-        this.decodeKeywords();
-        this.decodeRelativePaths(this.content);
-        return this;
+        this.content = this.decodeRelativePathValues(this.content);
+        this.refineObj(this.content);
+        return this.obj;
     }
     /**
      * Returns file path from `import` keyword
@@ -231,22 +220,41 @@ export class Cjson extends Is {
      * @returns `JSON` if no errors. Else `undefined`
      */
     public inject(injectingObj: any) {
+
         let content = this.content;
 
-        this.decodeKeywords();
-
-        var uniqueKeys = this.content.match(Keywords.runTimeValsRegex)?.filter((value, index, array) => { return array.indexOf(value) === index });
-        if(uniqueKeys) {
-            content = refineRuntimeVals(content, uniqueKeys);
-
-            content = this.decodeRuntimeVals(content, uniqueKeys, injectingObj);
-        }
-        uniqueKeys = this.content.match(Keywords.relativeJPathRegex)?.filter((value, index, array) => { return array.indexOf(value) === index });
-        if(uniqueKeys)
-            content = this.decodeRelativePaths(content);
+        var uniqueKeys = this.content.match(Keywords.decodedRuntimeKeys)?.filter((value, index, array) => { return array.indexOf(value) === index });
         
+        uniqueKeys = uniqueKeys?.flatMap(eachElem => eachElem.split("<-")[1].split("->")[0]);
+
+        var injectObjKeys: string[] = Object.keys(injectingObj);
+
+        for(let i = 0; i < injectObjKeys.length; i ++) {
+            if(uniqueKeys?.includes(injectObjKeys[i])) {
+                if(typeof injectingObj[injectObjKeys[i]] === "boolean" || 
+                    typeof injectingObj[injectObjKeys[i]] === "bigint" ||
+                    typeof injectingObj[injectObjKeys[i]] === "number")
+                    content = content.replace(new RegExp("\"<-" + injectObjKeys[i] + "->\"", "g"), injectingObj[injectObjKeys[i]]);
+                else if(typeof injectingObj[injectObjKeys[i]] === "object")
+                    content = content.replace(new RegExp("\"<-" + injectObjKeys[i] + "->\"", "g"), JSON.stringify(injectingObj[injectObjKeys[i]]));
+                else
+                    content = content.replace(new RegExp("<-" + injectObjKeys[i] + "->", "g"), injectingObj[injectObjKeys[i]]);
+                
+                if(this.decodedRuntimeKeyList !== undefined)
+                    this.removeFromStringArray(this.decodedRuntimeKeyList, injectObjKeys[i]);
+                else
+                    console.error("Cannot update Base.decodedRuntimeKeyList as it is undefined");
+            }
+        }
+
+        if(this.content.match(Keywords.decodedRuntimeKeys)?.filter((value, index, array) => { return array.indexOf(value) === index }).length !== 0)
+            console.warn("Still some runtime keys are expecting values... Run cjson.getAllRuntimeKeys()")
+        else 
+            this.isInjectExist = false;
+
+        content = this.decodeRelativePathValues(content);
         this.refineObj(content);
-        return this.obj;
+        return this;
     }
     /**
      * Converts JSON object to string. Just a wrapper over `JSON.stringify()`
@@ -265,9 +273,7 @@ export class Cjson extends Is {
      * @returns `JSON` equivalent of `CJSON` content in `string`
      */
     public deserializeAsString() : string {
-        if(this.obj === undefined)
-            this.deserialize();
-        
+        this.deserialize();
         return this.content;
     }
     /**
@@ -278,7 +284,6 @@ export class Cjson extends Is {
      * @returns Resultant content in `JSON` object
      */
     public remove(key: string) {
-        this.deserialize();
         this.obj = this.json?.removeWithKey(key, this.content);
         this.content = Cjson.toString(this.obj);
         return this;
@@ -299,11 +304,49 @@ export class Cjson extends Is {
      * @returns 
      */
     public replace = (jPath: string, value: any) => {
-        this.deserialize();
         if(jPath.startsWith("$."))
             jPath = jPath.split("$.")[1];
         this.obj = this.json?.replace(jPath, value, this.obj);
         this.refineObj(Cjson.toString(this.obj));
         return this;
+    }
+    private decodeRuntimeKeys(content: string) {
+        var runtimeKeys: string[] | undefined = content.match(Keywords.runtimeVals)?.filter((value, index, array) => { return array.indexOf(value) === index });
+
+        if(runtimeKeys !== undefined && runtimeKeys !== null) {
+            this.isInjectExist = true;
+
+            for(let i = 0; i < runtimeKeys.length; i ++) {
+                let variable: string = runtimeKeys[i].split("<")[1].split(">")[0];
+                let ignoreUnderQuotes: RegExpMatchArray | null = content.match("\".*" + runtimeKeys[i] + ".*\"");
+
+                if(ignoreUnderQuotes === null) {
+                    variable = "\"<-" + variable + "->\"";
+                    content = content.replace(new RegExp(runtimeKeys[i], "g"), variable);
+                }
+            }
+        }
+        return content;
+    }
+    private decodeRelativePathValues(content: string) {
+        var encodedKeys: string[] | undefined = content.match(Keywords.encodedRelativeJPathRegex)?.filter((value, index, array) => { return array.indexOf(value) === index });
+        if(encodedKeys) {
+            for(let i = 0; i < encodedKeys.length; i ++) {
+                let key: string = encodedKeys[i].split("<")[1].split(">")[0];
+                let value = this.json?.parse(key);
+                if(value !== null) {
+                    while(JSON.stringify(value).includes("$.")) 
+                        value = this.json?.parse(value.split("<")[1].split(">")[0]);
+
+                    if(typeof value === "string")
+                        content = content.replace(new RegExp(encodedKeys[i].replace("$", "\\$"), "g"), value);
+                    else
+                        content = content.replace(new RegExp("\"" + encodedKeys[i].replace("$", "\\$") + "\"", "g"), value);
+                }
+                else
+                    content = content.replace(new RegExp("\"" + encodedKeys[i].replace("$", "\\$") + "\"", "g"), "null");
+            }
+        }
+        return content;
     }
 }

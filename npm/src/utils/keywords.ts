@@ -13,4 +13,7 @@ export default class Keywords {
 
     public static removeWithSucComa = (key: string, value: string): RegExp => new RegExp("\n*\s*\\t*\r*\"" + key.split(".")[key.split(".").length - 1] + "\":\\s*\"*" + value + "\"*,*\\s*\\t*\\r*", "g");
     public static removeWithPreComa = (key: string, value: string): RegExp => new RegExp(",*\n*\s*\\t*\r*\"" + key.split(".")[key.split(".").length - 1] + "\":\\s*\"*" + value + "\"*", "g");
+    public static runtimeVals: RegExp = new RegExp("<[^-].*[^-]>", "g");
+    public static decodedRuntimeKeys: RegExp = new RegExp("[<]-.*-[>]", "g");
+    public static encodedRelativeJPathRegex = new RegExp("[<][$.][.A-Za-z0-9]*[>]", "g");
 }

@@ -1,24 +1,25 @@
-const Cjson = require('coded-json').Cjson;
 const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
+const Cjson = require("../../out/cjson").Cjson;
+const jasmine = require("jasmine");
 
+const basePath = path.join(__dirname, "..", "..", "..", "tests", "test-files");
 /** Path to target.cjson */
-const cjsonfilePath = path.join(__dirname, "..", "..", "..", "\\test-files\\target.cjson");
+const cjsonfilePath = path.join(basePath, "target.cjson");
 /** Path to source.json */
-const jsonfilePath = path.join(__dirname, "..", "..", "..", "\\test-files\\source.json");
+const jsonfilePath = path.join(basePath, "source.json");
 /** Path to pure.json */
-const pureJsonfilePath = path.join(__dirname, "..", "..", "..", "\\test-files\\pure.json");
+const pureJsonfilePath = path.join(basePath, "pure.json");
 /** Path to relativeTargetCjson.json */
-const relativeTargetCjson = path.join(__dirname, "..", "..", "..", "\\test-files\\targetRelativeCalls.cjson");
+const relativeTargetCjson = path.join(basePath, "targetRelativeCalls.cjson");
 /** Path to relativeTargetCjson.json */
-const VariableInjection = path.join(__dirname, "..", "..", "..", "\\test-files\\VariableInjection.cjson");
+const VariableInjection = path.join(basePath, "VariableInjection.cjson");
 
 /**
  * Tests related to CJSON files 
  */
 describe("CJSON Test 1", () => {
-
     it("I should be able to import pure JSON files", () => {
         var cjson = new Cjson(pureJsonfilePath);
         var pureJSONContent = cjson.deserialize();
@@ -48,10 +49,7 @@ describe("CJSON Test 1", () => {
 
     it("I should be able to deserialize relative path to local variable", () => {
         var cjson = new Cjson(relativeTargetCjson);
-
         var decodedJSON = cjson.deserialize();
-
-        console.log(decodedJSON);
         
         assert.equal(decodedJSON.target.digitCheck, cjson.json.parse("target.digitCheck"));
         assert.equal(decodedJSON.target.digitImport, cjson.json.parse("target.digitImport"));
@@ -70,9 +68,8 @@ describe("CJSON Test 1", () => {
                 injectedData: "jsonInjectionValue"
             }
         };
-        var deserializedVal = cjson.inject(injectObj);
+        var deserializedVal = cjson.inject(injectObj).deserialize();
         
-        console.log(deserializedVal);
         assert.equal(deserializedVal.target.fruit, injectObj.fruit);
         assert.equal(JSON.stringify(deserializedVal.jsonInjection), JSON.stringify(injectObj.jsonTypeData))
     });
@@ -115,44 +112,32 @@ describe("CJSON Test 1", () => {
         assert.equal(cjson.deserialize().quiz.sport.q1, undefined);
     });
 
-    it("I should be able to stringify JSON object using toString function", ()=> {
+    it("I should be able to stringify JSON object using toString()", ()=> {
         var fileContent = fs.readFileSync(pureJsonfilePath).toJSON();
         var stringContent = Cjson.toString(fileContent);
         assert.equal(JSON.stringify(fileContent), stringContent);
     });
-});
 
-/**
- * Tests related to native JSON files
- */
-describe("JSON Test 2", () => {
+    it("I should be able to replace a value in JSON context using replace()", () => {
+        var cjson = new Cjson(cjsonfilePath);
+        cjson = cjson.replace("$.source.pure.quiz.sport.q1.answer", "Los Angeles Kings");
 
-    it("I should be able to use isContentJson()", () => {
-        var cjson = new Cjson(pureJsonfilePath);
-        assert.equal(cjson.isContentJson(), true);
+        assert.equal(cjson.json.parse("$.source.pure.quiz.sport.q1.answer"), "Los Angeles Kings");
     });
 
-    it("I should be able to parse jpath using `obj< Cjson >.json.parse(\"Valid.JPATH\")`", () => {
-        var cjson = new Cjson(cjsonfilePath);
-        cjson.deserialize();
-        
-        var value = cjson.json.parse("$.source.pure.quiz.sport.q1.question");
-        assert.equal(value, "Which one is correct team name in NBA?");
+    it("I should be able to inject null value during runtime", () => {
+        var cjson = new Cjson(VariableInjection);
+        cjson = cjson.inject({
+            "fruit": null
+        });
+        assert.equal(cjson.deserialize().target.fruit, null, "Null value injection is successfull");
     });
 
-    it("I should be able to parse full json using `obj< Cjson >.json.parse()`", () => {
-        var cjson = new Cjson(cjsonfilePath);
-        cjson.deserialize();
-
-        var value = JSON.stringify(cjson.json.parse());
-        assert.equal(value, JSON.stringify(cjson.deserialize()));
-    });
-
-    it("I should be able to replace a value using replace()", () => {
-        var cjson = new Cjson(cjsonfilePath);
-        cjson.deserialize();
-        var jPath = "$.source.pure.quiz.sport.q1.question"
-        cjson = cjson.replace(jPath, "New question");
-        assert.equal(cjson.json.parse(jPath), "New question");
+    it("I should be able to inject array", () => {
+        var cjson = new Cjson(VariableInjection);
+        cjson = cjson.inject({
+            "fruit": ["Orange", "Apple", "Banana"]
+        });
+        assert.equal(cjson.deserialize().target.fruit.length, 3, "Null value injection is successfull");
     });
 });
