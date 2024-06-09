@@ -44,6 +44,10 @@ jobs:
     name: Test
     runs-on: windows-latest
 
+    defaults:
+      run:
+        working-directory: ./npm
+
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
