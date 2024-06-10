@@ -2,8 +2,11 @@ import { CancellationToken, CompletionContext, CompletionItem, CompletionItemKin
 import { BackTrackSearchResult, DirectoryContent } from "../utils/interfaces";
 import { setAutCompleteList } from "../utils/utils";
 import { Registers } from "./register";
+import { Base } from "./base";
+import { Cjson } from "coded-json";
+import path from "path";
 
-export class CompletionItems implements CompletionItemProvider {
+export class CompletionItems extends Base implements CompletionItemProvider {
     private fileList: DirectoryContent[] | undefined;
     public completionItemList: CompletionItem[] = [];
     public previousCompleteList: CompletionItem[] = [];
@@ -148,5 +151,24 @@ export class CompletionItems implements CompletionItemProvider {
             }
             return false;
         }
+    }
+}
+
+export class RelativeVariableCompletionProvider extends Base implements CompletionItemProvider {
+    public completionItemList: CompletionItem[] = [];
+
+    provideCompletionItems(document: TextDocument, position: Position, token: CancellationToken, context: CompletionContext): ProviderResult<CompletionItem[] | CompletionList<CompletionItem>> {
+        let matchChars = this.getCharactersByRange(document, position, new Position(position.line, position.character - 1));
+        if(workspace.workspaceFolders) {
+            var a = document.fileName;
+            if(a !== undefined) {
+                var cjson = new Cjson(a);
+                cjson.json?.getAllKeys().map(eachElem => this.completionItemList.push(new CompletionItem(eachElem)));
+            }
+        }
+        return this.completionItemList;
+    }
+    resolveCompletionItem?(item: CompletionItem, token: CancellationToken): ProviderResult<CompletionItem> {
+        return item;
     }
 }
