@@ -51,7 +51,7 @@ describe("JSON Test 2", () => {
     });
 
     it("I should be able to get all keys after deserialization", () => {
-        var cjson = new Cjson(VariableInjection);
+        var cjson = new Cjson(relativeTargetCjson);
         cjson.deserialize();
 
         assert.notEqual(cjson.json.getAllKeys().length, 0, "getAllKeys() test passed");
