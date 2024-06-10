@@ -75,7 +75,10 @@ export class Json extends Base {
      * @param prevKey Previous key
      */
     private getKeys(jsonData: any, prevKey: string = "") {
-        if(isContentJson(JSON.stringify(jsonData))) {
+        if(jsonData === null)
+            this.pushKey("", prevKey);
+
+        else if(isContentJson(JSON.stringify(jsonData))) {
             Object.keys(jsonData).forEach(eachKey => {
                 if(Array.isArray(jsonData[eachKey])) {
                     var allRaw: boolean = true;
