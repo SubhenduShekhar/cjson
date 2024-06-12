@@ -8,6 +8,8 @@ export function activate(context: vscode.ExtensionContext) {
 
 	let goToDefinition = Registers.registerGoToImportDefinitionCommand();
 
+	let relativeVariableMapping = Registers.registerRelativeVariableMappingCommand();
+
 	// let deseralizeAndPreview = Registers.registerDeseralizeAndPreviewCommand();
 
 	// disposable = cjsonRegisterDocumentLinkCommand();

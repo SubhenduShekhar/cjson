@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { CompletionItems } from './completion-items';
+import { CompletionItems, RelativeVariableCompletionProvider } from './completion-items';
 import { GoToImportDefinition } from './goto-definition';
 import fs from "fs";
 import { Cjson } from "coded-json";
@@ -7,7 +7,7 @@ import { Cjson } from "coded-json";
 export class Registers {
     static registerImportFilesCommand() {
         let disposable = vscode.languages.registerCompletionItemProvider({language: "cjson", scheme: "file"}, 
-            new CompletionItems(), ".", "/", "\\");
+            new CompletionItems(), ".", "/", "\\", "$");
     
         return disposable;
     }
@@ -20,10 +20,14 @@ export class Registers {
     }
 
     static registerDeserializedPreviewView(nodePath: string) {
-        let panel = vscode.window.createWebviewPanel("cjson.deseralizeAndPreview", "Deserialised " + nodePath.split("/")[nodePath.split("/").length - 1], {
-            viewColumn: vscode.ViewColumn.One,
-            preserveFocus: true
-        });
+        let panel = vscode.window.createWebviewPanel("cjson.deseralizeAndPreview", "Deserialised " + nodePath.split("/")[nodePath.split("/").length - 1],
+        vscode.ViewColumn.One,
+        {
+            enableScripts: true,
+            enableForms: true,
+            enableCommandUris: true
+        }
+    );
         fs.readFile(nodePath, (err, data) => {
             if(err)
                 vscode.window.showErrorMessage(err.message);
@@ -52,5 +56,10 @@ export class Registers {
         return vscode.commands.registerCommand("cjson.deseralizeAndPreview", (node) => {
             this.registerDeserializedPreviewView(node.path.substring(1));
         }, this);
+    }
+
+    static registerRelativeVariableMappingCommand() {
+        return vscode.languages.registerCompletionItemProvider({ language: "cjson", scheme: "file"},
+            new RelativeVariableCompletionProvider(), "$");
     }
 }
