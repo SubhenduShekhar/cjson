@@ -13,12 +13,12 @@ export class CompletionItems extends Base implements CompletionItemProvider {
     // Condition for checkAndConfirm to work as expected
     private isDirectoryChanged: boolean = false;
 
-    private checkAndConfirm(item: string) {
+    protected checkAndConfirm(item: string): boolean {
         if(this.isDirectoryChanged)
             return false;
         else {
             for(let i = 0; i < this.completionItemList.length; i ++) 
-                if(JSON.parse(JSON.stringify(this.completionItemList[i].label.valueOf()))["label"] === item)
+                if(JSON.parse(JSON.stringify(this.completionItemList[i].label.valueOf())) === item)
                     return true;
             return false;
         }
@@ -157,15 +157,27 @@ export class CompletionItems extends Base implements CompletionItemProvider {
 export class RelativeVariableCompletionProvider extends Base implements CompletionItemProvider {
     public completionItemList: CompletionItem[] = [];
 
+    protected checkAndConfirm(item: string): boolean {
+        for(let i = 0; i < this.completionItemList.length; i ++) 
+            if(JSON.parse(JSON.stringify(this.completionItemList[i].label.valueOf())) === item)
+                return true;
+        return false;
+    }
+
     provideCompletionItems(document: TextDocument, position: Position, token: CancellationToken, context: CompletionContext): ProviderResult<CompletionItem[] | CompletionList<CompletionItem>> {
-        let matchChars = this.getCharactersByRange(document, position, new Position(position.line, position.character - 1));
         if(workspace.workspaceFolders) {
-            var a = document.fileName;
-            if(a !== undefined) {
-                var cjson = new Cjson(a);
-                cjson.json?.getAllKeys().map(eachElem => this.completionItemList.push(new CompletionItem(eachElem)));
+            if(document.fileName !== undefined) {
+                var cjson = new Cjson(document.fileName);
+                cjson.json?.getAllKeys().map((eachElem) => {
+                    if(! this.checkAndConfirm(eachElem))
+                        this.completionItemList.push(new CompletionItem(eachElem));
+                });
             }
+            else
+                window.showErrorMessage("No CJSON file is opened");
         }
+        else
+            window.showErrorMessage("CJSON requires folder to be opened");
         return this.completionItemList;
     }
     resolveCompletionItem?(item: CompletionItem, token: CancellationToken): ProviderResult<CompletionItem> {

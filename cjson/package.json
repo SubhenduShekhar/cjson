@@ -91,6 +91,6 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
-    "coded-json": "^2.1.0"
+    "coded-json": "^2.1.1"
   }
 }
