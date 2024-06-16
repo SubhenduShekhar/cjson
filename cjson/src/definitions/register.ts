@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { CompletionItems, RelativeVariableCompletionProvider } from './completion-items';
-import { GoToImportDefinition } from './goto-definition';
+import { GoToImportDefinition, GoToVariableDefinition } from './goto-definition';
 import fs from "fs";
 import { Cjson } from "coded-json";
 
@@ -61,5 +61,12 @@ export class Registers {
     static registerRelativeVariableMappingCommand() {
         return vscode.languages.registerCompletionItemProvider({ language: "cjson", scheme: "file"},
             new RelativeVariableCompletionProvider(), "$");
+    }
+
+    static registerGoToVariableDefinitionCommand() {
+        return vscode.languages.registerDefinitionProvider({
+            language: "cjson",
+            scheme: "file"
+        }, new GoToVariableDefinition())
     }
 }

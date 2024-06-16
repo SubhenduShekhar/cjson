@@ -2,6 +2,8 @@ import * as fs from "fs";
 import { DirectoryContent } from "./interfaces";
 import path from "path";
 import * as vscode from "vscode";
+import { Cjson } from "coded-json";
+import { NewC } from "./inh";
 
 export function convertDirectoryContentPathToRelative(absDirPath: string, pathToRemove: string): DirectoryContent[] {
     absDirPath = absDirPath.substring(1);
@@ -41,4 +43,16 @@ export function setAutCompleteList(relativeFolderPath?: string) {
         dirContent = [];
     }
     return dirContent;
+}
+
+export function findValueForRelativePath(variable: string, baseDocumentPath: vscode.Uri) {
+    var splittedVariable: string[] = variable.split(".");
+    for(let i = 0; i < splittedVariable.length; i ++) {
+        if(splittedVariable[i] === "$") continue;
+        var a = new NewC(baseDocumentPath.fsPath);
+        a.getDecodedString();
+        // var cjson: Cjson = new Cjson(baseDocumentPath.fsPath, false);
+
+        // var val = cjson.json?.parse(variable);
+    }
 }

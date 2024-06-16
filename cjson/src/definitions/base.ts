@@ -6,3 +6,11 @@ export abstract class Base {
     }
     protected abstract checkAndConfirm(item: string): boolean;
 }
+
+export abstract class GotoDefinitionBase{
+    protected abstract findRangeByTextInDocument(document: TextDocument, text: string, lineNumber: number): Range;
+
+    protected checkPositionInRange(range: Range, position: Position) {
+        return range.contains(position);
+    }
+}
