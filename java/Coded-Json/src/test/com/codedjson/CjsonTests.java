@@ -11,7 +11,7 @@ import java.util.HashMap;
 
 public class CjsonTests extends Base {
     @Test
-    public void iShouldBeAbleToImportPureJSONFiles() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError, UndeserializedCJSON, VariableInjectionException {
+    public void iShouldBeAbleToImportPureJSONFiles() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError, UndeserializedCJSON, VariableInjectionException, UnsupportedDatatypeForImport {
         CJson<Pure> cJson = new CJson<>(pureJsonfilePath);
         Pure pure = cJson.deserialize(Pure.class);
 
@@ -19,14 +19,14 @@ public class CjsonTests extends Base {
     }
 
     @Test
-    public void iShouldBeAbleToImportNestedCJSONFiles() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError, UndeserializedCJSON, VariableInjectionException {
+    public void iShouldBeAbleToImportNestedCJSONFiles() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError, UndeserializedCJSON, VariableInjectionException, UnsupportedDatatypeForImport {
         CJson<Target> cJson = new CJson<>(cjsonfilePath);
         Target target = cJson.deserialize(Target.class);
 
         Assertions.assertEquals(target.source.pure.quiz.get("sport").get("q1").question, "Which one is correct team name in NBA?", "Nested CJSON imports passed.");
     }
     @Test
-    public void iShouldBeAbleToDeserializeCommentsFromjsonFiles() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError, UndeserializedCJSON, VariableInjectionException {
+    public void iShouldBeAbleToDeserializeCommentsFromjsonFiles() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError, UndeserializedCJSON, VariableInjectionException, UnsupportedDatatypeForImport {
         CJson<Pure> cJson = new CJson<>(jsonfilePath);
         Pure cjsonObject = cJson.deserialize(Pure.class);
 
@@ -34,14 +34,14 @@ public class CjsonTests extends Base {
         Assertions.assertEquals(cjsonObject.quiz.get("sport").get("q2"), null);
     }
     @Test
-    public void iShouldBeAbleToDeserializeImportsAndComments() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError, UndeserializedCJSON, VariableInjectionException {
+    public void iShouldBeAbleToDeserializeImportsAndComments() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError, UndeserializedCJSON, VariableInjectionException, UnsupportedDatatypeForImport {
         CJson<Target> cJson = new CJson<>(cjsonfilePath);
         Target decodedJson = cJson.deserialize(Target.class);
         Assertions.assertNotEquals(decodedJson.source.pure.quiz, null, "Value check in source");
         Assertions.assertNotEquals(decodedJson.target.color, null, "Value check in target.color");
     }
     @Test
-    public void iShouldBeAbleToDeserializeRelativePathToLocalVariable() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError, UndeserializedCJSON, IllegalValueType, InvalidJPathError, VariableInjectionException {
+    public void iShouldBeAbleToDeserializeRelativePathToLocalVariable() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError, UndeserializedCJSON, IllegalValueType, InvalidJPathError, VariableInjectionException, UnsupportedDatatypeForImport {
         CJson<TargetRelativeCalls> cJson = new CJson<TargetRelativeCalls>(relativeTargetCjson);
         HashMap<String, Object> toBeInjected = new HashMap<>();
         toBeInjected.put("fruit", "Orange");
@@ -54,7 +54,7 @@ public class CjsonTests extends Base {
         Assertions.assertEquals(targetRelativeCalls.target.digitCheck, cJson.parse("$.target.digitCheck"));
     }
     @Test
-    public void iShouldBeAbleToDeserializeCJSONString() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError, UndeserializedCJSON, VariableInjectionException {
+    public void iShouldBeAbleToDeserializeCJSONString() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError, UndeserializedCJSON, VariableInjectionException, UnsupportedDatatypeForImport {
         String cjsonCotent = "{\n" +
                 "    \"source\": $import \"" + pureJsonfilePath.toString() + "\",\n" +
                 "    \"target\": {\n" +
@@ -81,7 +81,7 @@ public class CjsonTests extends Base {
         Assertions.assertThrows(AbsolutePathConstraintError.class, () -> new CJson<>(cjsonContent) );
     }
     @Test
-    public void iShouldBeAbleToInjectRuntimeValuesUsingKeyValue() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError, UndeserializedCJSON, VariableInjectionException {
+    public void iShouldBeAbleToInjectRuntimeValuesUsingKeyValue() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError, UndeserializedCJSON, VariableInjectionException, UnsupportedDatatypeForImport {
         CJson<TargetObj> cJson = new CJson<>("{\n" +
                 "        \"types\": \"asd\",\n" +
                 "        \"fruit\": <fruit>" +
@@ -91,7 +91,7 @@ public class CjsonTests extends Base {
         Assertions.assertEquals(targetObj.fruit, "apple");
     }
     @Test
-    public void iShouldBeAbleToInjectRuntimeValuesUsingHashMap() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError, UndeserializedCJSON, VariableInjectionException {
+    public void iShouldBeAbleToInjectRuntimeValuesUsingHashMap() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError, UndeserializedCJSON, VariableInjectionException, UnsupportedDatatypeForImport {
         CJson<VariableInjection> cJson = new CJson<>(variableInjectionCjson);
         HashMap<String, Object> values = new HashMap<>();
         values.put("jsonTypeData", "placeholder");
@@ -104,7 +104,7 @@ public class CjsonTests extends Base {
         Assertions.assertEquals(variableInjection.target.fruit, "apple");
     }
     @Test
-    public void iShouldBeAbleToDeserializeAndFetchAsString() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError, UndeserializedCJSON, VariableInjectionException {
+    public void iShouldBeAbleToDeserializeAndFetchAsString() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError, UndeserializedCJSON, VariableInjectionException, UnsupportedDatatypeForImport {
         CJson<Target> cJson = new CJson<>(cjsonfilePath);
 
         String targetRelativeCallsString = cJson.deserializeAsString();
@@ -114,7 +114,7 @@ public class CjsonTests extends Base {
         Assertions.assertEquals(target.source.pure.quiz.get("sport").get("q1").question, "Which one is correct team name in NBA?");
     }
     @Test
-    public void iShouldBeAbleToInjectNull() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError, UndeserializedCJSON, VariableInjectionException {
+    public void iShouldBeAbleToInjectNull() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError, UndeserializedCJSON, VariableInjectionException, UnsupportedDatatypeForImport {
         CJson<TargetObj> cJson = new CJson<>("{\n" +
                 "        \"types\": \"asd\",\n" +
                 "        \"fruit\": <fruit>" +
@@ -124,7 +124,7 @@ public class CjsonTests extends Base {
         Assertions.assertNull(targetObj.fruit);
     }
     @Test
-    public void iShouldBeAbleToReferInjectedVariable() throws IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException, UndeserializedCJSON, VariableInjectionException {
+    public void iShouldBeAbleToReferInjectedVariable() throws IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException, UndeserializedCJSON, VariableInjectionException, UnsupportedDatatypeForImport {
         CJson<ReferInjectedVariable> cJson = new CJson<>(referInjectedVariable);
         ReferInjectedVariable referInjectedVariable = cJson.inject(ReferInjectedVariable.class, new HashMap<String, Object>() {
             {
@@ -137,7 +137,7 @@ public class CjsonTests extends Base {
         Assertions.assertEquals(referInjectedVariable.variableInjection.target.quantity, 100);
     }
     @Test
-    public void iShouldBeAbleToInjectValuesForKeysWithSpecialCharacters() throws IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException, UndeserializedCJSON, InvalidJPathError, VariableInjectionException {
+    public void iShouldBeAbleToInjectValuesForKeysWithSpecialCharacters() throws IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException, UndeserializedCJSON, InvalidJPathError, VariableInjectionException, UnsupportedDatatypeForImport {
         CJson<TargetObj> cJson = new CJson<>("{\n" +
                 "        \"types\": \"asd\",\n" +
                 "        \"fruit\": <fruit!@#$%^&*()>" +
@@ -146,7 +146,7 @@ public class CjsonTests extends Base {
         Assertions.assertEquals(cJson.parse("$.fruit"), "apple");
     }
     @Test
-    public void iShouldBeAbleToInjectSpecialCharacters() throws IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException, InvalidJPathError, VariableInjectionException {
+    public void iShouldBeAbleToInjectSpecialCharacters() throws IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException, InvalidJPathError, VariableInjectionException, UnsupportedDatatypeForImport {
         CJson<TargetObj> cJson = new CJson<>("{\n" +
                 "        \"types\": \"asd\",\n" +
                 "        \"fruit\": <fruit!:@#$%^&*()>" +
@@ -155,14 +155,14 @@ public class CjsonTests extends Base {
         Assertions.assertNull(cJson.parse("$.fruit"));
     }
     @Test
-    public void iShouldBeAbleToDeserializeRawDataInInjectionQuotes() throws IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException, VariableInjectionException {
+    public void iShouldBeAbleToDeserializeRawDataInInjectionQuotes() throws IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException, VariableInjectionException, UnsupportedDatatypeForImport {
         CJson<VariableInjection> cJson = new CJson<>(variableInjectionCjson);
         Assertions.assertThrows(VariableInjectionException.class, () -> {
             cJson.deserialize(VariableInjection.class);
         });
     }
     @Test
-    public void iShouldBeAbleToIgnoreInjectsUnderQuotes() throws IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException, VariableInjectionException {
+    public void iShouldBeAbleToIgnoreInjectsUnderQuotes() throws IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException, VariableInjectionException, UnsupportedDatatypeForImport {
         CJson<VariableInjection> cJson = new CJson<>(variableInjectionCjson);
         cJson.inject(VariableInjection.class, "quantity", 1);
         VariableInjection variableInjection = cJson.deserialize(VariableInjection.class);
