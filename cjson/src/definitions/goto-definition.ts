@@ -1,6 +1,7 @@
 import { CancellationToken, Definition, DefinitionProvider, LocationLink, Position, ProviderResult, Range, TextDocument, TextLine, Uri, window, workspace } from "vscode";
 import path from "path";
 import * as fs from "fs";
+import { Cjson } from "coded-json";
 
 export class GoToImportDefinition implements DefinitionProvider {
     private relativeJPathRegex: RegExp = new RegExp("[$][.][.A-Za-z0-9]*", "g");
@@ -91,18 +92,32 @@ export class GoToImportDefinition implements DefinitionProvider {
                     this.curKey = relativeVariablePaths[i].split("$.")[1];
                     let splitKeys: string[] = this.curKey.split(".");
 
+                    var docText: string = document.getText();
+                    var docPath: string = document.fileName
+                    var targetRange: Range = new Range(new Position(0, 0), new Position(0, 0));
+
+
                     for(let j = 0; j < splitKeys.length; j ++) {
-                        var keysWithImports: any = this.findKeysWithImports(document.getText());
+                        var keysWithImports: any = this.findKeysWithImports(docText);
 
                         if(Object.keys(keysWithImports).includes(splitKeys[j])) {
-
-                            //var newDocuText: string = fs.readFileSync(path.join(path.dirname(document.fileName), this.importPaths[i]))
+                            docPath = path.join(path.dirname(document.fileName), keysWithImports[splitKeys[j]]);
+                            docText = fs.readFileSync(docPath).toString();
+                        }
+                        else {
+                            var cjson = new Cjson(docPath);
+                            if(Object.keys(cjson.deserialize()).includes(splitKeys[j])) {
+                                targetRange = this.findRangeByTextInDocument(docText, splitKeys[j])
+                            }
                         }
                     }
-                    this.findRelativeVariableLocationRecursively(document.getText(), 
-                        position,
-                        path.dirname(document.fileName),
-                        this.curKey);
+
+                    return [{
+                        targetRange: new Range(new Position(0, 9), new Position(700, 19)),
+                        targetUri: Uri.file(docPath),
+                        originSelectionRange: originRange,
+                        targetSelectionRange: targetRange
+                    }]
                 }
             }
         }
@@ -113,26 +128,26 @@ export class GoToImportDefinition implements DefinitionProvider {
 
 
 
-    findRelativeVariableLocationRecursively(documentText: string, position: Position, docPath: string, relVarPath: string) {
-        var keys: string[] = this.curKey.split(".");
-        var keysWithImports: any = this.findKeysWithImports(documentText);
+    // findRelativeVariableLocationRecursively(documentText: string, position: Position, docPath: string, relVarPath: string) {
+    //     var keys: string[] = this.curKey.split(".");
+    //     var keysWithImports: any = this.findKeysWithImports(documentText);
 
-        // When relative path is empty and value is found
-        if(this.curKey == "")
-            return docPath;
+    //     // When relative path is empty and value is found
+    //     if(this.curKey == "")
+    //         return docPath;
         
-        for(let i = 0; i < keys.length; i ++) {
-            if(Object.keys(keysWithImports).includes(keys[i])) {
-                this.curKey = this.curKey.replace(keys[i], "");
+    //     for(let i = 0; i < keys.length; i ++) {
+    //         if(Object.keys(keysWithImports).includes(keys[i])) {
+    //             this.curKey = this.curKey.replace(keys[i], "");
                 
-                if(this.curKey.startsWith("."))
-                    this.curKey = this.curKey.substring(1);
-                // Find next key
-                this.findRelativeVariableLocationRecursively(keysWithImports[keys[i]], position, docPath, this.curKey);
-            }
-            else {
+    //             if(this.curKey.startsWith("."))
+    //                 this.curKey = this.curKey.substring(1);
+    //             // Find next key
+    //             this.findRelativeVariableLocationRecursively(keysWithImports[keys[i]], position, docPath, this.curKey);
+    //         }
+    //         else {
 
-            }
-        }
-    }
+    //         }
+    //     }
+    // }
 }
