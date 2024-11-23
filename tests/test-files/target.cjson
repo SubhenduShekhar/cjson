@@ -1,6 +1,6 @@
 {
     // asdas
-    "source": $import "./sub-dir/source.json",
+    "source": $import "./sub-dir/source.cjson",
     "target": {
         "fruit": "Apple",
         "size": "Large",

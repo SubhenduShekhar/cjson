@@ -60,6 +60,6 @@ export class Registers {
 
     static registerRelativeVariableMappingCommand() {
         return vscode.languages.registerCompletionItemProvider({ language: "cjson", scheme: "file"},
-            new RelativeVariableCompletionProvider(), "$");
+            new RelativeVariableCompletionProvider(), ".");
     }
 }
