@@ -10,7 +10,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	let relativeVariableMapping = Registers.registerRelativeVariableMappingCommand();
 
-	// let deseralizeAndPreview = Registers.registerDeseralizeAndPreviewCommand();
+	let deseralizeAndPreview = Registers.registerDeseralizeAndPreviewCommand();
 
 	// disposable = cjsonRegisterDocumentLinkCommand();
 

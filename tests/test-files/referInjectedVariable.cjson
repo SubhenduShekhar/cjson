@@ -1,4 +1,5 @@
 {
+    //asdasd
     "variableInjection": $import "./VariableInjection.cjson",
     "target": {
         "fruit": $.variableInjection.target.fruit,

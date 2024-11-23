@@ -73,7 +73,7 @@ export class CompletionItems extends Base implements CompletionItemProvider {
 
         if(positionCharacterMatch === "\"./") {
             this.setCompletionItemsList();
-            this.isDirectoryChanged = false;
+                this.isDirectoryChanged = false;
         }
         else if(triggerToken === ".") {
             this.completionItemList = [{
@@ -124,16 +124,21 @@ export class CompletionItems extends Base implements CompletionItemProvider {
 
     private setCompletionItemsList() {
         if(this.fileList != undefined) {
+            let k = 0;
             for(let i = 0; i < this.fileList.length; i ++) {
                 if(!this.checkAndConfirm(this.fileList[i].url)) {
                     if(!this.fileList[i].isDirectory) 
                         this.completionItemList.push(new CompletionItem({
                             label: this.fileList[i].url
                         }, CompletionItemKind.File))
-                    else
-                        this.completionItemList.push(new CompletionItem({
-                            label: this.fileList[i].url
-                        }, CompletionItemKind.Folder))
+                    else {
+                        let fileItem = this.completionItemList[k]
+                        this.completionItemList[k] = new CompletionItem({
+                                label: this.fileList[i].url
+                            }, CompletionItemKind.Folder)
+
+                        this.completionItemList.push(fileItem)
+                    }
                 }
             }
         }
@@ -167,11 +172,16 @@ export class RelativeVariableCompletionProvider extends Base implements Completi
     provideCompletionItems(document: TextDocument, position: Position, token: CancellationToken, context: CompletionContext): ProviderResult<CompletionItem[] | CompletionList<CompletionItem>> {
         if(workspace.workspaceFolders) {
             if(document.fileName !== undefined) {
-                var cjson = new Cjson(document.fileName);
-                cjson.json?.getAllKeys().map((eachElem) => {
-                    if(! this.checkAndConfirm(eachElem))
-                        this.completionItemList.push(new CompletionItem(eachElem));
-                });
+                var positionCharacterMatch = document.getText(new Range(position, new Position(position.line, position.character - 2)));
+                var triggerToken: string = document.getText(new Range(position, new Position(position.line, position.character - 1)));
+
+                if(positionCharacterMatch.includes("$.")) {
+                    var cjson = new Cjson(document.fileName);
+                    cjson.json?.getAllKeys().map((eachElem) => {
+                        if(! this.checkAndConfirm(eachElem))
+                            this.completionItemList.push(new CompletionItem(eachElem));
+                    });
+                }
             }
             else
                 window.showErrorMessage("No CJSON file is opened");
