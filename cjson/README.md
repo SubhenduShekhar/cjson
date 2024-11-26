@@ -11,4 +11,4 @@ CJSON language support for visual studio code extension.
 - File import navigation
 
 <br/>
-<img src="./src/icons/language-highlights.png" />
+<img src="https://raw.githubusercontent.com/SubhenduShekhar/cjson/refs/heads/vscode-extn/cjson/src/icons/language-highlights.png" />
