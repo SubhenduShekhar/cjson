@@ -11,7 +11,7 @@ import java.util.List;
 
 public class CjsonRemoveTests extends Base {
     @Test
-    public void iShouldBeAbleToRemoveAStringKeyValue() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError, UndeserializedCJSON, InvalidJPathError, VariableInjectionException {
+    public void iShouldBeAbleToRemoveAStringKeyValue() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError, UndeserializedCJSON, InvalidJPathError, VariableInjectionException, UnsupportedDatatypeForImport {
         CJson<Target> cJson = new CJson<>(cjsonfilePath);
         cJson.deserialize(Target.class);
         Target target = cJson.remove("$.target.fruit");
@@ -23,7 +23,7 @@ public class CjsonRemoveTests extends Base {
         Assertions.assertEquals(target.target.quantity, 0);
     }
     @Test
-    public void iShouldBeAbleToReceiveUndeserializedCJSONExceptionIRemoveWithoutDeserialize() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError {
+    public void iShouldBeAbleToReceiveUndeserializedCJSONExceptionIRemoveWithoutDeserialize() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError, UnsupportedDatatypeForImport {
         CJson<Target> cJson = new CJson<>(cjsonfilePath);
 
         Assertions.assertThrows(UndeserializedCJSON.class, () -> {
@@ -31,7 +31,7 @@ public class CjsonRemoveTests extends Base {
         });
     }
     @Test
-    public void iShouldBeAbleToRemoveUsingListOfKeys() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError, UndeserializedCJSON, VariableInjectionException {
+    public void iShouldBeAbleToRemoveUsingListOfKeys() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError, UndeserializedCJSON, VariableInjectionException, UnsupportedDatatypeForImport {
         CJson<Target> cJson = new CJson<>(cjsonfilePath);
         cJson.deserialize(Target.class);
 
@@ -48,7 +48,7 @@ public class CjsonRemoveTests extends Base {
         Assertions.assertEquals(target.target.quantity, 0);
     }
     @Test
-    public void iShouldBeAbleToReceiveUndeserializedCJSONExceptionIRemoveWithoutDeserializeInListOfKeys() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError {
+    public void iShouldBeAbleToReceiveUndeserializedCJSONExceptionIRemoveWithoutDeserializeInListOfKeys() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError, UnsupportedDatatypeForImport {
         CJson<Target> cJson = new CJson<>(cjsonfilePath);
         List<String> li = new ArrayList<>();
         li.add("$.target.fruit");
