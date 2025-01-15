@@ -9,6 +9,6 @@ import java.nio.file.Paths;
 
 public class Main {
     public static void main(String[] args) throws IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException, UnsupportedDatatypeForImport {
-        CJson<String> cjson = new CJson<>(Paths.get("C:\\Users\\Home\\OneDrive\\Desktop\\projects\\cjson\\tests\\test-files\\asKeywordTest.cjson"));
+        String str = CJson.read("C:\\Users\\Home\\OneDrive\\Desktop\\projects\\cjson\\tests\\test-files\\pure.json");
     }
 }
