@@ -83,6 +83,7 @@ export class GoToImportDefinition implements DefinitionProvider {
 
         var relativeVariablePaths: string[] = this.findRelativeVariablePathsInDocument(document.getText());
         var keysWithImports: any = this.findKeysWithImports(document.getText());
+        var prevDocPath: string = "";
 
         for(let i = 0; i < relativeVariablePaths.length; i ++) {
             if(workspace.workspaceFolders !== undefined) {
@@ -105,15 +106,30 @@ export class GoToImportDefinition implements DefinitionProvider {
                             docText = fs.readFileSync(docPath).toString();
                         }
                         else {
-                            var cjson = new Cjson(docPath);
-                            if(Object.keys(cjson.deserialize()).includes(splitKeys[j])) {
-                                targetRange = this.findRangeByTextInDocument(docText, splitKeys[j])
+                            if(prevDocPath !== docPath) {
+                                var cjson = new Cjson(docPath);
+                                
+                                if(Object.keys(cjson.deserialize()).includes(splitKeys[j])) {
+                                    targetRange = this.findRangeByTextInDocument(docText, splitKeys[j])
+                                    let jsn = JSON.parse(cjson.deserializeAsString())[splitKeys[j]]
+                                    docText = JSON.stringify(jsn)
+                                }
+                                prevDocPath = docPath;
+                            }
+                            else {
+                                if(Object.keys(JSON.parse(docText)).includes(splitKeys[j])) {
+                                    docText = JSON.stringify(JSON.parse(docText)[splitKeys[j]])
+                                    let gotRange: Range = this.findRangeByTextInDocument(docText, splitKeys[j]);
+                                    let start: Position = new Position(targetRange.start.line + gotRange.start.line, targetRange.start.character + gotRange.start.character)
+                                    let end: Position = new Position(targetRange.end.line + gotRange.end.line, targetRange.end.line + gotRange.end.line);
+                                    targetRange = new Range(start, end);
+                                }
                             }
                         }
                     }
 
                     return [{
-                        targetRange: new Range(new Position(0, 9), new Position(700, 19)),
+                        targetRange: targetRange,
                         targetUri: Uri.file(docPath),
                         originSelectionRange: originRange,
                         targetSelectionRange: targetRange
@@ -121,33 +137,5 @@ export class GoToImportDefinition implements DefinitionProvider {
                 }
             }
         }
-
-        // var splittedPaths: string[] | undefined = keywordSearch?.split("$.")[1].split(".");
-        // this.findRelativeVariableLocationRecursively(document.getText(), position, path.dirname(document.fileName));
     }
-
-
-
-    // findRelativeVariableLocationRecursively(documentText: string, position: Position, docPath: string, relVarPath: string) {
-    //     var keys: string[] = this.curKey.split(".");
-    //     var keysWithImports: any = this.findKeysWithImports(documentText);
-
-    //     // When relative path is empty and value is found
-    //     if(this.curKey == "")
-    //         return docPath;
-        
-    //     for(let i = 0; i < keys.length; i ++) {
-    //         if(Object.keys(keysWithImports).includes(keys[i])) {
-    //             this.curKey = this.curKey.replace(keys[i], "");
-                
-    //             if(this.curKey.startsWith("."))
-    //                 this.curKey = this.curKey.substring(1);
-    //             // Find next key
-    //             this.findRelativeVariableLocationRecursively(keysWithImports[keys[i]], position, docPath, this.curKey);
-    //         }
-    //         else {
-
-    //         }
-    //     }
-    // }
 }
