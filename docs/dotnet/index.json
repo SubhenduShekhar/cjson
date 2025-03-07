@@ -1,0 +1,277 @@
+{
+  "CJson/api/CJson.CJson-1.html": {
+    "href": "CJson/api/CJson.CJson-1.html",
+    "title": "Class CJson<Type> | CJson",
+    "summary": "Class CJson<Type> Namespace CJson Assembly CJson.dll CJson entrypoint class. Object must be created for any CJson file or content for deserializing. Only class object to JSON string conversion can be done without object creation. public sealed class CJson<Type> : Decode Type Parameters Type Class Type should be passed. For more info, see official docs Inheritance Object Base Is Json Decode CJson<Type> Inherited Members Decode.runtimeValList Decode.matchedPaths Decode.isDeseralized Decode.Get() Decode.DecodeKeywords Decode.ReplaceContent(String, Object) Decode.InjectData(String, Object) Decode.GetAsString(Object) Decode.CheckForRuntimeVals() Json.json Json.ParseValue(String) Json.RedefineJson(String) Json.Parse(String) Is.MatchAndConfirm Is.Scan() Base.filePath Base.content Base.commaSeparatedLines Base.isFilePath Base.isInjectDone Base.isInjectEist Base.Read(String) Base.ParseJson(String) Base.GetType(Object) Base.Generify(String) Object.Equals(Object) Object.Equals(Object, Object) Object.GetHashCode() Object.GetType() Object.MemberwiseClone() Object.ReferenceEquals(Object, Object) Object.ToString() Constructors CJson(Path) Constructor for CJSON/ JSON file path CJson/JSON file path to be passed with CJson.Path class constructor. For loading CJSON/JSON raw content, please call CJSON(string content) contructor public CJson(Path filePath) Parameters filePath Path CJson.Path class constructor CJson(String) Constructor for raw CJSON/ JSON content CJson content to be passed. For loading CJSON/ JSON file, please create constructor with CJson.Path class For import statements, please specify absolute path to the file to be imported. public CJson(string content) Parameters content String CJson content in string format Methods Deserialize() Call this method to deserialize CJSON content to ClassType. If any error in format of the class hierarchy exists, this function will return a null valued object to the provided ClassType public Type Deserialize() Returns Type Deserialized class object of Type. Null if Type and CJSON content mismatches DeserializeAsString() public String DeserializeAsString() Returns String Inject(Dictionary<String, Object>) Call this function to inject value which expects a dynamic injection. You can use this function for bulk injection. For more info, check this link public Type Inject(Dictionary<String, dynamic> injectingValues) Parameters injectingValues Dictionary<String, Object> Dictionary whose key is location and value is data to be inject Returns Type Inject(String, Object) Call this function to inject value which expects a dynamic injection. Please note, inject doesnt work on inject at jpath, or inject at any json key. For more info, check this link public Type Inject(String key, dynamic value) Parameters key String Where you want to inject value Object Value which you want to inject at key Returns Type Deserialized class object of Type. Null if Type and CJSON content mismatches Remove(List<String>) public CJson<Type> Remove(List<String> jPathList) Parameters jPathList List<String> Returns CJson<Type> Remove(String) public CJson<Type> Remove(String jPath) Parameters jPath String Returns CJson<Type> ToString(Object) Use this function to convert a class object to a JSON string. No CJSON operation can be performed after this function. public static String ToString(dynamic value) Parameters value Object class object Returns String"
+  },
+  "CJson/api/CJson.Exceptions.AbsolutePathConstraintError.html": {
+    "href": "CJson/api/CJson.Exceptions.AbsolutePathConstraintError.html",
+    "title": "Class AbsolutePathConstraintError | CJson",
+    "summary": "Class AbsolutePathConstraintError Namespace CJson.Exceptions Assembly CJson.dll public class AbsolutePathConstraintError : Exception, ISerializable Inheritance Object Exception AbsolutePathConstraintError Implements ISerializable Inherited Members Exception.GetBaseException() Exception.GetObjectData(SerializationInfo, StreamingContext) Exception.GetType() Exception.ToString() Exception.Data Exception.HelpLink Exception.HResult Exception.InnerException Exception.Message Exception.Source Exception.StackTrace Exception.TargetSite Exception.SerializeObjectState Object.Equals(Object) Object.Equals(Object, Object) Object.GetHashCode() Object.MemberwiseClone() Object.ReferenceEquals(Object, Object) Constructors AbsolutePathConstraintError() public AbsolutePathConstraintError()"
+  },
+  "CJson/api/CJson.Exceptions.IllegalImportStatement.html": {
+    "href": "CJson/api/CJson.Exceptions.IllegalImportStatement.html",
+    "title": "Class IllegalImportStatement | CJson",
+    "summary": "Class IllegalImportStatement Namespace CJson.Exceptions Assembly CJson.dll public class IllegalImportStatement : Exception, ISerializable Inheritance Object Exception IllegalImportStatement Implements ISerializable Inherited Members Exception.GetBaseException() Exception.GetObjectData(SerializationInfo, StreamingContext) Exception.GetType() Exception.ToString() Exception.Data Exception.HelpLink Exception.HResult Exception.InnerException Exception.Message Exception.Source Exception.StackTrace Exception.TargetSite Exception.SerializeObjectState Object.Equals(Object) Object.Equals(Object, Object) Object.GetHashCode() Object.MemberwiseClone() Object.ReferenceEquals(Object, Object) Constructors IllegalImportStatement() public IllegalImportStatement() IllegalImportStatement(String) public IllegalImportStatement(string message) Parameters message String"
+  },
+  "CJson/api/CJson.Exceptions.InvalidJPathError.html": {
+    "href": "CJson/api/CJson.Exceptions.InvalidJPathError.html",
+    "title": "Class InvalidJPathError | CJson",
+    "summary": "Class InvalidJPathError Namespace CJson.Exceptions Assembly CJson.dll public class InvalidJPathError : Exception, ISerializable Inheritance Object Exception InvalidJPathError Implements ISerializable Inherited Members Exception.GetBaseException() Exception.GetObjectData(SerializationInfo, StreamingContext) Exception.GetType() Exception.ToString() Exception.Data Exception.HelpLink Exception.HResult Exception.InnerException Exception.Message Exception.Source Exception.StackTrace Exception.TargetSite Exception.SerializeObjectState Object.Equals(Object) Object.Equals(Object, Object) Object.GetHashCode() Object.MemberwiseClone() Object.ReferenceEquals(Object, Object) Constructors InvalidJPathError() public InvalidJPathError()"
+  },
+  "CJson/api/CJson.Exceptions.UndeserializedCJSON.html": {
+    "href": "CJson/api/CJson.Exceptions.UndeserializedCJSON.html",
+    "title": "Class UndeserializedCJSON | CJson",
+    "summary": "Class UndeserializedCJSON Namespace CJson.Exceptions Assembly CJson.dll public class UndeserializedCJSON : Exception, ISerializable Inheritance Object Exception UndeserializedCJSON Implements ISerializable Inherited Members Exception.GetBaseException() Exception.GetObjectData(SerializationInfo, StreamingContext) Exception.GetType() Exception.ToString() Exception.Data Exception.HelpLink Exception.HResult Exception.InnerException Exception.Message Exception.Source Exception.StackTrace Exception.TargetSite Exception.SerializeObjectState Object.Equals(Object) Object.Equals(Object, Object) Object.GetHashCode() Object.MemberwiseClone() Object.ReferenceEquals(Object, Object) Constructors UndeserializedCJSON(String) public UndeserializedCJSON(string message) Parameters message String"
+  },
+  "CJson/api/CJson.Exceptions.UnrecognizedTypeException.html": {
+    "href": "CJson/api/CJson.Exceptions.UnrecognizedTypeException.html",
+    "title": "Class UnrecognizedTypeException | CJson",
+    "summary": "Class UnrecognizedTypeException Namespace CJson.Exceptions Assembly CJson.dll public class UnrecognizedTypeException : Exception, ISerializable Inheritance Object Exception UnrecognizedTypeException Implements ISerializable Inherited Members Exception.GetBaseException() Exception.GetObjectData(SerializationInfo, StreamingContext) Exception.GetType() Exception.ToString() Exception.Data Exception.HelpLink Exception.HResult Exception.InnerException Exception.Message Exception.Source Exception.StackTrace Exception.TargetSite Exception.SerializeObjectState Object.Equals(Object) Object.Equals(Object, Object) Object.GetHashCode() Object.MemberwiseClone() Object.ReferenceEquals(Object, Object) Constructors UnrecognizedTypeException() public UnrecognizedTypeException() UnrecognizedTypeException(String) public UnrecognizedTypeException(string message) Parameters message String"
+  },
+  "CJson/api/CJson.Exceptions.UnsupportedFileExtension.html": {
+    "href": "CJson/api/CJson.Exceptions.UnsupportedFileExtension.html",
+    "title": "Class UnsupportedFileExtension | CJson",
+    "summary": "Class UnsupportedFileExtension Namespace CJson.Exceptions Assembly CJson.dll public class UnsupportedFileExtension : Exception, ISerializable Inheritance Object Exception UnsupportedFileExtension Implements ISerializable Inherited Members Exception.GetBaseException() Exception.GetObjectData(SerializationInfo, StreamingContext) Exception.GetType() Exception.ToString() Exception.Data Exception.HelpLink Exception.HResult Exception.InnerException Exception.Message Exception.Source Exception.StackTrace Exception.TargetSite Exception.SerializeObjectState Object.Equals(Object) Object.Equals(Object, Object) Object.GetHashCode() Object.MemberwiseClone() Object.ReferenceEquals(Object, Object) Constructors UnsupportedFileExtension() public UnsupportedFileExtension() UnsupportedFileExtension(String) public UnsupportedFileExtension(string message) Parameters message String"
+  },
+  "CJson/api/CJson.Exceptions.VariableInjectionException.html": {
+    "href": "CJson/api/CJson.Exceptions.VariableInjectionException.html",
+    "title": "Class VariableInjectionException | CJson",
+    "summary": "Class VariableInjectionException Namespace CJson.Exceptions Assembly CJson.dll public class VariableInjectionException : Exception, ISerializable Inheritance Object Exception VariableInjectionException Implements ISerializable Inherited Members Exception.GetBaseException() Exception.GetObjectData(SerializationInfo, StreamingContext) Exception.GetType() Exception.ToString() Exception.Data Exception.HelpLink Exception.HResult Exception.InnerException Exception.Message Exception.Source Exception.StackTrace Exception.TargetSite Exception.SerializeObjectState Object.Equals(Object) Object.Equals(Object, Object) Object.GetHashCode() Object.MemberwiseClone() Object.ReferenceEquals(Object, Object) Constructors VariableInjectionException(String) public VariableInjectionException(string message) Parameters message String"
+  },
+  "CJson/api/CJson.Exceptions.html": {
+    "href": "CJson/api/CJson.Exceptions.html",
+    "title": "Namespace CJson.Exceptions | CJson",
+    "summary": "Namespace CJson.Exceptions Classes AbsolutePathConstraintError IllegalImportStatement InvalidJPathError UndeserializedCJSON UnrecognizedTypeException UnsupportedFileExtension VariableInjectionException"
+  },
+  "CJson/api/CJson.Path.html": {
+    "href": "CJson/api/CJson.Path.html",
+    "title": "Class Path | CJson",
+    "summary": "Class Path Namespace CJson Assembly CJson.dll For file path related operations, use this class object. public class Path Inheritance Object Path Inherited Members Object.Equals(Object) Object.Equals(Object, Object) Object.GetHashCode() Object.GetType() Object.MemberwiseClone() Object.ReferenceEquals(Object, Object) Constructors Path(String[]) Constructor for object creation. Please provide absolute path for this operation. public Path(params string[] filePath) Parameters filePath String[] Properties ToString Get the string value of the path public string ToString { get; } Property Value String Methods IsAbsolutePath(String) Returns true if the path is absolute, else false. This method is not tested in IOS. For bug report, refer to the github public static bool IsAbsolutePath(string filePath) Parameters filePath String Test path Returns Boolean true if path is absolute, else false in boolean"
+  },
+  "CJson/api/CJson.Types.ParsedValue.html": {
+    "href": "CJson/api/CJson.Types.ParsedValue.html",
+    "title": "Class ParsedValue | CJson",
+    "summary": "Class ParsedValue Namespace CJson.Types Assembly CJson.dll public class ParsedValue Inheritance Object ParsedValue Inherited Members Object.Equals(Object) Object.Equals(Object, Object) Object.GetHashCode() Object.GetType() Object.MemberwiseClone() Object.ReferenceEquals(Object, Object) Object.ToString() Constructors ParsedValue(Object, String) public ParsedValue(object value, string type) Parameters value Object type String Fields type public string type Field Value String value public dynamic value Field Value Object"
+  },
+  "CJson/api/CJson.Types.Try.html": {
+    "href": "CJson/api/CJson.Types.Try.html",
+    "title": "Class Try | CJson",
+    "summary": "Class Try Namespace CJson.Types Assembly CJson.dll public class Try Inheritance Object Try Inherited Members Object.Equals(Object) Object.Equals(Object, Object) Object.GetHashCode() Object.GetType() Object.MemberwiseClone() Object.ReferenceEquals(Object, Object) Object.ToString() Methods GetType(Object) public static String GetType(dynamic value) Parameters value Object Returns String TryBoolean(JValue) public static Boolean TryBoolean(JValue jValue) Parameters jValue JValue Returns Boolean TryDouble(JValue) public static Boolean TryDouble(JValue jValue) Parameters jValue JValue Returns Boolean TryInt32(JValue) public static Boolean TryInt32(JValue jValue) Parameters jValue JValue Returns Boolean TryNull(JValue) public static Boolean TryNull(JValue jValue) Parameters jValue JValue Returns Boolean TryString(JValue) public static Boolean TryString(JValue jValue) Parameters jValue JValue Returns Boolean"
+  },
+  "CJson/api/CJson.Types.html": {
+    "href": "CJson/api/CJson.Types.html",
+    "title": "Namespace CJson.Types | CJson",
+    "summary": "Namespace CJson.Types Classes ParsedValue Try"
+  },
+  "CJson/api/CJson.Utils.Base.html": {
+    "href": "CJson/api/CJson.Utils.Base.html",
+    "title": "Class Base | CJson",
+    "summary": "Class Base Namespace CJson.Utils Assembly CJson.dll public class Base Inheritance Object Base Derived Is Inherited Members Object.Equals(Object) Object.Equals(Object, Object) Object.GetHashCode() Object.GetType() Object.MemberwiseClone() Object.ReferenceEquals(Object, Object) Object.ToString() Constructors Base(String) public Base(string content) Parameters content String Base(String, Boolean) public Base(string filePath, bool isFilePath) Parameters filePath String isFilePath Boolean Fields commaSeparatedLines protected string[] commaSeparatedLines Field Value String[] content protected string content Field Value String filePath protected string filePath Field Value String isFilePath protected bool isFilePath Field Value Boolean isInjectDone protected bool isInjectDone Field Value Boolean isInjectEist protected bool isInjectEist Field Value Boolean Methods Generify(String) protected static string Generify(string content) Parameters content String Returns String GetType(Object) protected static string GetType(dynamic testVar) Parameters testVar Object Returns String ParseJson(String) protected static dynamic ParseJson(string jsonString) Parameters jsonString String Returns Object Read(String) public static string Read(string filePath) Parameters filePath String Returns String"
+  },
+  "CJson/api/CJson.Utils.Decode.html": {
+    "href": "CJson/api/CJson.Utils.Decode.html",
+    "title": "Class Decode | CJson",
+    "summary": "Class Decode Namespace CJson.Utils Assembly CJson.dll public class Decode : Json Inheritance Object Base Is Json Decode Derived CJson<Type> Inherited Members Json.json Json.ParseValue(String) Json.RedefineJson(String) Json.Parse(String) Is.MatchAndConfirm Is.Scan() Base.filePath Base.content Base.commaSeparatedLines Base.isFilePath Base.isInjectDone Base.isInjectEist Base.Read(String) Base.ParseJson(String) Base.GetType(Object) Base.Generify(String) Object.Equals(Object) Object.Equals(Object, Object) Object.GetHashCode() Object.GetType() Object.MemberwiseClone() Object.ReferenceEquals(Object, Object) Object.ToString() Constructors Decode(Path) public Decode(Path filePath) Parameters filePath Path Decode(String) public Decode(string content) Parameters content String Fields isDeseralized protected bool isDeseralized Field Value Boolean matchedPaths protected List<string> matchedPaths Field Value List<String> runtimeValList protected static List<string> runtimeValList Field Value List<String> Properties DecodeKeywords Decode root for all keywords public string DecodeKeywords { get; } Property Value String Methods CheckForRuntimeVals() protected string CheckForRuntimeVals() Returns String Get() protected string Get() Returns String GetAsString(Object) protected static string GetAsString(dynamic value) Parameters value Object Returns String InjectData(String, Object) public string InjectData(string key, dynamic value) Parameters key String value Object Returns String ReplaceContent(String, Object) protected Decode ReplaceContent(string key, dynamic value) Parameters key String value Object Returns Decode"
+  },
+  "CJson/api/CJson.Utils.Is.html": {
+    "href": "CJson/api/CJson.Utils.Is.html",
+    "title": "Class Is | CJson",
+    "summary": "Class Is Namespace CJson.Utils Assembly CJson.dll public class Is : Base Inheritance Object Base Is Derived Json Inherited Members Base.filePath Base.content Base.commaSeparatedLines Base.isFilePath Base.isInjectDone Base.isInjectEist Base.Read(String) Base.ParseJson(String) Base.GetType(Object) Base.Generify(String) Object.Equals(Object) Object.Equals(Object, Object) Object.GetHashCode() Object.GetType() Object.MemberwiseClone() Object.ReferenceEquals(Object, Object) Object.ToString() Constructors Is(String) public Is(string content) Parameters content String Is(String, Boolean) public Is(string filePath, bool isFilePath) Parameters filePath String isFilePath Boolean Fields MatchAndConfirm public static Func<string, string, List<string>> MatchAndConfirm Field Value Func<String, String, List<String>> Methods Scan() protected void Scan()"
+  },
+  "CJson/api/CJson.Utils.Json.html": {
+    "href": "CJson/api/CJson.Utils.Json.html",
+    "title": "Class Json | CJson",
+    "summary": "Class Json Namespace CJson.Utils Assembly CJson.dll public class Json : Is Inheritance Object Base Is Json Derived Decode Inherited Members Is.MatchAndConfirm Is.Scan() Base.filePath Base.content Base.commaSeparatedLines Base.isFilePath Base.isInjectDone Base.isInjectEist Base.Read(String) Base.ParseJson(String) Base.GetType(Object) Base.Generify(String) Object.Equals(Object) Object.Equals(Object, Object) Object.GetHashCode() Object.GetType() Object.MemberwiseClone() Object.ReferenceEquals(Object, Object) Object.ToString() Constructors Json(Path) public Json(Path filePath) Parameters filePath Path Json(String) public Json(String content) Parameters content String Fields json protected dynamic json Field Value Object Methods Parse(String) public dynamic Parse(String key) Parameters key String Returns Object ParseValue(String) public ParsedValue ParseValue(String key) Parameters key String Returns ParsedValue RedefineJson(String) protected void RedefineJson(String content) Parameters content String"
+  },
+  "CJson/api/CJson.Utils.html": {
+    "href": "CJson/api/CJson.Utils.html",
+    "title": "Namespace CJson.Utils | CJson",
+    "summary": "Namespace CJson.Utils Classes Base Decode Is Json"
+  },
+  "CJson/api/CJson.html": {
+    "href": "CJson/api/CJson.html",
+    "title": "Namespace CJson | CJson",
+    "summary": "Namespace CJson Classes CJson<Type> CJson entrypoint class. Object must be created for any CJson file or content for deserializing. Only class object to JSON string conversion can be done without object creation. Path For file path related operations, use this class object."
+  },
+  "CJson/api/index.html": {
+    "href": "CJson/api/index.html",
+    "title": "PLACEHOLDER | CJson",
+    "summary": "PLACEHOLDER TODO: Add .NET projects to the src folder and run docfx to generate REAL API Documentation!"
+  },
+  "CJson/articles/intro.html": {
+    "href": "CJson/articles/intro.html",
+    "title": "Add your introductions here! | CJson",
+    "summary": "Add your introductions here!"
+  },
+  "CJson/index.html": {
+    "href": "CJson/index.html",
+    "title": "This is the HOMEPAGE. | CJson",
+    "summary": "This is the HOMEPAGE. Refer to Markdown for how to write markdown files. Quick Start Notes: Add images to the images folder if the file is referencing an image."
+  },
+  "README.html": {
+    "href": "README.html",
+    "title": "| CJson",
+    "summary": "Coded Javascript Object Notation For C# CJSON is a data file format(inspired from JSON), but supports logical expressions too. Having extended language support to NodeJS, Python, Java and DotNet, users has experienced data reusability. For features and examples, please refer to this documentation as base document. PLEASE NOTE, ONLY DOTNET V6.0 IS SUPPORTED Dependency .NET CLI dotnet add package CJson --version 1.0.0 Package Manager NuGet\\Install-Package CJson -Version 1.0.0 PackageReference <PackageReference Include=\"CJson\" Version=\"1.0.0\" /> Paket CLI paket add CJson --version 1.0.0 Script & Interactive #r \"nuget: CJson, 1.0.0\" Cake // Install CJson as a Cake Addin #addin nuget:?package=CJson&version=1.0.0 // Install CJson as a Cake Tool #tool nuget:?package=CJson&version=1.0.0 Examples Importing a JSON file in CJSON file file.cjson { \"source\": $import \"path/to/source.json\", \"target\": { \"fruit\": \"Apple\", \"size\": \"Large\", \"color\": \"Red\" } } Code using CJson; namespace CJsonImpl { public class Main { public static void Main(String[] args) { CJson.Path cjsonFilePath = new CJson.Path(GetCurrentDirectory, \"file.cjson\") CJson<SerializableClass> cJson = new CJson<SerializableClass>(cjsonFilePath); SerializableClass classObj = cJson.Deserialize(); } } } Output: { \"source\": { // source.json content }, \"target\": { \"fruit\": \"Apple\", \"size\": \"Large\", \"color\": \"Red\" } } Calling relative keys using JPATH Below example shows color variable is calling data from fruit variable file.cjson { \"target\": { \"fruit\": \"Orange\", \"size\": \"Medium\", \"color\": $.target.fruit } } Code using CJson; namespace CJsonImpl { public class Main { public static void Main(String[] args) { CJson.Path cjsonFilePath = new CJson.Path(GetCurrentDirectory, \"file.cjson\") CJson<SerializableClass> cJson = new CJson<SerializableClass>(cjsonFilePath); SerializableClass classObj = cJson.Deserialize(); } } } Output { \"target\": { \"fruit\": \"Orange\", \"size\": \"Medium\", \"color\": \"Orange\" } } Variable Injection file.cjson { \"target\": { \"fruit\": \"Orange\", \"size\": \"Medium\", \"color\": \"Orangle\", \"sellerId\": <id> } } Code using CJson; namespace CJsonImpl { public class Main { public static void Main(String[] args) { Dictionary<String, String> data = new Dictionary<String, String>(); data.Add(\"id\", \"ID01\"); CJson<SerializableClass> cJson = new CJson<SerializableClass>(new Path(\"file/path/to/file.cjson\")); SerializableClass target = cJson.Inject(data); } } } target value { \"target\": { \"fruit\": \"Orange\", \"size\": \"Medium\", \"color\": \"Orangle\", \"sellerId\": \"ID01\" } } Single/ Multiple line comments For single line comments, use // For multi line comments, use like below: // This is first line comment // This is the second one { \"name\": \"Amrut\" // This is not allowed } Deserializing CJSON string content Any import path used must be absolute. Otherwise, you will receive AbsolutePathConstraintError exception Code using CJson; namespace CJsonImpl { public class Main { public static void Main(String[] args) { String cjsonContent = \"{\\n\" + \" \\\"source\\\": $import \\\"\" + pureJsonfilePath.ToString + \"\\\",\\n\" + \" \\\"target\\\": {\\n\" + \" \\\"fruit\\\": \\\"Apple\\\",\\n\" + \" \\\"size\\\": \\\"Large\\\",\\n\" + \" \\\"color\\\": \\\"Red\\\"\\n\" + \" }\\n\" + \"}\"; CJson<SerializableClass> cJson = new CJson<SerializableClass>(cjsonContent); SerializableClass target = cJson.Deserialize(); } } } Convert Class Object to JSON String Code using CJson; namespace CJsonImpl { public class Main { public static void Main(String[] args) { Target target = new Target(); target.source = new Pure(); target.source.quiz = new HashMap<>(); Dictionary<String, Questions> questionsHashMap = new Dictionary<String, Questions>(); Questions questions = new Questions(); questions.question = \"Which one is correct team name in NBA?\"; questions.options = Arrays.asList(\"New York Bulls\", \"Los Angeles Kings\", \"Golden State Warriros\", \"Huston Rocket\"); questions.answer = \"Huston Rocket\"; questionsHashMap.put(\"q1\", questions); target.source.quiz.put(\"sport\", questionsHashMap); String targetString = CJson<Object>.ToString(target); } } } Output { \"source\":{ \"quiz\":{ \"sport\":{ \"q1\":{ \"question\":\"Which one is correct team name in NBA?\", \"options\":[ \"New York Bulls\", \"Los Angeles Kings\", \"Golden State Warriros\", \"Huston Rocket\" ], \"answer\":\"Huston Rocket\" }, \"q2\":null } } } }"
+  },
+  "api/CJson.CJson-1.html": {
+    "href": "api/CJson.CJson-1.html",
+    "title": "Class CJson<Type> | CJson",
+    "summary": "Class CJson<Type> Namespace CJson Assembly CJson.dll CJson entrypoint class. Object must be created for any CJson file or content for deserializing. Only class object to JSON string conversion can be done without object creation. public sealed class CJson<Type> : Decode Type Parameters Type Class Type should be passed. For more info, see official docs Inheritance object Base Is Json Decode CJson<Type> Inherited Members Decode.DecodeKeywords Decode.InjectData(string, dynamic) Json.ParseValue(string) Json.Parse(string) Is.MatchAndConfirm Base.Read(string) object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.ReferenceEquals(object, object) object.ToString() Constructors CJson(Path) Constructor for CJSON/ JSON file path CJson/JSON file path to be passed with CJson.Path class constructor. For loading CJSON/JSON raw content, please call CJSON(string content) contructor public CJson(Path filePath) Parameters filePath Path CJson.Path class constructor CJson(string) Constructor for raw CJSON/ JSON content CJson content to be passed. For loading CJSON/ JSON file, please create constructor with CJson.Path class For import statements, please specify absolute path to the file to be imported. public CJson(string content) Parameters content string CJson content in string format Methods Deserialize() Call this method to deserialize CJSON content to ClassType. If any error in format of the class hierarchy exists, this function will return a null valued object to the provided ClassType public Type? Deserialize() Returns Type Deserialized class object of Type. Null if Type and CJSON content mismatches DeserializeAsString() public string DeserializeAsString() Returns string Inject(Dictionary<string, dynamic>) Call this function to inject value which expects a dynamic injection. You can use this function for bulk injection. For more info, check this link public Type? Inject(Dictionary<string, dynamic> injectingValues) Parameters injectingValues Dictionary<string, dynamic> Dictionary whose key is location and value is data to be inject Returns Type Inject(string, dynamic) Call this function to inject value which expects a dynamic injection. Please note, inject doesnt work on inject at jpath, or inject at any json key. For more info, check this link public Type? Inject(string key, dynamic value) Parameters key string Where you want to inject value dynamic Value which you want to inject at key Returns Type Deserialized class object of Type. Null if Type and CJSON content mismatches Remove(List<string>) public CJson<Type> Remove(List<string> jPathList) Parameters jPathList List<string> Returns CJson<Type> Remove(string) public CJson<Type> Remove(string jPath) Parameters jPath string Returns CJson<Type> ToString(dynamic) Use this function to convert a class object to a JSON string. No CJSON operation can be performed after this function. public static string ToString(dynamic value) Parameters value dynamic class object Returns string"
+  },
+  "api/CJson.Exceptions.AbsolutePathConstraintError.html": {
+    "href": "api/CJson.Exceptions.AbsolutePathConstraintError.html",
+    "title": "Class AbsolutePathConstraintError | CJson",
+    "summary": "Class AbsolutePathConstraintError Namespace CJson.Exceptions Assembly CJson.dll public class AbsolutePathConstraintError : Exception, ISerializable Inheritance object Exception AbsolutePathConstraintError Implements ISerializable Inherited Members Exception.GetBaseException() Exception.GetObjectData(SerializationInfo, StreamingContext) Exception.GetType() Exception.ToString() Exception.Data Exception.HelpLink Exception.HResult Exception.InnerException Exception.Message Exception.Source Exception.StackTrace Exception.TargetSite Exception.SerializeObjectState object.Equals(object) object.Equals(object, object) object.GetHashCode() object.MemberwiseClone() object.ReferenceEquals(object, object) Constructors AbsolutePathConstraintError() public AbsolutePathConstraintError()"
+  },
+  "api/CJson.Exceptions.IllegalImportStatement.html": {
+    "href": "api/CJson.Exceptions.IllegalImportStatement.html",
+    "title": "Class IllegalImportStatement | CJson",
+    "summary": "Class IllegalImportStatement Namespace CJson.Exceptions Assembly CJson.dll public class IllegalImportStatement : Exception, ISerializable Inheritance object Exception IllegalImportStatement Implements ISerializable Inherited Members Exception.GetBaseException() Exception.GetObjectData(SerializationInfo, StreamingContext) Exception.GetType() Exception.ToString() Exception.Data Exception.HelpLink Exception.HResult Exception.InnerException Exception.Message Exception.Source Exception.StackTrace Exception.TargetSite Exception.SerializeObjectState object.Equals(object) object.Equals(object, object) object.GetHashCode() object.MemberwiseClone() object.ReferenceEquals(object, object) Constructors IllegalImportStatement() public IllegalImportStatement() IllegalImportStatement(string) public IllegalImportStatement(string message) Parameters message string"
+  },
+  "api/CJson.Exceptions.InvalidJPathError.html": {
+    "href": "api/CJson.Exceptions.InvalidJPathError.html",
+    "title": "Class InvalidJPathError | CJson",
+    "summary": "Class InvalidJPathError Namespace CJson.Exceptions Assembly CJson.dll public class InvalidJPathError : Exception, ISerializable Inheritance object Exception InvalidJPathError Implements ISerializable Inherited Members Exception.GetBaseException() Exception.GetObjectData(SerializationInfo, StreamingContext) Exception.GetType() Exception.ToString() Exception.Data Exception.HelpLink Exception.HResult Exception.InnerException Exception.Message Exception.Source Exception.StackTrace Exception.TargetSite Exception.SerializeObjectState object.Equals(object) object.Equals(object, object) object.GetHashCode() object.MemberwiseClone() object.ReferenceEquals(object, object) Constructors InvalidJPathError() public InvalidJPathError()"
+  },
+  "api/CJson.Exceptions.UndeserializedCJSON.html": {
+    "href": "api/CJson.Exceptions.UndeserializedCJSON.html",
+    "title": "Class UndeserializedCJSON | CJson",
+    "summary": "Class UndeserializedCJSON Namespace CJson.Exceptions Assembly CJson.dll public class UndeserializedCJSON : Exception, ISerializable Inheritance object Exception UndeserializedCJSON Implements ISerializable Inherited Members Exception.GetBaseException() Exception.GetObjectData(SerializationInfo, StreamingContext) Exception.GetType() Exception.ToString() Exception.Data Exception.HelpLink Exception.HResult Exception.InnerException Exception.Message Exception.Source Exception.StackTrace Exception.TargetSite Exception.SerializeObjectState object.Equals(object) object.Equals(object, object) object.GetHashCode() object.MemberwiseClone() object.ReferenceEquals(object, object) Constructors UndeserializedCJSON(string) public UndeserializedCJSON(string message) Parameters message string"
+  },
+  "api/CJson.Exceptions.UnrecognizedTypeException.html": {
+    "href": "api/CJson.Exceptions.UnrecognizedTypeException.html",
+    "title": "Class UnrecognizedTypeException | CJson",
+    "summary": "Class UnrecognizedTypeException Namespace CJson.Exceptions Assembly CJson.dll public class UnrecognizedTypeException : Exception, ISerializable Inheritance object Exception UnrecognizedTypeException Implements ISerializable Inherited Members Exception.GetBaseException() Exception.GetObjectData(SerializationInfo, StreamingContext) Exception.GetType() Exception.ToString() Exception.Data Exception.HelpLink Exception.HResult Exception.InnerException Exception.Message Exception.Source Exception.StackTrace Exception.TargetSite Exception.SerializeObjectState object.Equals(object) object.Equals(object, object) object.GetHashCode() object.MemberwiseClone() object.ReferenceEquals(object, object) Constructors UnrecognizedTypeException() public UnrecognizedTypeException() UnrecognizedTypeException(string) public UnrecognizedTypeException(string message) Parameters message string"
+  },
+  "api/CJson.Exceptions.UnsupportedFileExtension.html": {
+    "href": "api/CJson.Exceptions.UnsupportedFileExtension.html",
+    "title": "Class UnsupportedFileExtension | CJson",
+    "summary": "Class UnsupportedFileExtension Namespace CJson.Exceptions Assembly CJson.dll public class UnsupportedFileExtension : Exception, ISerializable Inheritance object Exception UnsupportedFileExtension Implements ISerializable Inherited Members Exception.GetBaseException() Exception.GetObjectData(SerializationInfo, StreamingContext) Exception.GetType() Exception.ToString() Exception.Data Exception.HelpLink Exception.HResult Exception.InnerException Exception.Message Exception.Source Exception.StackTrace Exception.TargetSite Exception.SerializeObjectState object.Equals(object) object.Equals(object, object) object.GetHashCode() object.MemberwiseClone() object.ReferenceEquals(object, object) Constructors UnsupportedFileExtension() public UnsupportedFileExtension() UnsupportedFileExtension(string) public UnsupportedFileExtension(string message) Parameters message string"
+  },
+  "api/CJson.Exceptions.VariableInjectionException.html": {
+    "href": "api/CJson.Exceptions.VariableInjectionException.html",
+    "title": "Class VariableInjectionException | CJson",
+    "summary": "Class VariableInjectionException Namespace CJson.Exceptions Assembly CJson.dll public class VariableInjectionException : Exception, ISerializable Inheritance object Exception VariableInjectionException Implements ISerializable Inherited Members Exception.GetBaseException() Exception.GetObjectData(SerializationInfo, StreamingContext) Exception.GetType() Exception.ToString() Exception.Data Exception.HelpLink Exception.HResult Exception.InnerException Exception.Message Exception.Source Exception.StackTrace Exception.TargetSite Exception.SerializeObjectState object.Equals(object) object.Equals(object, object) object.GetHashCode() object.MemberwiseClone() object.ReferenceEquals(object, object) Constructors VariableInjectionException(string) public VariableInjectionException(string message) Parameters message string"
+  },
+  "api/CJson.Exceptions.html": {
+    "href": "api/CJson.Exceptions.html",
+    "title": "Namespace CJson.Exceptions | CJson",
+    "summary": "Namespace CJson.Exceptions Classes AbsolutePathConstraintError IllegalImportStatement InvalidJPathError UndeserializedCJSON UnrecognizedTypeException UnsupportedFileExtension VariableInjectionException"
+  },
+  "api/CJson.Path.html": {
+    "href": "api/CJson.Path.html",
+    "title": "Class Path | CJson",
+    "summary": "Class Path Namespace CJson Assembly CJson.dll For file path related operations, use this class object. public class Path Inheritance object Path Inherited Members object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) Constructors Path(params string[]) Constructor for object creation. Please provide absolute path for this operation. public Path(params string[] filePath) Parameters filePath string[] Properties ToString Get the string value of the path public string ToString { get; } Property Value string Methods IsAbsolutePath(string) Returns true if the path is absolute, else false. This method is not tested in IOS. For bug report, refer to the github public static bool IsAbsolutePath(string filePath) Parameters filePath string Test path Returns bool true if path is absolute, else false in boolean"
+  },
+  "api/CJson.Types.ParsedValue.html": {
+    "href": "api/CJson.Types.ParsedValue.html",
+    "title": "Class ParsedValue | CJson",
+    "summary": "Class ParsedValue Namespace CJson.Types Assembly CJson.dll public class ParsedValue Inheritance object ParsedValue Inherited Members object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Constructors ParsedValue(object, string) public ParsedValue(object value, string type) Parameters value object type string Fields type public string type Field Value string value public dynamic value Field Value dynamic"
+  },
+  "api/CJson.Types.Try.html": {
+    "href": "api/CJson.Types.Try.html",
+    "title": "Class Try | CJson",
+    "summary": "Class Try Namespace CJson.Types Assembly CJson.dll public class Try Inheritance object Try Inherited Members object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Methods GetType(dynamic) public static string GetType(dynamic value) Parameters value dynamic Returns string TryBoolean(JValue) public static bool TryBoolean(JValue jValue) Parameters jValue JValue Returns bool TryDouble(JValue) public static bool TryDouble(JValue jValue) Parameters jValue JValue Returns bool TryInt32(JValue) public static bool TryInt32(JValue jValue) Parameters jValue JValue Returns bool TryNull(JValue) public static bool TryNull(JValue jValue) Parameters jValue JValue Returns bool TryString(JValue) public static bool TryString(JValue jValue) Parameters jValue JValue Returns bool"
+  },
+  "api/CJson.Types.html": {
+    "href": "api/CJson.Types.html",
+    "title": "Namespace CJson.Types | CJson",
+    "summary": "Namespace CJson.Types Classes ParsedValue Try"
+  },
+  "api/CJson.Utils.Base.html": {
+    "href": "api/CJson.Utils.Base.html",
+    "title": "Class Base | CJson",
+    "summary": "Class Base Namespace CJson.Utils Assembly CJson.dll public class Base Inheritance object Base Derived Is Inherited Members object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Constructors Base(string) public Base(string content) Parameters content string Base(string, bool) public Base(string filePath, bool isFilePath) Parameters filePath string isFilePath bool Fields commaSeparatedLines protected string[] commaSeparatedLines Field Value string[] content protected string content Field Value string filePath protected string filePath Field Value string isFilePath protected bool isFilePath Field Value bool isInjectDone protected bool isInjectDone Field Value bool isInjectEist protected bool isInjectEist Field Value bool Methods Generify(string) protected static string Generify(string content) Parameters content string Returns string GetType(dynamic) protected static string GetType(dynamic testVar) Parameters testVar dynamic Returns string ParseJson(string) protected static dynamic ParseJson(string jsonString) Parameters jsonString string Returns dynamic Read(string) public static string Read(string filePath) Parameters filePath string Returns string"
+  },
+  "api/CJson.Utils.Decode.html": {
+    "href": "api/CJson.Utils.Decode.html",
+    "title": "Class Decode | CJson",
+    "summary": "Class Decode Namespace CJson.Utils Assembly CJson.dll public class Decode : Json Inheritance object Base Is Json Decode Derived CJson<Type> Inherited Members Json.json Json.ParseValue(string) Json.RedefineJson(string) Json.Parse(string) Is.MatchAndConfirm Is.Scan() Base.filePath Base.content Base.commaSeparatedLines Base.isFilePath Base.isInjectDone Base.isInjectEist Base.Read(string) Base.ParseJson(string) Base.GetType(dynamic) Base.Generify(string) object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Constructors Decode(Path) public Decode(Path filePath) Parameters filePath Path Decode(string) public Decode(string content) Parameters content string Fields isDeseralized protected bool isDeseralized Field Value bool matchedPaths protected List<string> matchedPaths Field Value List<string> runtimeValList protected static List<string> runtimeValList Field Value List<string> Properties DecodeKeywords Decode root for all keywords public string DecodeKeywords { get; } Property Value string Methods CheckForRuntimeVals() protected string? CheckForRuntimeVals() Returns string Get() protected string Get() Returns string GetAsString(dynamic) protected static string GetAsString(dynamic value) Parameters value dynamic Returns string InjectData(string, dynamic) public string InjectData(string key, dynamic value) Parameters key string value dynamic Returns string ReplaceContent(string, dynamic) protected Decode ReplaceContent(string key, dynamic value) Parameters key string value dynamic Returns Decode"
+  },
+  "api/CJson.Utils.Is.html": {
+    "href": "api/CJson.Utils.Is.html",
+    "title": "Class Is | CJson",
+    "summary": "Class Is Namespace CJson.Utils Assembly CJson.dll public class Is : Base Inheritance object Base Is Derived Json Inherited Members Base.filePath Base.content Base.commaSeparatedLines Base.isFilePath Base.isInjectDone Base.isInjectEist Base.Read(string) Base.ParseJson(string) Base.GetType(dynamic) Base.Generify(string) object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Constructors Is(string) public Is(string content) Parameters content string Is(string, bool) public Is(string filePath, bool isFilePath) Parameters filePath string isFilePath bool Fields MatchAndConfirm public static Func<string, string, List<string>> MatchAndConfirm Field Value Func<string, string, List<string>> Methods Scan() protected void Scan()"
+  },
+  "api/CJson.Utils.Json.html": {
+    "href": "api/CJson.Utils.Json.html",
+    "title": "Class Json | CJson",
+    "summary": "Class Json Namespace CJson.Utils Assembly CJson.dll public class Json : Is Inheritance object Base Is Json Derived Decode Inherited Members Is.MatchAndConfirm Is.Scan() Base.filePath Base.content Base.commaSeparatedLines Base.isFilePath Base.isInjectDone Base.isInjectEist Base.Read(string) Base.ParseJson(string) Base.GetType(dynamic) Base.Generify(string) object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Constructors Json(Path) public Json(Path filePath) Parameters filePath Path Json(string) public Json(string content) Parameters content string Fields json protected dynamic json Field Value dynamic Methods Parse(string) public dynamic Parse(string key) Parameters key string Returns dynamic ParseValue(string) public ParsedValue ParseValue(string key) Parameters key string Returns ParsedValue RedefineJson(string) protected void RedefineJson(string content) Parameters content string"
+  },
+  "api/CJson.Utils.html": {
+    "href": "api/CJson.Utils.html",
+    "title": "Namespace CJson.Utils | CJson",
+    "summary": "Namespace CJson.Utils Classes Base Decode Is Json"
+  },
+  "api/CJson.html": {
+    "href": "api/CJson.html",
+    "title": "Namespace CJson | CJson",
+    "summary": "Namespace CJson Classes CJson<Type> CJson entrypoint class. Object must be created for any CJson file or content for deserializing. Only class object to JSON string conversion can be done without object creation. Path For file path related operations, use this class object."
+  },
+  "api/CJsonTests.Base.html": {
+    "href": "api/CJsonTests.Base.html",
+    "title": "Class Base | CJson",
+    "summary": "Class Base Namespace CJsonTests Assembly CJsonTests.dll public class Base Inheritance object Base Inherited Members object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Fields cjsonFilePath protected readonly Path cjsonFilePath Field Value Path jsonfilePath protected readonly Path jsonfilePath Field Value Path pureJsonfilePath protected readonly Path pureJsonfilePath Field Value Path relativeTargetCjson protected readonly Path relativeTargetCjson Field Value Path variableInjectionCjson protected readonly Path variableInjectionCjson Field Value Path"
+  },
+  "api/CJsonTests.html": {
+    "href": "api/CJsonTests.html",
+    "title": "Namespace CJsonTests | CJson",
+    "summary": "Namespace CJsonTests Classes Base"
+  },
+  "api/CJsonTests.models.CJsonContentTarget.html": {
+    "href": "api/CJsonTests.models.CJsonContentTarget.html",
+    "title": "Class CJsonContentTarget | CJson",
+    "summary": "Class CJsonContentTarget Namespace CJsonTests.models Assembly CJsonTests.dll public class CJsonContentTarget Inheritance object CJsonContentTarget Inherited Members object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Properties source public Pure source { get; set; } Property Value Pure target public TargetObj target { get; set; } Property Value TargetObj"
+  },
+  "api/CJsonTests.models.Pure.html": {
+    "href": "api/CJsonTests.models.Pure.html",
+    "title": "Class Pure | CJson",
+    "summary": "Class Pure Namespace CJsonTests.models Assembly CJsonTests.dll public class Pure Inheritance object Pure Inherited Members object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Properties quiz public Dictionary<string, Dictionary<string, Questions>> quiz { get; set; } Property Value Dictionary<string, Dictionary<string, Questions>>"
+  },
+  "api/CJsonTests.models.Questions.html": {
+    "href": "api/CJsonTests.models.Questions.html",
+    "title": "Class Questions | CJson",
+    "summary": "Class Questions Namespace CJsonTests.models Assembly CJsonTests.dll public class Questions Inheritance object Questions Inherited Members object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Properties answer public string answer { get; set; } Property Value string options public List<string> options { get; set; } Property Value List<string> question public string question { get; set; } Property Value string"
+  },
+  "api/CJsonTests.models.RelativeCalls.html": {
+    "href": "api/CJsonTests.models.RelativeCalls.html",
+    "title": "Class RelativeCalls | CJson",
+    "summary": "Class RelativeCalls Namespace CJsonTests.models Assembly CJsonTests.dll public class RelativeCalls Inheritance object RelativeCalls Inherited Members object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Properties quiz public Dictionary<string, Dictionary<string, Questions>> quiz { get; set; } Property Value Dictionary<string, Dictionary<string, Questions>>"
+  },
+  "api/CJsonTests.models.Source.html": {
+    "href": "api/CJsonTests.models.Source.html",
+    "title": "Class Source | CJson",
+    "summary": "Class Source Namespace CJsonTests.models Assembly CJsonTests.dll public class Source Inheritance object Source Inherited Members object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Properties pure public Pure pure { get; set; } Property Value Pure"
+  },
+  "api/CJsonTests.models.Target.html": {
+    "href": "api/CJsonTests.models.Target.html",
+    "title": "Class Target | CJson",
+    "summary": "Class Target Namespace CJsonTests.models Assembly CJsonTests.dll public class Target Inheritance object Target Inherited Members object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Properties source public Source source { get; set; } Property Value Source target public TargetObj target { get; set; } Property Value TargetObj"
+  },
+  "api/CJsonTests.models.TargetObj.html": {
+    "href": "api/CJsonTests.models.TargetObj.html",
+    "title": "Class TargetObj | CJson",
+    "summary": "Class TargetObj Namespace CJsonTests.models Assembly CJsonTests.dll public class TargetObj Inheritance object TargetObj Inherited Members object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Properties color public string color { get; set; } Property Value string colorList public List<string> colorList { get; set; } Property Value List<string> digitArrayImport public List<double> digitArrayImport { get; set; } Property Value List<double> digitCheck public double digitCheck { get; set; } Property Value double digitImport public double digitImport { get; set; } Property Value double fruit public string fruit { get; set; } Property Value string fruitType public string fruitType { get; set; } Property Value string mixData public string mixData { get; set; } Property Value string quantity public int quantity { get; set; } Property Value int rawData public string rawData { get; set; } Property Value string secColor public string secColor { get; set; } Property Value string size public string size { get; set; } Property Value string types public string types { get; set; } Property Value string"
+  },
+  "api/CJsonTests.models.TargetRelativeCalls.html": {
+    "href": "api/CJsonTests.models.TargetRelativeCalls.html",
+    "title": "Class TargetRelativeCalls | CJson",
+    "summary": "Class TargetRelativeCalls Namespace CJsonTests.models Assembly CJsonTests.dll public class TargetRelativeCalls Inheritance object TargetRelativeCalls Inherited Members object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Properties relativeCalls public RelativeCalls relativeCalls { get; set; } Property Value RelativeCalls source public Pure source { get; set; } Property Value Pure target public TargetObj target { get; set; } Property Value TargetObj"
+  },
+  "api/CJsonTests.models.VariableInjection.html": {
+    "href": "api/CJsonTests.models.VariableInjection.html",
+    "title": "Class VariableInjection | CJson",
+    "summary": "Class VariableInjection Namespace CJsonTests.models Assembly CJsonTests.dll public class VariableInjection Inheritance object VariableInjection Inherited Members object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Properties jsonInjection public string jsonInjection { get; set; } Property Value string target public TargetObj target { get; set; } Property Value TargetObj"
+  },
+  "api/CJsonTests.models.html": {
+    "href": "api/CJsonTests.models.html",
+    "title": "Namespace CJsonTests.models | CJson",
+    "summary": "Namespace CJsonTests.models Classes CJsonContentTarget Pure Questions RelativeCalls Source Target TargetObj TargetRelativeCalls VariableInjection"
+  },
+  "index.html": {
+    "href": "index.html",
+    "title": "| CJson",
+    "summary": "Coded Javascript Object Notation CJSON is a data file format(inspired from JSON), but supports logical expressions too. Having extended language support to NodeJS, Python, Java and DotNet, users has experienced data reusability. For features and examples, please refer to this documentation as base document. Content Import multiple JSON files Deserializing CJSON/JSON string content Calling relative keys using JPATH Dynamic variable injection Single/ Multiple line comments Removing key Converting Class object to JSON String Reference Examples Features (v2.0.0 or higher) Import multiple JSON files One of the strong feature which we have introduced is importing CJson/Json files in another CJson file. It works in the similar way, how we import libraries in programming languages. All you need to import it using $import \"path/to/target/file\" and deserialize the file. Deserializing CJSON/JSON string content Parsing of CJSON string content is also possible now. You can create CJSON object with a second parameter(specific to language). For language specific details, refer below. Calling relative keys using JPATH Unlike XPATH for XML files, we have JPATH for JSON files. But as the drawback of plain data files, we cannot refer any variable inside a json object to another variable. This feature is useful when you have to duplicate the json key, but the value will be pulled from another variable which is already present in the json file. You can also refer to a variable which will be loaded after importing the file. Dynamic variable injection You can inject a variable dynamically also. Instead of replacing a variable value by parsing as gson object, put a key in format <keyToBeReplaced> like below: { \"idValue\": <id> } Now create a HashMap with key as <id> and store relevant value in it. While invoking inject function, pass the HashMap as the second parameter. Single/ Multiple line comments CJSON also supports commented lines by adding // at the start of the line. Please note, inline comments are not supported. Contributers create an issue here Removing key Any JSON key value pair can be removed by providing its JPath. Please Note, if you use remove before deserialize you will receive UndeserializedCJSON exception. This is because, unless the content is deserialized, CJSON engine has not processed the CJSON content. Convert Class Object to JSON String Any class object can be converted to json string by using toString() function. It accepts pure class object and returns JSON in string. Keywords Keywords Description $import To import other json file $.jpath Refer to a local variable inside JSON Comments(Single/ Multi-line) // <key> Expects a dynamic variable"
+  }
+}

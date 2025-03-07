@@ -1,0 +1,834 @@
+{
+  "source_base_path": "D:/a/cjson/cjson/dotnet/CJson",
+  "xrefmap": "xrefmap.yml",
+  "files": [
+    {
+      "type": "Resource",
+      "output": {
+        "resource": {
+          "relative_path": "index.json"
+        }
+      }
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "CJson/api/CJson.CJson-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "CJson/api/CJson.CJson-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJson.CJson<Type>",
+      "Summary": "<p sourcefile=\"CJson/api/CJson.CJson-1.yml\" sourcestartlinenumber=\"2\">CJson entrypoint class.<br>\nObject must be created for any CJson file or content for deserializing.<br>\nOnly class object to JSON string conversion can be done without object creation.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "CJson/api/CJson.Exceptions.AbsolutePathConstraintError.yml",
+      "output": {
+        ".html": {
+          "relative_path": "CJson/api/CJson.Exceptions.AbsolutePathConstraintError.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJson.Exceptions.AbsolutePathConstraintError",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "CJson/api/CJson.Exceptions.IllegalImportStatement.yml",
+      "output": {
+        ".html": {
+          "relative_path": "CJson/api/CJson.Exceptions.IllegalImportStatement.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJson.Exceptions.IllegalImportStatement",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "CJson/api/CJson.Exceptions.InvalidJPathError.yml",
+      "output": {
+        ".html": {
+          "relative_path": "CJson/api/CJson.Exceptions.InvalidJPathError.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJson.Exceptions.InvalidJPathError",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "CJson/api/CJson.Exceptions.UndeserializedCJSON.yml",
+      "output": {
+        ".html": {
+          "relative_path": "CJson/api/CJson.Exceptions.UndeserializedCJSON.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJson.Exceptions.UndeserializedCJSON",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "CJson/api/CJson.Exceptions.UnrecognizedTypeException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "CJson/api/CJson.Exceptions.UnrecognizedTypeException.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJson.Exceptions.UnrecognizedTypeException",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "CJson/api/CJson.Exceptions.UnsupportedFileExtension.yml",
+      "output": {
+        ".html": {
+          "relative_path": "CJson/api/CJson.Exceptions.UnsupportedFileExtension.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJson.Exceptions.UnsupportedFileExtension",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "CJson/api/CJson.Exceptions.VariableInjectionException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "CJson/api/CJson.Exceptions.VariableInjectionException.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJson.Exceptions.VariableInjectionException",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "CJson/api/CJson.Exceptions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "CJson/api/CJson.Exceptions.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJson.Exceptions",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "CJson/api/CJson.Path.yml",
+      "output": {
+        ".html": {
+          "relative_path": "CJson/api/CJson.Path.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJson.Path",
+      "Summary": "<p sourcefile=\"CJson/api/CJson.Path.yml\" sourcestartlinenumber=\"2\">For file path related operations, use this class object.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "CJson/api/CJson.Types.ParsedValue.yml",
+      "output": {
+        ".html": {
+          "relative_path": "CJson/api/CJson.Types.ParsedValue.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJson.Types.ParsedValue",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "CJson/api/CJson.Types.Try.yml",
+      "output": {
+        ".html": {
+          "relative_path": "CJson/api/CJson.Types.Try.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJson.Types.Try",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "CJson/api/CJson.Types.yml",
+      "output": {
+        ".html": {
+          "relative_path": "CJson/api/CJson.Types.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJson.Types",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "CJson/api/CJson.Utils.Base.yml",
+      "output": {
+        ".html": {
+          "relative_path": "CJson/api/CJson.Utils.Base.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJson.Utils.Base",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "CJson/api/CJson.Utils.Decode.yml",
+      "output": {
+        ".html": {
+          "relative_path": "CJson/api/CJson.Utils.Decode.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJson.Utils.Decode",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "CJson/api/CJson.Utils.Is.yml",
+      "output": {
+        ".html": {
+          "relative_path": "CJson/api/CJson.Utils.Is.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJson.Utils.Is",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "CJson/api/CJson.Utils.Json.yml",
+      "output": {
+        ".html": {
+          "relative_path": "CJson/api/CJson.Utils.Json.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJson.Utils.Json",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "CJson/api/CJson.Utils.yml",
+      "output": {
+        ".html": {
+          "relative_path": "CJson/api/CJson.Utils.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJson.Utils",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "CJson/api/CJson.yml",
+      "output": {
+        ".html": {
+          "relative_path": "CJson/api/CJson.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJson",
+      "Summary": null
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "CJson/api/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "CJson/api/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "CJson/api/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "CJson/api/toc.html"
+        },
+        ".json": {
+          "relative_path": "CJson/api/toc.json"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "CJson/articles/intro.md",
+      "output": {
+        ".html": {
+          "relative_path": "CJson/articles/intro.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "CJson/articles/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "CJson/articles/toc.html"
+        },
+        ".json": {
+          "relative_path": "CJson/articles/toc.json"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "CJson/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "CJson/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "CJson/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "CJson/toc.html"
+        },
+        ".json": {
+          "relative_path": "CJson/toc.json"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "README.md",
+      "output": {
+        ".html": {
+          "relative_path": "README.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CJson.CJson-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CJson.CJson-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJson.CJson<Type>",
+      "Summary": "<p sourcefile=\"api/CJson.CJson-1.yml\" sourcestartlinenumber=\"1\">CJson entrypoint class.<br>\nObject must be created for any CJson file or content for deserializing.<br>\nOnly class object to JSON string conversion can be done without object creation.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CJson.Exceptions.AbsolutePathConstraintError.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CJson.Exceptions.AbsolutePathConstraintError.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJson.Exceptions.AbsolutePathConstraintError",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CJson.Exceptions.IllegalImportStatement.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CJson.Exceptions.IllegalImportStatement.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJson.Exceptions.IllegalImportStatement",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CJson.Exceptions.InvalidJPathError.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CJson.Exceptions.InvalidJPathError.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJson.Exceptions.InvalidJPathError",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CJson.Exceptions.UndeserializedCJSON.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CJson.Exceptions.UndeserializedCJSON.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJson.Exceptions.UndeserializedCJSON",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CJson.Exceptions.UnrecognizedTypeException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CJson.Exceptions.UnrecognizedTypeException.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJson.Exceptions.UnrecognizedTypeException",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CJson.Exceptions.UnsupportedFileExtension.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CJson.Exceptions.UnsupportedFileExtension.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJson.Exceptions.UnsupportedFileExtension",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CJson.Exceptions.VariableInjectionException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CJson.Exceptions.VariableInjectionException.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJson.Exceptions.VariableInjectionException",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CJson.Exceptions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CJson.Exceptions.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJson.Exceptions",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CJson.Path.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CJson.Path.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJson.Path",
+      "Summary": "<p sourcefile=\"api/CJson.Path.yml\" sourcestartlinenumber=\"1\">For file path related operations, use this class object.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CJson.Types.ParsedValue.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CJson.Types.ParsedValue.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJson.Types.ParsedValue",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CJson.Types.Try.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CJson.Types.Try.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJson.Types.Try",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CJson.Types.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CJson.Types.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJson.Types",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CJson.Utils.Base.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CJson.Utils.Base.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJson.Utils.Base",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CJson.Utils.Decode.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CJson.Utils.Decode.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJson.Utils.Decode",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CJson.Utils.Is.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CJson.Utils.Is.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJson.Utils.Is",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CJson.Utils.Json.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CJson.Utils.Json.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJson.Utils.Json",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CJson.Utils.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CJson.Utils.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJson.Utils",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CJson.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CJson.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJson",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CJsonTests.Base.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CJsonTests.Base.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJsonTests.Base",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CJsonTests.models.CJsonContentTarget.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CJsonTests.models.CJsonContentTarget.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJsonTests.models.CJsonContentTarget",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CJsonTests.models.Pure.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CJsonTests.models.Pure.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJsonTests.models.Pure",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CJsonTests.models.Questions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CJsonTests.models.Questions.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJsonTests.models.Questions",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CJsonTests.models.RelativeCalls.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CJsonTests.models.RelativeCalls.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJsonTests.models.RelativeCalls",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CJsonTests.models.Source.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CJsonTests.models.Source.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJsonTests.models.Source",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CJsonTests.models.Target.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CJsonTests.models.Target.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJsonTests.models.Target",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CJsonTests.models.TargetObj.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CJsonTests.models.TargetObj.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJsonTests.models.TargetObj",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CJsonTests.models.TargetRelativeCalls.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CJsonTests.models.TargetRelativeCalls.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJsonTests.models.TargetRelativeCalls",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CJsonTests.models.VariableInjection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CJsonTests.models.VariableInjection.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJsonTests.models.VariableInjection",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CJsonTests.models.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CJsonTests.models.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJsonTests.models",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CJsonTests.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CJsonTests.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CJsonTests",
+      "Summary": null
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "api/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/toc.html"
+        },
+        ".json": {
+          "relative_path": "api/toc.json"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "index.md",
+      "output": {
+        ".html": {
+          "relative_path": "index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "toc.html"
+        },
+        ".json": {
+          "relative_path": "toc.json"
+        }
+      },
+      "version": ""
+    }
+  ],
+  "groups": [
+    {
+      "xrefmap": "xrefmap.yml"
+    }
+  ]
+}

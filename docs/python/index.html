@@ -1,0 +1,165 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome &mdash; CodedJson 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=51b770b3"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            CodedJson
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Welcome</a></li>
+<li><a class="reference internal" href="#cjson-syntax">CJSON Syntax</a></li>
+<li><a class="reference internal" href="#import-multiple-json-files">Import multiple JSON files</a></li>
+<li><a class="reference internal" href="#single-multiple-line-comments">Single/ Multiple line comments</a></li>
+<li><a class="reference internal" href="#dynamic-variable-injection">Dynamic variable injection</a></li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">CodedJson</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Welcome</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="welcome">
+<h1>Welcome<a class="headerlink" href="#welcome" title="Link to this heading"></a></h1>
+<p>Coded JSON(officially CJSON) is an extended format of JSON formatted data storage, which gives
+you more previledge to organize data into more structured format.</p>
+<p>Here is an example for <cite>CJSON</cite> format:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>{
+   &quot;source&quot;: $import &quot;./source.json&quot;,
+   &quot;target&quot;: {
+      &quot;fruit&quot;: &quot;Apple&quot;,
+      &quot;size&quot;: &quot;Large&quot;,
+      &quot;color&quot;: &quot;Red&quot;,
+      &quot;secColor&quot;: $.target.color,
+      &quot;colorList&quot;: [ $.target.color, $.target.secColor ],
+      // You can add comments like this
+      &quot;digitCheck&quot;: 1.5,
+      &quot;digitImport&quot;: $.target.digitCheck,
+      &quot;digitArrayImport&quot;: [ $.target.digitCheck, $.target.digitImport ]
+   }
+}
+</pre></div>
+</div>
+<p>The above <cite>CJSON</cite> snipped will be deserialized in JSON format and can be used
+as same as other JSON files.</p>
+<p>For other details, please refer to official page: <a class="reference external" href="https://subhendushekhar.github.io/cjson/">https://subhendushekhar.github.io/cjson/</a></p>
+</section>
+<section id="cjson-syntax">
+<h1>CJSON Syntax<a class="headerlink" href="#cjson-syntax" title="Link to this heading"></a></h1>
+<p><cite>CJSON</cite> is an enhanced version of <cite>JSON</cite> file format. But it targets more reusability and structured data storage.</p>
+</section>
+<section id="import-multiple-json-files">
+<h1>Import multiple JSON files<a class="headerlink" href="#import-multiple-json-files" title="Link to this heading"></a></h1>
+<p>One of the strong feature which we have introduced is importing CJson/Json files in another CJson file.
+It works in the similar way, how we import libraries in programming languages. All you need to import it using
+<cite>$import “path/to/target/file”</cite> and <cite>deserialize</cite> the file.</p>
+</section>
+<section id="single-multiple-line-comments">
+<h1>Single/ Multiple line comments<a class="headerlink" href="#single-multiple-line-comments" title="Link to this heading"></a></h1>
+<p>CJSON also supports <strong>commented lines</strong> by adding <cite>//</cite> at the start of the line.</p>
+<p><em>Please note, inline comments are not supported. Contributers create an issue [here](https://github.com/users/SubhenduShekhar/projects/7)</em></p>
+</section>
+<section id="dynamic-variable-injection">
+<h1>Dynamic variable injection<a class="headerlink" href="#dynamic-variable-injection" title="Link to this heading"></a></h1>
+<p>You can inject a variable dynamically also. Instead of replacing a variable value by parsing as <cite>gson</cite> object, put a key in format <cite>&lt;keyToBeReplaced&gt;</cite> like below:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+   <span class="s2">&quot;idValue&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="nb">id</span><span class="o">&gt;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Now create a <cite>HashMap</cite> with key as <cite>&lt;id&gt;</cite> and store relevant value in it.
+While invoking <cite>inject</cite> function, pass the HashMap as the second parameter.</p>
+</section>
+<section id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Link to this heading"></a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Shubhendu Shekhar Gupta.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

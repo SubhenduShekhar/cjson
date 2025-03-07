@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: utils/json.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: utils/json.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>"use strict";
+var __createBinding = (this &amp;&amp; this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this &amp;&amp; this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this &amp;&amp; this.__importStar) || function (mod) {
+    if (mod &amp;&amp; mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" &amp;&amp; Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __importDefault = (this &amp;&amp; this.__importDefault) || function (mod) {
+    return (mod &amp;&amp; mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Json = exports.separateByComma = exports.isContentJson = void 0;
+const base_1 = require("./base");
+const file = __importStar(require("./file"));
+const keywords_1 = __importDefault(require("./keywords"));
+const refinery_1 = require("./refinery");
+/**
+ * Checks for `JSON` content
+ * @param content String type content
+ * @returns `true` if content is JSON type
+ */
+function isContentJson(content, isFilePath) {
+    if (isFilePath)
+        content = file.read(content).toString();
+    try {
+        JSON.parse(content);
+        return true;
+    }
+    catch {
+        return false;
+    }
+}
+exports.isContentJson = isContentJson;
+/**
+ * Split by comma
+ * @param content String type content
+ * @returns `string[]`
+ */
+function separateByComma(content) {
+    return content.split(",");
+}
+exports.separateByComma = separateByComma;
+/**
+ * `JSON` specific functions
+ */
+class Json extends base_1.Base {
+    jsonKeys = [];
+    jsonValues = [];
+    filePath;
+    constructor(obj, isFilePath) {
+        super();
+        if (typeof obj === "string" &amp;&amp; isFilePath) {
+            this.filePath = obj;
+            this.obj = JSON.parse(file.read(this.filePath));
+        }
+        else if (typeof obj === "string" &amp;&amp; !isFilePath) {
+            this.obj = JSON.parse(obj);
+            this.filePath = undefined;
+        }
+        else if (obj !== undefined) {
+            this.obj = obj;
+            this.filePath = undefined;
+        }
+    }
+    /**
+     * Allowed data types
+     */
+    dataTypes = [
+        "string",
+        "number",
+        "boolean"
+    ];
+    /**
+     * Pushes valid JSON path keys
+     * @param eachKey Key to be appended
+     * @param prevKey Previous key
+     */
+    pushKey(eachKey, prevKey) {
+        if (prevKey === "")
+            this.jsonKeys.push(eachKey);
+        else
+            this.jsonKeys.push(prevKey + "." + eachKey);
+    }
+    /**
+     * Reads keys in recursive manner
+     * @param jsonData `JSON` data
+     * @param prevKey Previous key
+     */
+    getKeys(jsonData, prevKey = "") {
+        if (jsonData === null)
+            this.pushKey("", prevKey);
+        else if (isContentJson(JSON.stringify(jsonData))) {
+            Object.keys(jsonData).forEach(eachKey => {
+                if (Array.isArray(jsonData[eachKey])) {
+                    var allRaw = true;
+                    for (let i = 0; i &lt; jsonData[eachKey].length; i++) {
+                        if (this.dataTypes.includes(typeof jsonData[eachKey][i]))
+                            continue;
+                        else {
+                            allRaw = false;
+                            if (prevKey !== "")
+                                this.getKeys(jsonData[eachKey][i], prevKey + "." + eachKey + "[" + i + "]");
+                            else
+                                this.getKeys(jsonData[eachKey][i], eachKey + "[" + i + "]");
+                        }
+                    }
+                    if (allRaw &amp;&amp; jsonData[eachKey].length !== 0)
+                        for (let i = 0; i &lt; jsonData[eachKey].length; i++)
+                            this.pushKey(eachKey + "[" + i + "]", prevKey);
+                }
+                else if (this.dataTypes.includes(typeof jsonData[eachKey]))
+                    this.pushKey(eachKey, prevKey);
+                else if (isContentJson(JSON.stringify(jsonData[eachKey]))) {
+                    if (prevKey !== "")
+                        this.getKeys(jsonData[eachKey], prevKey + "." + eachKey);
+                    else
+                        this.getKeys(jsonData[eachKey], eachKey);
+                }
+                else if (jsonData[eachKey] === null)
+                    this.pushKey(eachKey, prevKey);
+            });
+        }
+        else if (Array.isArray(jsonData)) {
+            jsonData.forEach(eachElem => this.getKeys(eachElem));
+        }
+    }
+    /**
+     * Parses value from JSON
+     * @param key
+     * @returns Value fetched from key
+     */
+    getValueFromKey(key) {
+        let value = this.obj;
+        if (key.includes(".")) {
+            let keyList = key.split(".");
+            for (let j = 0; j &lt; keyList.length; j++) {
+                if (keyList[j].includes("[") &amp;&amp; keyList[j].includes("]")) {
+                    let key = keyList[j].split("[")[0];
+                    let index = parseInt(keyList[j].split("[")[1].split("]")[0]);
+                    value = value[key][index];
+                }
+                else
+                    value = value[keyList[j]];
+            }
+        }
+        else if (key === "")
+            value = this.obj;
+        else
+            value = value[key];
+        return value;
+    }
+    /**
+     * Parses value from JSON
+     * @param key
+     * @returns Value fetched from key
+     */
+    parse(key) {
+        if (key?.startsWith("$."))
+            key = key.split("$.")[1];
+        if (key !== undefined)
+            return this.getValueFromKey(key);
+        else
+            return this.obj;
+    }
+    /**
+     * Reads all possible keys.
+     * @returns Keys `string[]`
+     */
+    getAllKeys() {
+        this.getKeys(this.obj);
+        return this.jsonKeys;
+    }
+    /**
+     * Fetches all values with given `JSON` keys
+     * @returns Values in `string[]`
+     */
+    getAllValues() {
+        if (this.jsonKeys.length === 0)
+            this.getAllKeys();
+        for (let i = 0; i &lt; this.jsonKeys.length; i++) {
+            let value = this.getValueFromKey(this.jsonKeys[i]);
+            this.jsonValues.push(value);
+        }
+        return this.jsonValues;
+    }
+    removeWithSucComma(key, value, content) {
+        var uniqueKeys = content.match(keywords_1.default.removeWithSucComa(key, (0, refinery_1.regexRefinery)(value)))?.filter((value, index, array) => { return array.indexOf(value) === index; });
+        if (uniqueKeys !== undefined) {
+            for (let i = 0; i &lt; uniqueKeys?.length; i++) {
+                var val = (0, refinery_1.regexRefinery)(uniqueKeys[i]);
+                content = content.replace(new RegExp(val, "g"), "");
+            }
+        }
+        return content;
+    }
+    removeWithPreComma(key, value, content) {
+        var uniqueKeys = content.match(keywords_1.default.removeWithPreComa(key, (0, refinery_1.regexRefinery)(value)))?.filter((value, index, array) => { return array.indexOf(value) === index; });
+        if (uniqueKeys !== undefined) {
+            for (let i = 0; i &lt; uniqueKeys?.length; i++) {
+                var val = (0, refinery_1.regexRefinery)(uniqueKeys[i]);
+                content = content.replace(new RegExp(val, "g"), "");
+            }
+        }
+        return content;
+    }
+    removeRecursively(key, obj) {
+        if (key.split(".").length === 1) {
+            let stringObj = JSON.stringify(obj);
+            let con = this.removeWithSucComma(key, obj[key], stringObj);
+            if (!isContentJson(con)) {
+                con = this.removeWithPreComma(key, obj[key], stringObj);
+                con = this.removeWithSucComma(key, obj[key], con);
+            }
+            return con;
+        }
+        else {
+            let curKey = key.split(".")[0];
+            var a = this.removeRecursively(key.replace(curKey + ".", ""), obj[curKey]);
+            if (a !== undefined)
+                obj[curKey] = JSON.parse(a);
+            else
+                obj[curKey] = a;
+            return JSON.stringify(obj);
+        }
+    }
+    /**
+     * Removes a key:value from the JSON context. Key will be JPath in `$.full.path` format
+     *
+     * The function automatically deserializes before removing. So, no need to explicitely deserialize it.
+     * @param key JPath to the key
+     * @param content JSON `string` content from which to be removed.
+     * @returns Resultant content in `JSON` object
+     */
+    removeWithKey(key, content) {
+        if (key.startsWith(keywords_1.default.relativeJPath))
+            key = key.replace(keywords_1.default.relativeJPath, "");
+        var value = this.parse(key);
+        if (typeof value !== "object")
+            this.obj = JSON.parse(this.removeRecursively(key, JSON.parse(content)));
+        else {
+            // Replacing with null first and then removing the key:value set
+            var nulledObj = this.replaceRecursively(key, null, JSON.parse(content));
+            this.obj = JSON.parse(this.removeRecursively(key, nulledObj));
+        }
+        return this.obj;
+    }
+    /**
+     * Replace a JPath to a specified value. The function context is of JSON and cannot be used in CJSON context.
+     *
+     * In order to use this in CJSON context, follow below steps:
+     * &lt;ol>
+     * &lt;li>Create CJson object&lt;/li>
+     * &lt;li>Deserialize&lt;/li>
+     * &lt;li>Deserialize&lt;/li>
+     * &lt;li>cjson.json?.replace("$.jpath", value, object)&lt;/li>
+     * &lt;/ol>
+     * @param key
+     * @param value
+     * @param jsonObject
+     * @returns
+     */
+    replace = (jPath, value, obj) => {
+        this.obj = this.replaceRecursively(jPath, value, obj);
+        return this.obj;
+    };
+    /**
+     * Recursive function for replacing data in provided key.
+     * @private
+     * @param key
+     * @param obj
+     * @returns
+     */
+    replaceRecursively(key, value, obj) {
+        if (key.split(".").length === 1)
+            obj[key] = value;
+        else {
+            let curKey = key.split(".")[0];
+            obj[curKey] = this.replaceRecursively(key.replace(curKey + ".", ""), value, obj[curKey]);
+        }
+        return obj;
+    }
+}
+exports.Json = Json;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Cjson.html">Cjson</a></li><li><a href="Is.html">Is</a></li><li><a href="Json.html">Json</a></li></ul><h3>Global</h3><ul><li><a href="global.html#isAbsolutePath">isAbsolutePath</a></li><li><a href="global.html#isContentJson">isContentJson</a></li><li><a href="global.html#read">read</a></li><li><a href="global.html#refineRelativePaths">refineRelativePaths</a></li><li><a href="global.html#refineRuntimeVals">refineRuntimeVals</a></li><li><a href="global.html#regexRefinery">regexRefinery</a></li><li><a href="global.html#separateByComma">separateByComma</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Fri Mar 07 2025 15:41:45 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
