@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Is extends Base {
     public Is(String filePath, boolean isFilePath) throws FileNotFoundException {
@@ -47,6 +48,16 @@ public class Is extends Base {
             return "char";
         else if(Keywords.importAsDataType(Matcher.quoteReplacement(filePath), "boolean").matcher(content).find())
             return "boolean";
+        else if(Keywords.importAsDataType(Matcher.quoteReplacement(filePath), "json").matcher(content).find())
+            return "json";
         else return null;
+    }
+
+    protected boolean isRelativePathDecoded(String content, String testString) {
+        Matcher matcher = Pattern.compile("\\\"*<\\\\*" + Matcher.quoteReplacement(testString) + ">\\\"*").matcher(content);
+        while (matcher.find()) {
+            return true;
+        }
+        return false;
     }
 }

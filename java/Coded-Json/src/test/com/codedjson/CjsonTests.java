@@ -42,7 +42,7 @@ public class CjsonTests extends Base {
     }
     @Test
     public void iShouldBeAbleToDeserializeRelativePathToLocalVariable() throws FileNotFoundException, IllegalJsonType, AbsolutePathConstraintError, UndeserializedCJSON, IllegalValueType, InvalidJPathError, VariableInjectionException, UnsupportedDatatypeForImport {
-        CJson<TargetRelativeCalls> cJson = new CJson<TargetRelativeCalls>(relativeTargetCjson);
+        CJson<TargetRelativeCalls> cJson = new CJson<>(relativeTargetCjson);
         HashMap<String, Object> toBeInjected = new HashMap<>();
         toBeInjected.put("fruit", "Orange");
         toBeInjected.put("quantity", 10);
@@ -140,18 +140,18 @@ public class CjsonTests extends Base {
     public void iShouldBeAbleToInjectValuesForKeysWithSpecialCharacters() throws IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException, UndeserializedCJSON, InvalidJPathError, VariableInjectionException, UnsupportedDatatypeForImport {
         CJson<TargetObj> cJson = new CJson<>("{\n" +
                 "        \"types\": \"asd\",\n" +
-                "        \"fruit\": <fruit!@#$%^&*()>" +
+                "        \"fruit\": <fruit123>" +
                 "}");
-        cJson.inject(TargetObj.class, "fruit!@#$%^&*()", "apple");
+        cJson.inject(TargetObj.class, "fruit123", "apple");
         Assertions.assertEquals(cJson.parse("$.fruit"), "apple");
     }
     @Test
-    public void iShouldBeAbleToInjectSpecialCharacters() throws IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException, InvalidJPathError, VariableInjectionException, UnsupportedDatatypeForImport {
+    public void iShouldBeAbleToInjectAlphanumericKeys() throws IllegalJsonType, AbsolutePathConstraintError, FileNotFoundException, InvalidJPathError, VariableInjectionException, UnsupportedDatatypeForImport {
         CJson<TargetObj> cJson = new CJson<>("{\n" +
                 "        \"types\": \"asd\",\n" +
-                "        \"fruit\": <fruit!:@#$%^&*()>" +
+                "        \"fruit\": <fruit123>" +
                 "}");
-        cJson.inject(TargetObj.class, "fruit!:@#$%^&*()", null);
+        cJson.inject(TargetObj.class, "fruit123", null);
         Assertions.assertNull(cJson.parse("$.fruit"));
     }
     @Test

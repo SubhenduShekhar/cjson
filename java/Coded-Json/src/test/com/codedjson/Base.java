@@ -15,6 +15,8 @@ public class Base {
     protected Path relativeTargetCjson = Paths.get(testDataDir, "targetRelativeCalls.cjson");
     protected Path variableInjectionCjson = Paths.get(testDataDir, "VariableInjection.cjson");
     protected Path referInjectedVariable = Paths.get(testDataDir, "referInjectedVariable.cjson");
+    protected Path asStringWithImport = Paths.get(testDataDir, "as", "AsStringWithImport.cjson");
+    protected Path asJsonWithImport = Paths.get(testDataDir, "as", "asJSONWithImport.cjson");
     protected final Gson gson;
 
     public Base(){

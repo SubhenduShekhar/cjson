@@ -1,0 +1,3 @@
+{
+    "sourceStr": $import "../targetRelativeCalls.cjson" as string
+}

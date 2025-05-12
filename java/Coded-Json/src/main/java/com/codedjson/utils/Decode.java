@@ -27,7 +27,7 @@ public class Decode extends Json {
     private String getFilePath(String content) {
         return content.split(Pattern.quote(Keywords.importKey))[1].split("\"")[0];
     }
-    private String decodeImport(String content, String curPath) throws AbsolutePathConstraintError, FileNotFoundException, UnsupportedDatatypeForImport {
+    private String decodeImport(String content, String curPath) throws AbsolutePathConstraintError, FileNotFoundException, UnsupportedDatatypeForImport, IllegalJsonType {
         String filePath = this.getFilePath(content);
         String fileName = filePath.split("/")[filePath.split("/").length - 1];
 
@@ -47,7 +47,7 @@ public class Decode extends Json {
             importFilePath = appendPath(dirName, fileName);
         }
 
-        String innerContent = read(importFilePath);
+        String innerContent = readAndSimplify(importFilePath);
         String quoteReplacedContent = null;
 
         if(Objects.isNull(askedDatatype)) {
@@ -60,17 +60,38 @@ public class Decode extends Json {
             content = content.replaceAll(Pattern.quote(Keywords.importKey + filePath + "\""), quoteReplacedContent);
         }
         else {
-            if(isImport(innerContent))
-                quoteReplacedContent = Matcher.quoteReplacement(decodeImport(innerContent, getDirectory(importFilePath)));
-            else {
-                if(askedDatatype.equals("string"))
+            if(isImport(innerContent)) {
+                quoteReplacedContent = Matcher.quoteReplacement(decodeKeywords(innerContent, getDirectory(importFilePath)));
+                quoteReplacedContent = Matcher.quoteReplacement("\"" +
+                        quoteReplacedContent.replace("\"", "\\\\\"").replaceAll("\n", "") + "\"");
+
+                content = content
+                        .replaceAll(Keywords
+                                        .importAsDataType(filePath, askedDatatype)
+                                        .pattern()
+                                , quoteReplacedContent)
+                        .replaceAll("\\\\\\\\", "\\\\");
+
+                content = escapeSpecialChars(content);
+            } else {
+                if(askedDatatype.equals("string")) {
                     quoteReplacedContent = Matcher.quoteReplacement("\"" +
                             innerContent.replace("\"", "\\\\\"").replaceAll("\n", "") + "\"");
+                    content = content
+                            .replaceAll(Keywords
+                                    .importAsDataType(filePath, askedDatatype)
+                                    .pattern()
+                                    , quoteReplacedContent)
+                            .replaceAll("\\\\\\\\", "\\\\");
+
+                    content = escapeSpecialChars(content);
+                }
+                else if(askedDatatype.equals("json")) {
+                    content = content.replaceAll(Keywords
+                            .importAsDataType(filePath, askedDatatype)
+                            .pattern(), Matcher.quoteReplacement(innerContent));
+                }
                 else throw new UnsupportedDatatypeForImport(askedDatatype);
-
-                Matcher matcher = Keywords.importAsDataType(filePath, "string").matcher(content);
-
-                content = content.replaceAll(Keywords.importAsDataType(filePath, "string").pattern(), quoteReplacedContent).replaceAll("\\\\\\\\", "\\\\");
             }
         }
 
@@ -79,9 +100,10 @@ public class Decode extends Json {
 
         return content;
     }
-    private void decodeSingleLineComment() {
+    private String decodeSingleLineComment(String content) {
         for(String eachLine : commentedLines)
             content = content.replace(eachLine, "");
+        return content;
     }
     private String decodeRelativePaths(String content) throws IllegalJsonType {
         Matcher matcher = Keywords.relativeJPathRegex.matcher(content);
@@ -89,7 +111,7 @@ public class Decode extends Json {
         while (matcher.find()) {
             String group = matcher.group();
 
-            if (!jpaths.contains(group)) {
+            if (!isRelativePathDecoded(content, group)) {
                 jpaths.add(group);
                 content = content.replaceAll(Pattern.quote(group), "\"<" + group.replace("$", "\\$") + ">\"");
             }
@@ -112,7 +134,7 @@ public class Decode extends Json {
                 String variable = group.split("<")[1].split(">")[0];
                 runtimeVals.add(variable);
 
-                Matcher ignoreUnderQuotes = Pattern.compile("\".*" + Matcher.quoteReplacement(group) + ".*\"").matcher(content);
+                Matcher ignoreUnderQuotes = Pattern.compile("\\:\\s*\\\".*<" + variable + ">.*\\\"").matcher(content);
                 if (!ignoreUnderQuotes.find()) {
                     variable = "\"<-" + variable + "->\"";
                     content = content.replaceAll(Pattern.quote(group), Matcher.quoteReplacement(variable));
@@ -125,16 +147,15 @@ public class Decode extends Json {
         boolean isChanged;
         while(true) {
             isChanged = false;
-
+            if(isSingleLineComent(content)) {
+                content = decodeSingleLineComment(content);
+                isChanged = true;
+            }
             if(isImport(content)) {
                 if(this.filePath != null)
                     content = decodeImport(content, getDirectory(filePath));
                 else
                     content = decodeImport(content, "");
-                isChanged = true;
-            }
-            if(isSingleLineComent(content)) {
-                decodeSingleLineComment();
                 isChanged = true;
             }
             content = decodeRuntimeKeys(content);
@@ -143,6 +164,28 @@ public class Decode extends Json {
         content = decodeRelativePaths(content);
 
         json = parseJson(content);
+    }
+    protected String decodeKeywords(String content, String curFilePath) throws AbsolutePathConstraintError, FileNotFoundException, IllegalJsonType, UnsupportedDatatypeForImport {
+        boolean isChanged;
+        while(true) {
+            isChanged = false;
+
+            if(isImport(content)) {
+                if(curFilePath != null)
+                    content = decodeImport(content, getDirectory(curFilePath));
+                else
+                    content = decodeImport(content, "");
+                isChanged = true;
+            }
+            if(isSingleLineComent(content)) {
+                content = decodeSingleLineComment(content);
+                isChanged = true;
+            }
+            content = decodeRuntimeKeys(content);
+            if(! isChanged) break;
+        }
+        content = decodeRelativePaths(content);
+        return content;
     }
     protected String replaceContent(String content, HashMap<String, Object> injectingObj) {
         for (String key : injectingObj.keySet())
@@ -277,5 +320,12 @@ public class Decode extends Json {
             return true;
         }
         return false;
+    }
+    private String readAndSimplify(String filePath) throws FileNotFoundException {
+        String fileContent = read(filePath);
+        if(isSingleLineComent(fileContent))
+            fileContent = decodeSingleLineComment(fileContent);
+
+        return fileContent;
     }
 }

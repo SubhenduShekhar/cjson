@@ -1,3 +1,0 @@
-{
-    "source": $import "./pure.json" as string
-}

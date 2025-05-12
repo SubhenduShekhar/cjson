@@ -66,6 +66,7 @@ public class Base {
                 return jsonArray;
             }
             catch (Exception er) {
+                System.out.println(jsonString);
                 throw new IllegalJsonType();
             }
         }
@@ -113,7 +114,16 @@ public class Base {
     }
     protected String getDirectory(String absFilePath) {
         absFilePath = Paths.get(absFilePath).toString();
-        String fileName = Paths.get(absFilePath).getFileName().toString();
-        return Paths.get(absFilePath.replace(fileName, "")).toString();
+        if(new File(absFilePath).isDirectory())
+            return absFilePath;
+        else {
+            String fileName = Paths.get(absFilePath).getFileName().toString();
+            return Paths.get(absFilePath.replace(fileName, "")).toString();
+        }
+    }
+    protected String escapeSpecialChars(String content) {
+        if(content.contains("\\\\$"))
+            return content;
+        else return content.replaceAll("\\$", "\\\\\\$");
     }
 }

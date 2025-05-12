@@ -9,7 +9,7 @@ public class Keywords {
     public static String relativeJPath = "$.";
     public static Pattern relativeJPathRegex = Pattern.compile("[$][.][.A-Za-z0-9]*");
     public static Pattern encodedRelativeJPathRegex = Pattern.compile("[<][$.][.A-Za-z0-9]*[>]");
-    public static Pattern runtimeVals = Pattern.compile("<[^-].*[^-]>");
+    public static Pattern runtimeVals = Pattern.compile("<[^-][A-Za-z0-9]*[^-]>");
 //    public static Pattern importAsDataType = Pattern.compile()
     protected static Pattern importAsDataType(String filePathReplacer, String dataType) {
         return Pattern.compile("\\$import\\s\\\"" + filePathReplacer + "\\\"\\sas\\s" + dataType);
