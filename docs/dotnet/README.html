@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title> | CJson </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content=" | CJson ">
+      
+      
+      <link rel="icon" href="favicon.ico">
+      <link rel="stylesheet" href="public/docfx.min.css">
+      <link rel="stylesheet" href="public/main.css">
+      <meta name="docfx:navrel" content="toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/SubhenduShekhar/cjson/blob/main/dotnet/CJson/README.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="index.html">
+            <img id="logo" class="svg" src="logo.svg" alt="CJson">
+            CJson
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+<div align="center">
+    <img src="https://github.com/SubhenduShekhar/cjson/blob/main/docs/logo.png?raw=true" width="200" alt="CJSON Logo">
+    <h2>Coded Javascript Object Notation</h2><br>
+    <h2>For C#</h2><br>
+    <h3>
+        CJSON is a data file format(inspired from JSON), but supports logical expressions too. Having extended language support to NodeJS, Python, Java and DotNet, users has experienced data reusability. For features and examples, please refer to this documentation as base document.
+    </h3>
+    <br>
+    <div>
+        <img src="https://img.shields.io/badge/dotnet-blue" alt="CSharp Tag">
+    </div>
+    <div>
+        <img src="https://github.com/SubhenduShekhar/cjson/actions/workflows/dotnet-tests.yml/badge.svg" alt="DotNet Status">
+    </div>
+</div>
+<br>
+<p><strong>PLEASE NOTE, ONLY DOTNET V6.0 IS SUPPORTED</strong></p>
+<h2 id="dependency">Dependency</h2>
+<h3 id="net-cli">.NET CLI</h3>
+<pre><code class="lang-console">    dotnet add package CJson --version 1.0.0
+</code></pre>
+<h3 id="package-manager">Package Manager</h3>
+<pre><code class="lang-console">    NuGet\Install-Package CJson -Version 1.0.0
+</code></pre>
+<h3 id="packagereference">PackageReference</h3>
+<pre><code class="lang-console">    &lt;PackageReference Include=&quot;CJson&quot; Version=&quot;1.0.0&quot; /&gt;
+</code></pre>
+<h3 id="paket-cli">Paket CLI</h3>
+<pre><code class="lang-console">    paket add CJson --version 1.0.0
+</code></pre>
+<h3 id="script--interactive">Script &amp; Interactive</h3>
+<pre><code class="lang-console">    #r &quot;nuget: CJson, 1.0.0&quot;
+</code></pre>
+<h3 id="cake">Cake</h3>
+<pre><code class="lang-console">    // Install CJson as a Cake Addin
+    #addin nuget:?package=CJson&amp;version=1.0.0
+
+    // Install CJson as a Cake Tool
+    #tool nuget:?package=CJson&amp;version=1.0.0
+</code></pre>
+<h2 id="examples">Examples</h2>
+<h3 id="importing-a-json-file-in-cjson-file">Importing a JSON file in CJSON file</h3>
+<h4 id="filecjson">file.cjson</h4>
+<pre><code class="lang-json">{
+    &quot;source&quot;: $import &quot;path/to/source.json&quot;,
+    &quot;target&quot;: {
+        &quot;fruit&quot;: &quot;Apple&quot;,
+        &quot;size&quot;: &quot;Large&quot;,
+        &quot;color&quot;: &quot;Red&quot;
+    }
+}
+</code></pre>
+<h4 id="code">Code</h4>
+<pre><code class="lang-csharp">    using CJson;
+
+    namespace CJsonImpl {
+        public class Main {
+            public static void Main(String[] args) {
+                CJson.Path cjsonFilePath = new CJson.Path(GetCurrentDirectory, &quot;file.cjson&quot;)
+                CJson&lt;SerializableClass&gt; cJson = new CJson&lt;SerializableClass&gt;(cjsonFilePath);
+                SerializableClass classObj = cJson.Deserialize();
+            }
+        }
+    }
+</code></pre>
+<h4 id="output">Output:</h4>
+<pre><code class="lang-json">{
+    &quot;source&quot;: {
+        // source.json content
+    },
+    &quot;target&quot;: {
+        &quot;fruit&quot;: &quot;Apple&quot;,
+        &quot;size&quot;: &quot;Large&quot;,
+        &quot;color&quot;: &quot;Red&quot;
+    }
+}
+</code></pre>
+<h3 id="calling-relative-keys-using-jpath">Calling relative keys using JPATH</h3>
+<p>Below example shows <code>color</code> variable is calling data from <code>fruit</code> variable</p>
+<h4 id="filecjson-1">file.cjson</h4>
+<pre><code class="lang-json">{
+    &quot;target&quot;: {
+        &quot;fruit&quot;: &quot;Orange&quot;,
+        &quot;size&quot;: &quot;Medium&quot;,
+        &quot;color&quot;: $.target.fruit
+    }
+}
+</code></pre>
+<h4 id="code-1">Code</h4>
+<pre><code class="lang-csharp">    using CJson;
+
+    namespace CJsonImpl {
+        public class Main {
+            public static void Main(String[] args) {
+                CJson.Path cjsonFilePath = new CJson.Path(GetCurrentDirectory, &quot;file.cjson&quot;)
+                CJson&lt;SerializableClass&gt; cJson = new CJson&lt;SerializableClass&gt;(cjsonFilePath);
+                SerializableClass classObj = cJson.Deserialize();
+            }
+        }
+    }
+</code></pre>
+<h4 id="output-1">Output</h4>
+<pre><code class="lang-json">{
+    &quot;target&quot;: {
+        &quot;fruit&quot;: &quot;Orange&quot;,
+        &quot;size&quot;: &quot;Medium&quot;,
+        &quot;color&quot;: &quot;Orange&quot;
+    }
+}
+</code></pre>
+<h3 id="variable-injection">Variable Injection</h3>
+<h4 id="filecjson-2">file.cjson</h4>
+<pre><code class="lang-json">{
+    &quot;target&quot;: {
+        &quot;fruit&quot;: &quot;Orange&quot;,
+        &quot;size&quot;: &quot;Medium&quot;,
+        &quot;color&quot;: &quot;Orangle&quot;,
+        &quot;sellerId&quot;: &lt;id&gt;
+    }
+}
+</code></pre>
+<h4 id="code-2">Code</h4>
+<pre><code class="lang-csharp">    using CJson;
+
+    namespace CJsonImpl {
+        public class Main {
+            public static void Main(String[] args) {
+                Dictionary&lt;String, String&gt; data = new Dictionary&lt;String, String&gt;();
+                data.Add(&quot;id&quot;, &quot;ID01&quot;);
+
+                CJson&lt;SerializableClass&gt; cJson = new CJson&lt;SerializableClass&gt;(new Path(&quot;file/path/to/file.cjson&quot;));
+                SerializableClass target = cJson.Inject(data);
+            }
+        }
+    }
+</code></pre>
+<h4 id="target-value"><code>target</code> value</h4>
+<pre><code class="lang-json">{
+    &quot;target&quot;: {
+        &quot;fruit&quot;: &quot;Orange&quot;,
+        &quot;size&quot;: &quot;Medium&quot;,
+        &quot;color&quot;: &quot;Orangle&quot;,
+        &quot;sellerId&quot;: &quot;ID01&quot;
+    }
+}
+</code></pre>
+<h3 id="single-multiple-line-comments">Single/ Multiple line comments</h3>
+<p>For single line comments, use <code>//</code></p>
+<p>For multi line comments, use like below:</p>
+<pre><code class="lang-json">// This is first line comment
+// This is the second one
+
+{
+    &quot;name&quot;: &quot;Amrut&quot; // This is not allowed
+}
+</code></pre>
+<h3 id="deserializing-cjson-string-content">Deserializing CJSON string content</h3>
+<p><strong>Any import path used must be absolute. Otherwise, you will receive <code>AbsolutePathConstraintError</code> exception</strong></p>
+<h4 id="code-3">Code</h4>
+<pre><code class="lang-csharp">    using CJson;
+    
+    namespace CJsonImpl {
+        public class Main {
+            public static void Main(String[] args) {
+                String cjsonContent = &quot;{\n&quot; +
+                    &quot;    \&quot;source\&quot;: $import \&quot;&quot; + pureJsonfilePath.ToString + &quot;\&quot;,\n&quot; +
+                    &quot;    \&quot;target\&quot;: {\n&quot; +
+                    &quot;        \&quot;fruit\&quot;: \&quot;Apple\&quot;,\n&quot; +
+                    &quot;        \&quot;size\&quot;: \&quot;Large\&quot;,\n&quot; +
+                    &quot;        \&quot;color\&quot;: \&quot;Red\&quot;\n&quot; +
+                    &quot;    }\n&quot; +
+                    &quot;}&quot;;
+                CJson&lt;SerializableClass&gt; cJson = new CJson&lt;SerializableClass&gt;(cjsonContent);
+                SerializableClass target = cJson.Deserialize();
+            }
+        }
+    }
+</code></pre>
+<h3 id="convert-class-object-to-json-string">Convert <code>Class Object</code> to <code>JSON String</code></h3>
+<h4 id="code-4">Code</h4>
+<pre><code class="lang-csharp">    using CJson;
+    
+    namespace CJsonImpl {
+        public class Main {
+            public static void Main(String[] args) {
+                Target target = new Target();
+                target.source = new Pure();
+                target.source.quiz = new HashMap&lt;&gt;();
+
+                Dictionary&lt;String, Questions&gt; questionsHashMap = new Dictionary&lt;String, Questions&gt;();
+                Questions questions = new Questions();
+                questions.question = &quot;Which one is correct team name in NBA?&quot;;
+                questions.options = Arrays.asList(&quot;New York Bulls&quot;,
+                        &quot;Los Angeles Kings&quot;,
+                        &quot;Golden State Warriros&quot;,
+                        &quot;Huston Rocket&quot;);
+                questions.answer = &quot;Huston Rocket&quot;;
+
+                questionsHashMap.put(&quot;q1&quot;, questions);
+                target.source.quiz.put(&quot;sport&quot;, questionsHashMap);
+
+                String targetString = CJson&lt;Object&gt;.ToString(target);
+            }
+        }
+    }
+</code></pre>
+<h4 id="output-2">Output</h4>
+<pre><code class="lang-json">{
+  &quot;source&quot;:{
+    &quot;quiz&quot;:{
+      &quot;sport&quot;:{
+        &quot;q1&quot;:{
+          &quot;question&quot;:&quot;Which one is correct team name in NBA?&quot;,
+          &quot;options&quot;:[
+            &quot;New York Bulls&quot;,
+            &quot;Los Angeles Kings&quot;,
+            &quot;Golden State Warriros&quot;,
+            &quot;Huston Rocket&quot;
+          ],
+          &quot;answer&quot;:&quot;Huston Rocket&quot;
+        },
+        &quot;q2&quot;:null
+      }
+    }
+  }
+}
+</code></pre>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/SubhenduShekhar/cjson/blob/main/dotnet/CJson/README.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
